@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>@(ViewBag.Title ?? "Bất động sản hot")</title>
+    <link rel="icon" type="image/x-icon" href="~/shared/images/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="~/libs/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/libs/font-awesome/css/all.min.css">
+
+    <link rel="stylesheet" href="~/shared/css/font.css" />
+    <link rel="stylesheet" href="~/client/css/page_not_found.css" />
+</head>
+<body>
+
+    <div class="page-not-found d-flex flex-column justify-content-center align-items-center">
+        <div class="pnf-message">
+            <p class="pnf-code">404</p>
+            <p class="pnf-name">Page Not Found</p>
+        </div>
+        <p class="pnf-detail mt-5">Trang bạn đang tìm kiếm hiện không tồn tại. Có thể trang đã bị xóa, đổi tên hoặc không tồn tại từ đầu.</p>
+        <button class="pnf-button" onclick="window.location.href = '/admin'" type="button" title="Trở về">Quay về</button>
+    </div>
+
+    <div class="contact-float contact-float-send" style="bottom: 1rem">
+        <div class="contact-float-icon d-flex justify-content-center align-items-center"
+             style="background-color: #CB2474">
+            <i class="fa-solid fa-paper-plane"></i>
+        </div>
+        <div class="contact-float-item" style="background-color: #C7749C">
+            <div class="contact-float-body">
+                <p class="mb-1 contact-float-header">Điền thông tin để chúng tôi có thể tư vấn cho bạn!</p>
+                <label>Dự án: </label>
+                <input title="project" id="contact-float-phone-project" autocomplete="off" type="text" name="contact-float-project" />
+                <label>Số điện thoại: </label>
+                <input title="Số điện thoại" id="contact-float-phone" autocomplete="off" type="tel" name="contact-float-phone" />
+                <button type="button" class="contact-float-send-button" title="Chúng tôi sẽ gọi và tư vấn cho bạn!" onclick="">Gửi</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/libs/jquery/jquery.js"></script>
+    <script src="~/libs/bootstrap/js/bootstrap.js"></script>
+</body>
+</html>

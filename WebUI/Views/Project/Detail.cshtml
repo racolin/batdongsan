@@ -1,0 +1,32 @@
+﻿@using Application.Common.Responses.Views
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var model = Model as ProjectView ?? new ProjectView();
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/client/css/project_detail.css" />
+    <link rel="stylesheet" href="~/client/css/project_content.css" />
+}
+
+<div class="container project-detail" id="project-detail">
+    <div class="project-detail-name">
+        <h1 class="project-detail-title">@(model.Name)</h1>
+    </div>
+    <div class="d-flex justify-content-between align-items-center py-3">
+        <div class="project-detail-info d-flex flex-column flex-sm-row">
+            <a class="text-uppercase project-detail-type" href="/project#@(model.TypeUd)">@(model.TypeName)</a>
+            <p class="project-detail-separate d-none d-sm-block">&nbsp;|&nbsp;</p>
+            <p class="project-detail-address"><i class="fa-solid fa-location-dot"></i> @(model.Address)</p>
+        </div>
+        <button class="project-detail-share" title="Copy link bài viết" onclick="addToClipBoard(window.location.origin + '/projects/detail/@(model.Ud)')">
+            Copy link
+        </button>
+    </div>
+    <div class="project-content pt-3">
+        @Html.Raw(model.Content)
+    </div>
+</div>
+
+<script type="text/javascript">
+</script>

@@ -1,0 +1,315 @@
+﻿@{
+    var controller = "user";
+    var action = "index";
+    var list = Context.Request.Path.ToString().ToLower().Split("/");
+    if (list.Count() > 2)
+    {
+        controller = list[2];
+    }
+    if (list.Count() > 3)
+    {
+        action = list[3];
+    }
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>@(ViewBag.Title ?? "Bất động sản hot")</title>
+    <link rel="icon" type="image/x-icon" href="~/shared/images/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="~/libs/jquery/jquery.js"></script>
+    <script src="~/libs/bootstrap/js/bootstrap.js"></script>
+    <script src="~/libs/moment.js/moment.js"></script>
+
+    <link rel="stylesheet" href="~/libs/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/libs/font-awesome/css/all.min.css">
+
+    <link rel="stylesheet" href="~/shared/css/font.css" />
+    <link rel="stylesheet" href="~/admin/css/layout.css" />
+    <link rel="stylesheet" href="~/shared/css/loader.css" />
+    <link rel="stylesheet" href="~/shared/css/notify.css" />
+
+    @if (IsSectionDefined("AddToHead"))
+    {
+        @RenderSection("AddToHead", required: false)
+    }
+</head>
+<body>
+    <div class="layout">
+        <div class="layout-navbar">
+            <div class="" id="layout-menu-icon">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+            <div class="d-flex flex-column h-100">
+                <div class="layout-user">
+                    <div class="layout-user-avatar">
+                        <i class="fa-solid fa-circle-user"></i>
+                    </div>
+                    <div class="layout-user-info">
+                        <p id="layout-user-name"></p>
+                    </div>
+                    <button type="button" title="Đăng xuất" onclick="logout()">Đăng xuất</button>
+                </div>
+                <div class="layout-menu flex-grow-1">
+                    <div class="layout-menu-item">
+                        <div class="layout-menu-parent@(controller.Equals("user") ? " active" : "")">
+                            <button type="button" title="Người dùng" data-bs-toggle="collapse" 
+                                data-bs-target="#menu-user" aria-expanded="false" aria-controls="menu-user">
+                                <i class="fa-solid fa-users-rectangle"></i> Người dùng <i class="fa-solid fa-caret-down"></i>
+                            </button>
+                        </div>
+                        <div class="collapse layout-menu-children@(controller.Equals("user") ? " show" : "")" id="menu-user">
+                            <div class="">
+                                <div class="layout-menu-child@(controller.Equals("user") && action.Equals("index") ? " active" : "")">
+                                    <button class="" onclick="window.open('/admin/user', '_self')" type="button" title="">
+                                        <i class="fa-solid fa-list"></i> Danh sách
+                                    </button>
+                                </div>
+                                <div class="layout-menu-child@(controller.Equals("user") && action.Equals("item") ? " active" : "")">
+                                    <button class="" onclick="window.open('/admin/user/item', '_self')" type="button" title="">
+                                        <i class="fa-regular fa-square-plus"></i> Tạo mới/Xem
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layout-menu-item">
+                        <div class="layout-menu-parent@(controller.Equals("dashboard") ? " active" : "")">
+                            <button class="" type="button" title="" onclick="window.open('/admin/dashboard', '_self')">
+                                <i class="fa-solid fa-chart-line"></i> Dashboard 
+                            </button>
+                        </div>
+                    </div>
+                    <div class="layout-menu-item">
+                        <div class="layout-menu-parent@(controller.Equals("news") ? " active" : "")">
+                            <button type="button" title="Tin tức" data-bs-toggle="collapse" 
+                                data-bs-target="#menu-news" aria-expanded="false" aria-controls="menu-news">
+                                <i class="fa-solid fa-newspaper"></i> Tin tức <i class="fa-solid fa-caret-down"></i>
+                            </button>
+                        </div>
+                        <div class="collapse layout-menu-children@(controller.Equals("news") ? " show" : "")" id="menu-news">
+                            <div class="">
+                                <div class="layout-menu-child@(controller.Equals("news") && action.Equals("index") ? " active" : "")">
+                                    <button class="" onclick="window.open('/admin/news', '_self')" type="button" title="">
+                                        <i class="fa-solid fa-list"></i> Danh sách
+                                    </button>
+                                </div>
+                                <div class="layout-menu-child@(controller.Equals("news") && action.Equals("item") ? " active" : "")">
+                                    <button class="" onclick="window.open('/admin/news/item', '_self')" type="button" title="">
+                                        <i class="fa-regular fa-square-plus"></i> Tạo mới/Xem
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layout-menu-item">
+                        <div class="layout-menu-parent@(controller.Equals("project") ? " active" : "")">
+                            <button type="button" title="Dự án" data-bs-toggle="collapse" 
+                                data-bs-target="#menu-project" aria-expanded="false" aria-controls="menu-project">
+                                <i class="fa-solid fa-city"></i> Dự án <i class="fa-solid fa-caret-down"></i>
+                            </button>
+                        </div>
+                        <div class="collapse layout-menu-children@(controller.Equals("project") ? " show" : "")" id="menu-project">
+                            <div class="">
+                                <div class="layout-menu-child@(controller.Equals("project") && action.Equals("index") ? " active" : "")">
+                                    <button class="" onclick="window.open('/admin/project', '_self')" type="button" title="">
+                                        <i class="fa-solid fa-list"></i> Danh sách
+                                    </button>
+                                </div>
+                                <div class="layout-menu-child@(controller.Equals("project") && action.Equals("item") ? " active" : "")">
+                                    <button class="" onclick="window.open('/admin/project/item', '_self')" type="button" title="">
+                                        <i class="fa-regular fa-square-plus"></i> Tạo mới/Xem
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layout-menu-item">
+                        <div class="layout-menu-parent@(controller.Equals("contact") ? " active" : "")">
+                            <button class="" type="button" title="" onclick="window.open('/admin/contact', '_self')">
+                                <i class="fa-solid fa-gear"></i> Thông tin liên lạc
+                            </button>
+                        </div>
+                    </div>
+                    <div class="layout-menu-item">
+                        <div class="layout-menu-parent@(controller.Equals("image") ? " active" : "")">
+                            <button type="button" title="Thông tin liên lạc" data-bs-toggle="collapse" 
+                                data-bs-target="#menu-image" aria-expanded="false" aria-controls="menu-image">
+                                <i class="fa-regular fa-images"></i> Thư viện ảnh <i class="fa-solid fa-caret-down"></i>
+                            </button>
+                        </div>
+                        <div class="collapse layout-menu-children@(controller.Equals("image") ? " show" : "")" id="menu-image">
+                            <div class="">
+                                <div class="layout-menu-child@(controller.Equals("image") && action.Equals("index") ? " active" : "")">
+                                    <button class="" onclick="window.open('/admin/image', '_self')" type="button" title="">
+                                        <i class="fa-solid fa-list"></i> Danh sách
+                                    </button>
+                                </div>
+                                <div class="layout-menu-child@(controller.Equals("image") && action.Equals("item") ? " active" : "")">
+                                    <button class="" onclick="window.open('/admin/image/item', '_self')" type="button" title="">
+                                        <i class="fa-regular fa-square-plus"></i> Tạo mới/Xem
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layout-menu-item">
+                        <div class="layout-menu-parent@(controller.Equals("registermail") ? " active" : "")">
+                            <button class="" type="button" title="" onclick="window.open('/admin/registermail', '_self')">
+                                <i class="fa-regular fa-envelope"></i> Email nhận tin 
+                            </button>
+                        </div>
+                    </div>
+                    <div class="layout-menu-item">
+                        <div class="layout-menu-parent@(controller.Equals("content") ? " active" : "")">
+                            <button class="" type="button" title="" onclick="window.open('/admin/content', '_self')">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Nội dung
+                            </button>
+                        </div>
+                    </div>
+                    <div class="layout-menu-item">
+                        <div class="layout-menu-parent@(controller.Equals("configuration") ? " active" : "")">
+                            <button class="" type="button" title="" onclick="window.open('/admin/configuration', '_self')">
+                                <i class="fa-solid fa-gear"></i> Cấu hình
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layout-body">
+            <div class="container-fluid h-100 d-flex flex-column">
+                @RenderBody()
+                <!-- Message -->
+                <div id="message-container" class="container position-absolute bottom-0" style="z-index:10000;">
+                    <div class="messages row">
+                        <div class="messages-wrap col-12 col-md-10 col-lg-8 col-lg-6" id="message-wrap">
+                            <div class="alert alert-danger message message-error alert-dismissible fade d-none" role="alert">
+                                <i class="fa-solid fa-circle-xmark me-1"></i>
+                                <strong>Error! </strong>
+                                <span></span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div class="alert alert-warning message message-warning alert-dismissible fade d-none" role="alert">
+                                <i class="fa-solid fa-circle-exclamation me-1"></i>
+                                <strong>Warning! </strong>
+                                <span></span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <div class="alert alert-success message message-success alert-dismissible fade d-none" role="alert">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <strong>Success! </strong>
+                                <span></span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert -->
+    <div class="modal fade" id="alert" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static" aria-labelledby="alert-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="alert-label"></h5>        
+                    <button type="button" class="btn-close d-none" id="alert-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <div class="modal-body">
+                    <p id="alert-content"></p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary d-none" id="alert-dismiss" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="alert-action">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loader -->
+    <div id="loader" class="d-none">
+        <div class="loader-wrap">
+            <div class="loader-circle"></div>
+        </div>
+    </div>
+    <script src="~/shared/js/loader.js"></script>
+    <script src="~/shared/js/notify.js"></script>
+    <script type="text/javascript">
+        function setCookie(key, name) {
+            document.cookie = key + "=" + name + ";";
+        }
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+        $("#layout-user-name").text(decodeURI(getCookie("name")))
+        $(window).click(function () {
+            //Hide the menus if visible
+            $(".layout-navbar").removeClass("active");
+        });
+
+        $('.layout-navbar').click(function (event) {
+            event.stopPropagation();
+        });
+
+        $('#alert').click(function (event) {
+            event.stopPropagation();
+        });
+
+        $("#layout-menu-icon").click(function (e) {
+            $(".layout-navbar").toggleClass("active");
+        });
+
+        function logout() {
+            showAlert(
+                "Đăng xuất khỏi hệ thống", 
+                "<p>Bạn có thực sự muốn đăng xuất khỏi hệ thống không?</p>", 
+                function() {
+                    $.ajax({
+                        url: '/api/admin/auth/logout',
+                        type: 'GET',
+                        beforeSend: loading,
+                        complete: loaded,
+                        success: function (data) {
+                            // error response
+                            if (data.message.type != 0) {
+                                // do something if error
+                                return;
+                            }
+                            // success response
+                            // do something if success
+                            window.location.href = '/admin'
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            // error api
+                            // do something if error
+                            alert(xhr.responseText);
+                        },
+                    });
+                }, 
+                true
+            );
+        }
+        
+        function addToClipBoard(data) {
+            navigator.clipboard.writeText(data).then(function () {
+                showMessage('success', "Bạn vừa copy \"" + data + "\".")
+            }, function (err) {
+                showMessage('error', "Không thể copy, có thể tính năng copy đã bị chặn trên trang này!.")
+            });
+        }
+    </script>
+
+    @if (IsSectionDefined("AddToFooter"))
+    {
+        @RenderSection("AddToFooter", required: false)
+    }
+</body>
+</html>

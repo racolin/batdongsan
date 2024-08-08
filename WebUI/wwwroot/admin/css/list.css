@@ -1,0 +1,159 @@
+﻿.lb-body > .row {
+    height: 100%;
+}
+
+.list-control {
+    position: relative;
+    background-color: #f1f7fe;
+    height: 100%;
+}
+
+.list-control-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+}
+
+.list-data {
+    background-color: white;
+    position: relative;
+    height: 100%;
+}
+
+.list-data-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+}
+
+@media only screen and (max-width: 992px) {
+    .list-control {
+        position: initial;
+        background-color: #f1f7fe;
+        height: initial;
+    }
+
+    .list-control-wrap {
+        position: initial;
+        top: initial;
+        left: initial;
+        width: 100%;
+        height: initial;
+        overflow: initial;
+    }
+
+    .list-data {
+        background-color: white;
+        position: initial;
+        height: initial;
+    }
+
+    .list-data-wrap {
+        position: initial;
+        top: initial;
+        left: initial;
+        width: 100%;
+        height: initial;
+        overflow: initial;
+    }
+}
+
+#btn-search {
+    border: none;
+    border-radius: 1.5rem;
+    height: 2.5rem;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    background-color: #18A2DD;
+    padding: .25rem 1.5rem;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+#btn-search:hover {
+    background-color: #CB2474;
+}
+
+.btn-search-wrap {
+    text-align: center;
+}
+
+#btn-search:focus {
+}
+
+#btn-search i {
+    font-size: 1rem;
+    color: white;
+}
+
+.td-image img {
+    width: 9rem;
+    height: 6rem;
+}
+
+.item-Highlight {
+    background-color: #CB2474;
+    border-radius: 0.375rem;
+    color: white;
+    font-weight: 500;
+    padding: .3rem .5rem;
+    display: inline-block;
+}
+
+.item-Draft, .item-sent {
+    background-color: gray;
+    border-radius: 0.375rem;
+    color: white;
+    font-weight: 500;
+    padding: .3rem .5rem;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.item-Active, .item-added, .item-processed {
+    background-color: #18A2DD;
+    border-radius: 0.375rem;
+    color: white;
+    font-weight: 500;
+    padding: .3rem .5rem;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.item-InActive, .item-expired, .item-refused {
+    background-color: #FF8F28;
+    border-radius: 0.375rem;
+    color: white;
+    font-weight: 500;
+    padding: .3rem .5rem;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.item-Removed, .item-removed {
+    background-color: #000000;
+    border-radius: 0.375rem;
+    color: white;
+    font-weight: 500;
+    padding: .3rem .5rem;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.item-link {
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+    font-style: italic;
+    padding: .3rem .5rem;
+}
+
+table > tbody > tr > td {
+    vertical-align: middle;
+}

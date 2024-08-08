@@ -1,0 +1,165 @@
+﻿@using Application.Common.Responses.Views
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    HomeIndexView model = Model ?? new HomeIndexView();
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/client/css/home.css" />
+    <link rel="stylesheet" href="~/client/css/project_item.css" />
+    <link rel="stylesheet" href="~/client/css/news_item.css" />
+}
+
+<div class="bg-bottom" style="background-image: url(@(model.BackgroundImage.Image));"></div>
+
+<div class="container-fluid home" id="home">
+    <div class="home-top-image" id="home-top-image" style="background-image: url(@(model.TopImage.Image))">
+        <div id="home-top-image-inner"></div>
+    </div>
+
+    <div class="container-fluid" style="background-color: white">
+        <div class="container home-intro">
+            <h1>BDS Hot</h1>
+            @Html.Raw(model.Content)
+        </div>
+    </div>
+
+    <div class="home-project-type">
+        <div class="container d-flex flex-column align-items-center">
+            <div class="home-project-type-item d-flex" onclick="window.location.href = '/project#apartment'">
+                <div class="home-project-type-img flex-shrink-0">
+                    <img title="Căn hộ" src="~/shared/images/logo/logo-lg.png" />
+                </div>
+
+                <div class="home-project-type-wrap d-flex align-items-center">
+                    <div class="home-project-type-p">
+                        <p>Căn hộ</p>
+                    </div>
+                </div>
+            </div>
+            <div class="home-project-type-item d-flex" onclick="window.location.href = '/project#ground'">
+                <div class="home-project-type-img flex-shrink-0">
+                    <img title="Đất nền" src="~/shared/images/logo/logo-lg.png" />
+                </div>
+
+                <div class="home-project-type-wrap d-flex align-items-center">
+                    <div class="home-project-type-p">
+                        <p>Đất nền</p>
+                    </div>
+                </div>
+            </div>
+            <div class="home-project-type-item d-flex" onclick="window.location.href = '/project#resort-real-estate'">
+                <div class="home-project-type-img flex-shrink-0">
+                    <img title="Bất động sản nghỉ dưỡng" src="~/shared/images/logo/logo-lg.png" />
+                </div>
+                <div class="home-project-type-wrap d-flex align-items-center">
+                    <div class="home-project-type-p">
+                        <p>Bất động sản nghỉ dưỡng</p>
+                    </div>
+                </div>
+            </div>
+            <div class="home-project-type-item d-flex" onclick="window.location.href = '/project#villa'">
+                <div class="home-project-type-img flex-shrink-0">
+                    <img title="Biệt thự" src="~/shared/images/logo/logo-lg.png" />
+                </div>
+                <div class="home-project-type-wrap d-flex align-items-center">
+                    <div class="home-project-type-p">
+                        <p>Biệt thự</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" style="background-color: white">
+        <div class="container home-projects">
+            <div class="d-flex home-projects-head justify-content-between align-items-center">
+                <h1>Dự án nổi bật &nbsp;&nbsp;</h1>
+                <button type="button" title="Xem thêm về dự án" onclick="window.location.href = '/project'"><i class="fa-solid fa-list"></i></button>
+            </div>
+            <div class="home-projects-wrap mt-3">
+                <div class="row">
+                    @if (model.Projects.Count > 0)
+                    {
+                        @foreach (var project in model.Projects)
+                        {
+                            <div class="col-12 col-md-6">
+                                @await Html.PartialAsync("~/Views/Shared/Components/ProjectItemTB.cshtml", project)
+                            </div>
+                        }
+                    } else
+                    {
+                        <div class="no-data">
+                            <img title="Không có dữ liệu" alt="Hình ảnh biểu thị cho danh sách trống" src="/shared/images/no_data.svg" />
+                            <p>Chưa có dự án nổi bật!</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="home-news-type">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-4 offset-md-1 col-offset-md-1 col-lg-3 offset-lg-2 col-offset-lg-2 home-news-type-item">
+                    <div class="home-news-type-item-wrap" onclick="window.location.href = '/news/projects'">
+                        <img title="Ảnh tin tức dự án" src="~/shared/images/logo/logo-lg.png" />
+                        <h3>Tin tức dự án</h3>
+                        <p>Cập nhật tin về các dự án sớm nhất để nhà đầu tư có thêm nhiều thông tin cần thiết.</p>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 offset-md-2 col-offset-md-2 home-news-type-item">
+                    <div class="home-news-type-item-wrap" onclick="window.location.href = '/news/market'">
+                        <img title="Ảnh tin tức dự án" src="~/shared/images/logo/logo-lg.png" />
+                        <h3>Tin tức thị trường</h3>
+                        <p>Đăng các bản tin thị trường, các bài viết thống kê, phân tích và dự đoán thị trường.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" style="background-color: white">
+        <div class="container home-news">
+            <div class="d-flex home-news-head justify-content-between align-items-center">
+                <h1>Tin tức nổi bật &nbsp;&nbsp;</h1>
+                <button type="button" title="Xem thêm về tin tức" onclick="window.location.href = '/news'"><i class="fa-solid fa-list"></i></button>
+            </div>
+            <div class="home-news-wrap mt-3">
+                <div class="row">
+                    @if (model.NewsList.Count > 0)
+                    {
+                        @foreach (var news in model.NewsList)
+                        {
+                            <div class="col-12 col-lg-6">
+                                @await Html.PartialAsync("~/Views/Shared/Components/NewsItemLR.cshtml", news)
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="no-data">
+                            <img title="Không có dữ liệu" alt="Hình ảnh biểu thị cho danh sách trống" src="/shared/images/no_data.svg" />
+                            <p>Chưa có tin tức nổi bật!</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function onHomeScroll() {
+        var home = document.getElementById("home-top-image");
+        var scrollY = window.scrollY;
+        var y = 36 * 16 - scrollY;
+        y = y < 0 ? 0 : y / 36 / 16 * 100;
+        home.style.backgroundPositionY = y + '%';
+
+        var homeInner = document.getElementById("home-top-image-inner");
+        homeInner.style.opacity = (100 - y) + '%';
+
+    }
+</script>

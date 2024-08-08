@@ -1,0 +1,35 @@
+﻿.modal-item {
+    margin-top: .75rem;
+    margin-bottom: .75rem;
+    aspect-ratio: 2 / 1;
+}
+
+.modal-item-wrap {
+    cursor: pointer;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+}
+
+.modal-item-wrap:hover img {
+    transform: scale(1.2);
+}
+
+.modal-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all linear .25s;
+}
+
+.modal-item p {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: black;
+    opacity: .8;
+    color: white;
+    margin-bottom: 0;
+    padding: .5rem 1rem;
+}

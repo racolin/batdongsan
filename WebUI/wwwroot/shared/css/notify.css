@@ -1,0 +1,42 @@
+﻿/* Alert */
+#alert-close:focus {
+    outline: none!important;
+    box-shadow: none!important;
+}
+
+
+/* Message */
+.messages {
+}
+
+.message {
+    margin-bottom: .5rem;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    transition-duration: .5s !important;
+}
+
+.message button {
+    padding: 1rem!important;
+}
+
+.message button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.message i {
+    font-size: 1.15rem;
+}
+
+.message-error i, .message-error strong {
+    color: red;
+}
+
+.message-warning i, .message-warning strong {
+    color: orange;
+}
+
+.message-success i, .message-success strong {
+    color: green;
+}

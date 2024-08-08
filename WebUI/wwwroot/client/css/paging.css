@@ -1,0 +1,120 @@
+﻿.paging-item {
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: lightgray;
+    margin: 0.1rem;
+    transition: all linear .25s;
+    border-radius: .25rem;
+    cursor: pointer;
+}
+
+.paging-item .paging-number {
+    color: #212121;
+    font-weight: 600;
+    margin-bottom: 0;
+    transition: all linear .25s;
+    line-height: 2.5rem;
+    text-align: center;
+}
+
+.paging-item:hover, .paging-item.active {
+    background-color: #FF8F28;
+}
+
+.paging-item:hover .paging-number, .paging-item.active .paging-number {
+    color: white;
+}
+
+.paging {
+    position: relative;
+    height: 2.7rem;
+    overflow: hidden;
+}
+
+.paging-wrap {
+    position: absolute;
+    transition: all ease-in .25s;
+}
+
+.paging-previous, .paging-next {
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: lightgray;
+    margin: 0.1rem;
+    transition: all linear .25s;
+    border-radius: .25rem;
+    cursor: not-allowed;
+    position: relative;
+}
+
+.paging-previous.active, .paging-next.active {
+    cursor: pointer;
+}
+
+.paging-previous.active:hover, .paging-next.active:hover {
+    background-color: #FF8F28;
+}
+
+.paging-previous.active::before, 
+.paging-previous.active::after,
+.paging-next.active::before, 
+.paging-next.active::after {
+    background-color: #212121;
+}
+
+.paging-previous.active:hover::before, 
+.paging-previous.active:hover::after,
+.paging-next.active:hover::before, 
+.paging-next.active:hover::after {
+    background-color: white;
+}
+
+.paging-next::after {
+    content: "";
+    display: inline-block;
+    width: 0.1rem;
+    height: .8rem;
+    background-color: white;
+    position: absolute;
+    top: 0.6rem;
+    left: 1.15rem;
+    transform: rotate(-45deg);
+    transition: all linear .25s;
+}
+
+.paging-next::before {
+    content: "";
+    display: inline-block;
+    width: 0.1rem;
+    height: .8rem;
+    background-color: white;
+    position: absolute;
+    bottom: 0.6rem;
+    left: 1.15rem;
+    transform: rotate(45deg);
+    transition: all linear .25s;
+}
+
+.paging-previous::after {
+    content: "";
+    display: inline-block;
+    width: 0.1rem;
+    height: .8rem;
+    background-color: white;
+    position: absolute;
+    top: 0.6rem;
+    left: 1.15rem;
+    transform: rotate(45deg);
+}
+
+.paging-previous::before {
+    content: "";
+    display: inline-block;
+    width: 0.1rem;
+    height: .8rem;
+    background-color: white;
+    position: absolute;
+    bottom: 0.6rem;
+    left: 1.15rem;
+    transform: rotate(-45deg);
+}

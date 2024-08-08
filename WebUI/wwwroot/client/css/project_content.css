@@ -1,0 +1,13 @@
+﻿.project-content img { 
+    width: 100%;
+    padding: .5rem 0;
+}
+
+.project-content p {
+    text-align: justify;
+    margin-bottom: .5rem;
+}
+
+.project-content span {
+    text-align: justify;
+}

@@ -1,0 +1,34 @@
+﻿@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/admin/css/gallery.css" />
+    <link rel="stylesheet" href="~/admin/css/form.css" />
+    <link rel="stylesheet" href="~/admin/css/image_upload.css" />
+}
+
+<p class="layout-title">
+    Cấu hình
+</p>
+
+<div class="container-fluid flex-grow-1 lb-body">
+
+</div>
+
+@await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/GalleryModal.cshtml", new { Key = "", Amount = 5 })
+
+@section AddToFooter {
+    <script type="text/javascript">
+        var imageKey = '';
+        function selectedImageId(key, id) {
+            $("#imageId").val(id);
+        }
+        function removedImageId(key) {
+            $("#imageId").val("");
+        }
+    </script>
+    <script src="~/admin/js/image_upload.js"></script>
+    <script src="~/admin/js/verify.js"></script>
+    <script src="~/admin/js/api_service.js"></script>
+}

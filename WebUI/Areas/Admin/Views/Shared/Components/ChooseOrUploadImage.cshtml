@@ -1,0 +1,73 @@
+﻿@{
+    var key = Model.Key;
+    var src = Model.Src;
+}
+
+<div id="control-btn-@key" class="@(src == null || src == "" ? "d-flex" :  "d-none")">
+    <button type="button" onclick="imageKey='@key'" class="btn btn-save me-3" data-bs-toggle="modal" data-bs-target="#gallery-modal-">Thư viện</button>
+    <button type="button" class="btn btn-create" data-bs-toggle="modal" data-bs-target="#upload-image-@key">Thêm ảnh</button>
+</div>
+<div id="img-display-wrap-@key" class="w-100@(src == null || src == "" ? " d-none" : "") text-center">
+    <img id="img-display-@key" src="@src" class="w-100" />
+    <div class="image-title-wrap mt-3"> 
+        <button type="button" class="btn btn-danger"
+                onclick="clearDisplayImage('@key');removedImageId('@key');">
+            Bỏ ảnh
+        </button>
+    </div>
+</div>
+
+<!-- Modal Upload -->
+<div class="modal fade" id="upload-image-@key" tabindex="-1" aria-labelledby="upload-imageLabel-@key" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="upload-imageLabel-@key">Tải ảnh lên</h5>
+                <button type="button" class="btn-close form-control" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-lg-6 col-xl-5 my-2">
+                        <label class="form-label">Ảnh (<span class="text-danger">*</span>):
+                            <span id="image-ext-@key" class="text-danger"></span>
+                        </label>
+                        <div class="file-upload p-0" id="image-@key">
+                            <div class="image-upload-wrap">
+                                <input type="hidden" id="has-image-@key" name="has-image" value="false" />
+                                <input class="file-upload-input" type='file' onchange="readURL(this, 'image-@key');" accept="image/*" />
+                                <div class="drag-text">
+                                    <h3>Kéo và thả ảnh vào hoặc chọn ảnh.</h3>
+                                </div>
+                            </div>
+                            <div class="file-upload-content d-none">
+                                <img id="img-@key" class="file-upload-image image w-100" src="#" alt="Ảnh" />
+                                <div class="image-title-wrap mt-3">
+                                    <button type="button" onclick="removeUpload('image-@key');removedImageId('@key');$('#image-ext-@key').empty()" class="btn btn-danger">Bỏ ảnh</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 col-xl-7">
+                        <div class="col-12 my-2">
+                            <label for="name" class="form-label">Tên file (<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" name="name" id="name-@key" autocomplete="off" value="" placeholder="Nhập tên file">
+                        </div>
+                        <div class="col-12 my-2">
+                            <label for="alt" class="form-label">Text thay thế nếu ảnh lỗi (<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" name="alt" id="alt-@key" autocomplete="off" value="" placeholder="Nhập text thay thế">
+                        </div>
+                        <div class="col-12 my-2">
+                            <label for="title" class="form-label">Tiêu đề ảnh (<span class="text-danger">*</span>):</label>
+                            <input type="text" class="form-control" name="title" id="title-@key" autocomplete="off" value="" placeholder="Nhập tiêu đề">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <p class="upload-image-message flex-grow-1" id="message-@key"></p>
+                <button type="button" class="btn btn-edit" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-save" onclick="upload('@key')">Tải lên</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+﻿.projects {
+    padding: 0;
+}
+
+.projects-top-image {
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position-y: 100%;
+    background-size: cover;
+    height: 36rem;
+}
+
+.projects-top-slider {
+    height: 36rem;
+    position: relative;
+}
+
+#pjCarousel .carousel-item img {
+    height: 36rem;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+#projects-top-image-inner {
+    width: 100%;
+    height: 100%;
+    background-color: #18A2DD;
+    opacity: 0;
+}
+
+#projects-top-slider > #projects-top-image-inner {
+    position: absolute!important;
+    z-index: 1!important;
+}
+
+#pjCarousel .carousel-indicators,
+#pjCarousel .carousel-control-prev,
+#pjCarousel .carousel-control-next {
+    z-index: 4;
+}
+
+.projects-head {
+    padding-top: 8rem;
+    padding-bottom: 0rem;
+}
+
+.projects-head-title {
+    font-size: 2.35rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-family: Inter;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.line-wrap {
+    position: relative;
+}
+
+.projects-head .line {
+    height: .1rem;
+    background-color: #212121;
+    position: absolute;
+    transform: translateY(-50%);
+    top: 50%;
+    width: 100%;
+}
+
+.projects-group-title h1 {
+    text-decoration: underline solid #212121;
+    text-underline-offset: .75rem;
+    margin-bottom: 1rem;
+}
+
+.projects-section .projects-group:nth-child(2n + 1) .projects-group-title h1 {
+    text-align: right;
+}

@@ -1,0 +1,103 @@
+﻿@using Application.Common.Responses.Views
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    NewsIndexView model = Model ?? new NewsIndexView();
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/client/css/news.css" />
+    <link rel="stylesheet" href="~/client/css/paging.css" />
+    <link rel="stylesheet" href="~/client/css/news_item.css" />
+}
+
+@section AddToFooter {
+    <script src="~/client/js/paging.js"></script>
+}
+
+<div class="container-fluid news" id="news">
+    <div class="news-top-image" id="news-top-image" style="background-image: url(@(model.TopImage.Image));">
+        <div id="news-top-image-inner"></div>
+    </div>
+
+    <div class="news-body container-fluid">
+        <div class="news-head row" id="news-head">
+            <div class="line-wrap col-2 col-md-3 col-lg-4">
+                <div class="row line"></div>
+            </div>
+            <h1 class="news-head-title col-8 col-md-6 col-lg-4">Tin tức tổng hợp</h1>
+            <div class="line-wrap col-2 col-md-3 col-lg-4">
+                <div class="row line"></div>
+            </div>
+        </div>
+        <div class="container news-list">
+            
+            @if (model.Paging.NewsList.Count < 1)
+            {
+                <div class="no-data">
+                    <img title="Không có dữ liệu" alt="Hình ảnh biểu thị cho danh sách trống" src="/shared/images/no_data.svg" />
+                    <p>Chưa có tin tức nào!</p>
+                </div>
+            } else if (model.Paging.NewsList.Count == 1)
+            {
+                <div class="mt-3">
+                    @await Html.PartialAsync("~/Views/Shared/Components/NewsItemMax.cshtml", model.Paging.NewsList[0])
+                </div>
+            } else if (model.Paging.NewsList.Count == 2)
+            {
+                <div class="row">
+                    <div class="col-12 col-lg-6 mt-3">
+                        @await Html.PartialAsync("~/Views/Shared/Components/NewsItemMain.cshtml", model.Paging.NewsList[0])
+                    </div>
+                    <div class="col-12 col-lg-6 mt-3">
+                        @await Html.PartialAsync("~/Views/Shared/Components/NewsItemMain.cshtml", model.Paging.NewsList[1])
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-12 col-lg-6 mt-3">
+                        @await Html.PartialAsync("~/Views/Shared/Components/NewsItemMain.cshtml", model.Paging.NewsList[0])
+                    </div>
+                    <div class="col-12 col-lg-6 mt-3">
+                        @await Html.PartialAsync("~/Views/Shared/Components/NewsItemSub.cshtml", model.Paging.NewsList[1])
+                        <div class="mt-3 mt-lg-0 news-items-sub-space"></div>
+                        @await Html.PartialAsync("~/Views/Shared/Components/NewsItemSub.cshtml", model.Paging.NewsList[2])
+                    </div>
+                </div>
+                <div class="row">
+                    @for (var i = 3; i < model.Paging.NewsList.Count; i++)
+                    {
+                        <div class="col-12 col-lg-6 mt-3">
+                            @await Html.PartialAsync("~/Views/Shared/Components/NewsItemNormal.cshtml", model.Paging.NewsList[i])
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    <div class="my-5">
+        @await Html.PartialAsync("~/Views/Shared/Components/Paging.cshtml", new { Current = model.Paging.Current, Amount = 5, Max = model.Paging.Max, Key = "news" })
+    </div>
+</div>
+
+<script type="text/javascript">
+    function onNewsScroll() {
+        var news = document.getElementById("news-top-image");
+        var scrollY = window.scrollY;
+        var y = 36 * 16 - scrollY;
+        y = y < 0 ? 0 : y / 36 / 16 * 100;
+        news.style.backgroundPositionY = y + '%';
+
+        var newsInner = document.getElementById("news-top-image-inner");
+        newsInner.style.opacity = (100 - y) + '%';
+
+    }
+
+    function selectPage(key, page) {
+        console.log(key, page);
+        if (key === "news") {
+            window.location.href = '/news?page=' + page + '#news-head'; 
+        }
+    }
+</script>

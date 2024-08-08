@@ -1,0 +1,251 @@
+﻿@using Application.Common.Responses
+@using Application.Common.Supports
+@using Domain.Entities
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    PagingResponse<ContactEntity> model = Model ?? new PagingResponse<ContactEntity>();
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/admin/css/list.css" />
+    <link rel="stylesheet" href="~/admin/css/form.css" />
+    <link rel="stylesheet" href="~/admin/css/paging.css" />
+    <link rel="stylesheet" href="~/libs/bootstrap-datepicker/css/bootstrap-datepicker.css" />
+    <script src="~/libs/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+}
+
+<p class="layout-title">
+    Danh sách liên hệ
+</p>
+
+<div class="container-fluid flex-grow-1 lb-body">
+    <div class="row">
+        <div class="list-control col-12 col-lg-4 col-xl-3">
+            <div class="list-control-wrap p-3">
+                <div class="row">
+                    <div class="filter-control my-2">
+                        <div class="form-title-wrap">
+                            <p class="form-title">Lọc danh sách</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 my-2">
+                                <label for="filter-name" class="form-label">Lọc theo tiêu đề:</label>
+                                <input type="text" class="form-control" name="search" id="search" autocomplete="off" placeholder="Nhập nội dung tìm kiếm">
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-12 my-2">
+                                <label for="filter-range-date" class="form-label">Lọc theo ngày đăng: </label>
+                                <div class="input-group input-daterange" id="filter-range-date">
+                                    <input type="text" class="form-control form-control-left" name="startDate" id="startDate">
+                                    <div class="input-group-text"><i class="fa-solid fa-caret-right"></i></div>
+                                    <input type="text" class="form-control form-control-right" name="endDate" id="endDate">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-12 my-2">
+                                <label for="order" class="form-label">Sắp xếp:</label>
+                                <select class="form-select form-control" id="order" name="order" aria-label="Chọn chế độ sắp xếp">
+                                    <option value="asc-date">Tăng dần theo ngày</option>
+                                    <option value="desc-date">Giảm dần theo ngày</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    @if (model.Max > 0)
+                    {
+                        <div class="paging-control my-2">
+                            <div class="form-title-wrap">
+                                <p class="form-title">Điều khiển trang</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-md-3 col-lg-6 my-2">
+                                    <label for="page-amount" class="form-label">Số lượng/trang:</label>
+                                    <input type="number" class="form-control" name="perPage" id="perPage">
+                                </div>
+                                <div class="col-6 col-md-3 col-lg-6 my-2">
+                                    <label for="page-number" class="form-label">Nhập trang: </label>
+                                    <input type="number" class="form-control" name="currentPage" id="currentPage">
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-12 paging-small my-2">
+                                @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/Paging.cshtml", new { Current = model.Current, Max = model.Max, Amount = 4, Key = "small" })
+                            </div>
+                        </div>
+                    }
+                    <div class="col-12 btn-search-wrap my-2">
+                        <button id="btn-search" onclick="search()" title="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="list-data col-12 col-lg-8 col-xl-9">
+            <div class="list-data-wrap p-3">
+                <div class="py-2 d-flex justify-content-end">
+                    <button type="button" onclick="window.location.href = '/admin/contact/item'" class="btn btn-create" title="Tạo mới">Tạo mới</button>
+                </div>
+                @if (model.List.Count > 0)
+                {
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Tên</th>
+                                <th class="d-none d-md-table-cell" scope="col">Thông tin cá nhân</th>
+                                <th scope="col">Nội dung</th>
+                                <th class="" scope="col">Tình trạng</th>
+                                <th class="d-none d-md-table-cell" scope="col">Ngày tạo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (var i = 0; i < model.List.Count; i++)
+                            {
+                                <tr id="item-@i">
+                                    <td class="">@((model.Current - 1) * model.PerPage + i + 1)</td>
+                                    <td class="">
+                                        <p class="mb-0 item-name">@(model.List[i].Name)</p>
+                                    </td>
+                                    <td class="d-none d-md-table-cell">
+                                        <p class="mb-0">Email: <span class="item-email">@(model.List[i].Email)</span></p>
+                                        <p class="mb-0">Sđt: <span class="item-phone">@(model.List[i].Phone)</span></p>
+                                    </td>
+                                    <td class="">
+                                        <a class="item-link item-content" href="javascript:void(0)"
+                                           onclick="showDetail('@(model.List[i].Address)', '@i')"
+                                           title="Mở popup chi tiết">@(model.List[i].Content)</a>
+                                    </td>
+                                    <td>
+                                        <p class="item-@(model.List[i].State)">@(NameSupport.GetContactStateName(model.List[i].State))</p>
+                                    </td>
+                                    <td class="d-none d-md-table-cell item-createdDate">@(model.List[i].CreatedDate?.ToString("dd/MM/yyyy"))</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="col-12 paging-large my-2">
+                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/Paging.cshtml", new { Current = model.Current, Max = model.Max, Amount = 5, Key = "large" })
+                    </div>
+                }
+                else
+                {
+                    <div class="no-data">
+                        <img title="Không có dữ liệu" alt="Hình ảnh biểu thị cho danh sách trống" src="/shared/images/no_data.svg" />
+                        <p>Chưa có liên hệ nào!</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Detail -->
+<div class="modal fade" id="modal-detail" tabindex="-1" aria-labelledby="modal-detailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content contact-form">
+            <div class="modal-header">
+                <h5 class="modal-title contact-form-title" id="modal-detailLabel">Thông tin liên hệ</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <label for="" class="form-label mb-0">Tên liên hệ:</label>
+                        <p id="item-name"></p>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="" class="form-label mb-0">Email:</label>
+                        <p id="item-address"></p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <label for="" class="form-label mb-0">Số điện thoại:</label>
+                        <p id="item-phone"></p>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="" class="form-label mb-0">Địa chỉ:</label>
+                        <p id="item-email"></p>
+                    </div>
+                </div>
+
+                <label for="" class="form-label mb-0">Nội dung:</label>
+                <p id="item-content"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section AddToFooter {
+    <script src="~/admin/js/paging.js"></script>
+    <script type="text/javascript">
+        // $("input[name=asc][value='" + urlParams.get("asc") + "']").prop('checked', true);
+        var urlParams = new URLSearchParams(window.location.search);
+        $("#search").val(urlParams.get("search"));
+        $("#startDate").val(urlParams.get("startDate") ?? '01/01/2024');
+        $("#endDate").val(urlParams.get("endDate") ?? new Date().toLocaleDateString('vi-VN'));
+        var perPage = urlParams.get("perPage") ?? '';
+        $("#perPage").val(perPage == '' ? @(model.PerPage) : perPage);
+        $("#currentPage").val(@(model.Current));
+        $("#order").val(urlParams.get("order") ?? 'asc-date');
+
+        $('#filter-range-date').datepicker({
+            format: 'dd/mm/yyyy',
+            weekStart: 1,
+            templates: {
+                leftArrow: '<i class="fa-solid fa-angle-left"></i>',
+                rightArrow: '<i class="fa-solid fa-angle-right"></i>',
+            },
+            todayHighlight: true,
+            endDate: new Date(),
+        });
+
+        function search() {
+            var params = [];
+            var key = '';
+            key = $("#search").val();
+            if (key != null && key != '') {
+                params.push('search=' + key);
+            }
+            key = $("#startDate").val();
+            if (key != null && key != null) {
+                params.push('startDate=' + key);
+            }
+            key = $("#endDate").val();
+            if (key != null && key != null) {
+                params.push('endDate=' + key);
+            }
+            key = $("#perPage").val();
+            if (key != null && key != null) {
+                params.push('perPage=' + key);
+            }
+            key = $("#order").val();
+            if (key != null && key != null) {
+                params.push('order=' + key);
+            }
+            key = $("#currentPage").val();
+            if (key != null && key != null) {
+                params.push('currentPage=' + key);
+            }
+
+            window.location.search = params.join("&");
+        }
+
+        function selectPage(key, page) {
+            if (key == "large" || key == "small") {
+                $("#currentPage").val(page);
+                search();
+            }
+        }
+
+        function showDetail(address, id) {
+            $("#modal-detail").modal('show');
+            var item = $("#item-" + id);
+            console.log();
+            $("#item-name").text(item.find(".item-name").text())
+            $("#item-email").text(item.find(".item-email").text())
+            $("#item-phone").text(item.find(".item-phone").text())
+            $("#item-content").text(item.find(".item-content").text())
+            $("#item-address").text(address)
+        }
+    </script>
+}

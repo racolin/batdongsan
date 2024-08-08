@@ -1,0 +1,264 @@
+﻿html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    background: transparent;
+}
+* {
+    font-family: Roboto;
+    font-weight: 400;
+    color: #616161;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: Inter;
+    font-weight: 600;
+    color: #212121;
+}
+
+
+.layout {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.layout-navbar {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    width: 18rem;
+    height: 100%;
+    transition: all ease-in-out 0.35s;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.15) .15rem .15rem .2rem;
+}
+
+.layout-navbar.active {
+    transform: translateX(0);
+}
+
+.layout-menu {
+    background-color: #f1f7fe;
+    overflow: scroll;
+}
+
+#layout-menu-icon {
+    position: absolute;
+    top: 1rem;
+    right: -3rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background-color: #CB2474;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+#layout-menu-icon i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 1rem;
+}
+
+@media only screen and (max-width: 576px) {
+    .layout-navbar {
+        width: calc(100% - 3.6rem);
+    }
+}
+
+.layout-user {
+    width: 100%;
+    background-color: #18A2DD;
+    padding: 1rem 1.5rem;
+}
+
+.layout-user button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    border-bottom-left-radius: 1rem;
+    padding: .2rem .75rem;
+    background-color: #FF8F28;
+    color: white;
+    font-weight: 600;
+    font-size: .9rem;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.layout-user-avatar {
+    text-align: center;
+}
+
+.layout-user-avatar i {
+    color: white;
+    font-size: 4rem;
+    margin-bottom: .5rem;
+}
+
+.layout-user-info p {
+    font-size: 1rem;
+    color: white;
+    font-weight: 600;
+    margin: 0;
+    text-align: center;
+}
+
+.layout-user-logout {
+    text-align: right;
+}
+
+.layout-menu-item.active {
+
+}
+
+.layout-menu-parent {
+    width: 100%;
+}
+
+.layout-menu-parent button {
+    width: 100%;
+    text-align: left;
+    padding: .5rem 0;
+    background-color: #dde5f4;
+    border: none;
+    font-weight: 500;
+}
+
+.layout-menu-parent button:hover, .layout-menu-parent.active button {
+    background-color: #10729B;
+    color: white;
+}
+
+.layout-menu-parent button i {
+    padding: 0 1rem;
+}
+
+.layout-menu-parent button:hover i, .layout-menu-parent.active button i {
+    color: white;
+}
+
+.layout-menu-parent, .layout-menu-child {
+    border-top: .1rem solid white;
+}
+
+.layout-menu-children {
+    background-color: #dde5f4;
+}
+
+.layout-menu-child {
+    width: 100%;
+}
+
+.layout-menu-child button {
+    width: 100%;
+    text-align: left;
+    padding: .5rem 0;
+    background-color: #f1f7fe;
+    border: none;
+    font-weight: 500;
+}
+
+.layout-menu-child button:hover, .layout-menu-child.active button {
+    background-color: #68C9F2;
+    color: white;
+}
+
+.layout-menu-child button i {
+    padding: 0 1rem;
+}
+
+.layout-menu-child button:hover i, .layout-menu-child.active button i {
+    color: white;
+}
+
+.layout-body {
+    overflow: scroll;
+    height: 100%;
+    width: 100%;
+}
+
+/* Layout body*/ 
+
+.layout-title {
+    padding: 1rem 0 1rem 3.6rem;
+    font-size: 1.675rem;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.lb-body {
+    border-radius: .5rem;
+    overflow: scroll;
+    box-shadow: 0 .3rem .3rem lightgray, 0-0.3rem .3rem lightgray;
+}
+
+.lb-message {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.no-data {
+    padding: 4rem 0 2rem 0;
+    text-align: center;
+}
+
+.no-data img {
+    height: 16rem;
+}
+
+.no-data p {
+    margin-top: 2rem;
+    margin-bottom: 0rem;
+    font-size: 2rem;
+    font-weight: 500;
+    color: #8A96A3;
+}
+
+.content-item {
+    background-color: #f1f7fe;
+    padding: .75rem;
+    border-radius: .375rem;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    position: relative;
+}
+
+.add-slider {
+    position: relative;
+    min-height: 8rem;
+}
+
+.add-slider-wrap {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.dash {
+    border: 4px dashed #18A2DD;
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+.add-slider-wrap i {
+    font-size: 2rem;
+    color: #18A2DD;
+}
+
+.add-slider-wrap button {
+    background: none;
+    border: none;
+}

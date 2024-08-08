@@ -1,0 +1,263 @@
+﻿@using Application.Common.Responses
+@using Application.Common.Responses.Admin
+@using Application.Common.Supports
+@using Domain.Constants
+@using Domain.Entities
+@using Domain.Enums
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    DataResponse<UserResponse>? model = Model;
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/admin/css/form.css" />
+    <link rel="stylesheet" href="~/admin/css/item.css" />
+    <link rel="stylesheet" href="~/libs/bootstrap-datepicker/css/bootstrap-datepicker.css" />
+    <script src="~/libs/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+}
+
+<p class="layout-title">
+    @(model != null ? "Xem chi tiết người dùng" : "Tạo người dùng")
+</p>
+
+<div class="container-fluid flex-grow-1 lb-body layout-item">
+    @if (model != null && model.Message.Type == MessageType.Error)
+    {
+        <div class="no-data">
+            <img title="Không có dữ liệu" alt="Hình ảnh biểu thị cho danh sách trống" src="/shared/images/no_data.svg" />
+            <p>@(model!.Message.Name)</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="py-3 d-flex justify-content-end">
+                <button type="button" id="btn-save" onclick="" class="btn btn-save ms-3" title="Lưu người dùng">Lưu</button>
+                @if (model != null)
+                {
+                    if (model.Data.LockoutEnd == null)
+                    {
+                        <button type="button" id="btn-lock" class="btn btn-save ms-3" title="Khóa người dùng">Khóa</button>
+                    } else
+                    {
+                        <button type="button" id="btn-unlock" class="btn btn-save ms-3" title="Khóa người dùng">Mở khóa</button>
+                    }
+                    <button type="button" id="btn-lock" onclick="showUpdatePasswordModal(@(model.Data.Id), '@(model.Data.Username)')" class="btn btn-save ms-3" title="Đặt mật khẩu">Đặt mật khẩu</button>
+                    @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/UpdatePasswordModal.cshtml")
+                }
+            </div>
+            <div class="col-12">
+                <div class="my-2">
+                    <form id="form-save-user">
+                        <input type="hidden" id="id" name="id" value="@(model != null ? model.Data.Id : "")" />
+                        <div class="form-title-wrap">
+                            <p class="form-title">Thông tin người dùng</p>
+                        </div>
+                        <div class="row">
+
+                            <div class="col-12 col-md-6 col-lg-4 col-xl-3 my-2">
+                                <label for="username" class="form-label">Tên đăng nhập: (<span class="text-danger">*</span>)</label>
+                                <input type="text" class="form-control" name="username" value="@(model?.Data.Username)" id="username" autocomplete="off" />
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-4 col-xl-3 my-2">
+                                <label for="name" class="form-label">Tên người dùng: (<span class="text-danger">*</span>)</label>
+                                <input type="text" class="form-control" name="name" value="@(model?.Data.Name)" id="name" autocomplete="off" />
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-4 col-xl-3 my-2">
+                                <label for="email" class="form-label">Email: </label>
+                                <input type="email" class="form-control" name="email" value="@(model?.Data.Email)" id="email" autocomplete="off" />
+                            </div>
+
+                            <div class="col-6 col-md-6 col-lg-4 col-xl-3 my-2">
+                                <label for="phone" class="form-label">Số điện thoại: </label>
+                                <input type="tel" class="form-control" name="phone" value="@(model?.Data.Phone)" id="phone" autocomplete="off" />
+                            </div>
+
+                            <div class="col-6 col-sm-6 col-md-3 col-lg-2 col-xl-2 my-2">
+                                <label for="dob" class="form-label">Ngày sinh: </label>
+                                <div class="input-group date" id="dob">
+                                    <input type="text" name="dateOfBirth" class="form-control form-control-left flex-grow-1" value="@(model != null && model.Data.DateOfBirth != null ? model.Data.DateOfBirth.Value.ToString("dd/MM/yyyy") : "")">
+                                    <button class="btn btn-outline-warning" type="button"><i class="fa-solid fa-calendar-days"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="col-8 col-sm-6 col-md-3 col-lg-4 col-xl-2 my-2">
+                                <label for="filter-gender" class="form-label">Giới tính: (<span class="text-danger">*</span>)</label>
+                                <div class="input-group" id="filter-gender">
+                                    <input type="radio" class="btn-check" name="gender" value="1" id="gender-1" autocomplete="off" @(model == null || model.Data.Gender == (int)GenderEnum.Male ? "checked" : "") />
+                                    <label class="btn btn-outline-warning form-control-left" for="gender-1">Nam</label>
+
+                                    <input type="radio" class="btn-check" name="gender" value="-1" id="gender--1" autocomplete="off" @(model != null && model.Data.Gender == (int)GenderEnum.Female ? "checked" : "") />
+                                    <label class="btn btn-outline-warning form-control-between" for="gender--1">Nữ</label>
+
+                                    <input type="radio" class="btn-check" name="gender" value="0" id="gender-0" autocomplete="off" @(model != null && model.Data.Gender == (int)GenderEnum.Others ? "checked" : "") />
+                                    <label class="btn btn-outline-warning form-control-right" for="gender-0">Khác</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                @if (model != null)
+                {
+                    <div class="my-2">
+                        <div class="form-title-wrap">
+                            <p class="form-title">Vai trò của người dùng</p>
+                        </div>
+                        <div class=" my-2">
+                            <label for="filter-range-date" class="form-label">Chỉnh sửa vai trò của người dùng: </label>
+                            <div class="" id="">
+                                @foreach (var role in RoleConstant.GetAllProperties())
+                                {
+                                    <button id="role-@role" type="button" class="btn mb-2 me-2 @(model.Data.Roles.Contains(role) ? "btn-danger" : "btn-save")" 
+                                        onclick="updateRole(@((!model.Data.Roles.Contains(role)).ToString().ToLower()), @(model.Data.Id), '@(role)')">
+                                        @(model.Data.Roles.Contains(role) ? "Xóa vai trò " : "Thêm vai trò ")"@(NameSupport.GetRoleName(role))"
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@section AddToFooter {
+    <script type="text/javascript">
+        $('#dob').datepicker({
+            format: 'dd/mm/yyyy',
+            weekStart: 1,
+            templates: {
+                leftArrow: '<i class="fa-solid fa-angle-left"></i>',
+                rightArrow: '<i class="fa-solid fa-angle-right"></i>',
+            },
+            todayHighlight: true,
+            endDate: new Date(),
+        });
+
+        function updateRole(isAdd, userId, role) {
+            if (isAdd) {
+                showAlert(
+                    'Cập nhật vai trò',
+                    'Bạn có muốn thêm vai trò này không?',
+                    function () {
+                        postJsonApiExplicit(
+                            '/api/admin/user/add-role',
+                            {
+                                userId: userId,
+                                role: role,
+                            },
+                            // Success: function (data) {}
+                            function (data) {
+                                if (data != null && data == true) {
+                                    updateRoleButton('role-' + role, false);
+                                } else {
+                                    showMessage('error', 'Có lỗi phát sinh, không thể thêm vai trò này!');
+                                }
+                            },
+                            // Warning: function(textMessage, data) {}
+                            // Error: function(message) {}
+                            // Error Api function() {}
+                        );
+                    },
+                    true
+                );
+            } else {
+                showAlert(
+                    'Cập nhật vai trò',
+                    'Bạn có muốn xóa vai trò này không?',
+                    function () {
+                        postJsonApiExplicit(
+                            '/api/admin/user/remove-role',
+                            {
+                                userId: userId,
+                                role: role,
+                            },
+                            // Success: function (data) {}
+                            function (data) {
+                                if (data != null && data == true) {
+                                    updateRoleButton('role-' + role, true);
+                                } else {
+                                    showMessage('error', 'Có lỗi phát sinh, không thể xóa vai trò này!');
+                                }
+                            },
+                            // Warning: function(textMessage, data) {}
+                            // Error: function(message) {}
+                            // Error Api function() {}
+                        );
+                    },
+                    true
+                );
+            }
+        }
+
+        function updateRoleButton(id, isAdd) {
+            if (isAdd) {
+                var item = $("#" + id)[0].outerHTML.replace('btn-danger', 'btn-save').replace("Xóa", "Thêm").replace("false", "true");
+                $("#" + id).replaceWith(item);
+            } else {
+                var item = $("#" + id)[0].outerHTML.replace('btn-save', 'btn-danger').replace("Thêm", "Xóa").replace("true", "false");
+                $("#" + id).replaceWith(item);
+            }
+        }
+
+        $("#btn-save").click(function () {
+            postApiExplicit(
+                '/api/admin/user/admin-save',
+                $("#form-save-user").serialize(),
+                // Success: function (data) {}
+                function (data) {
+                    if (data != null) {
+                        window.location.replace("/admin/user/item?id=" + data);
+                    } else {
+                        showMessage('error', 'Có lỗi phát sinh, không thể lưu bài viết này!');
+                    }
+                },
+                // Warning: function(textMessage, data) {}
+                // Error: function(message) {}
+                // Error Api function() {}
+            );
+        });
+
+        $("#btn-lock").click(function () {
+            postJsonApiExplicit(
+                '/api/admin/user/set-lock',
+                {userId: $("#id").val(), isLock: true},
+                // Success: function (data) {}
+                function (data) {
+                    if (data != null) {
+                        window.location.reload()
+                    } else {
+                        showMessage('error', 'Có lỗi phát sinh, không thể khóa người dùng này!');
+                    }
+                },
+                // Warning: function(textMessage, data) {}
+                // Error: function(message) {}
+                // Error Api function() {}
+            );
+        });
+
+        $("#btn-unlock").click(function () {
+            postJsonApiExplicit(
+                '/api/admin/user/set-lock',
+                { userId: $("#id").val(), isLock: false },
+                // Success: function (data) {}
+                function (data) {
+                    if (data != null) {
+                        window.location.reload()
+                    } else {
+                        showMessage('error', 'Có lỗi phát sinh, không thể mở khóa cho người dùng này!');
+                    }
+                },
+                // Warning: function(textMessage, data) {}
+                // Error: function(message) {}
+                // Error Api function() {}
+            );
+        });
+    </script>
+    <script src="~/admin/js/verify.js"></script>
+    @* <script src="~/admin/js/User/item.js"></script> *@
+    <script src="~/admin/js/api_service.js"></script>
+}

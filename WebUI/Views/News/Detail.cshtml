@@ -1,0 +1,87 @@
+﻿@using Application.Common.Responses.Views
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var newsDetail = Model as NewsDetailView ?? new NewsDetailView();
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/client/css/news_detail.css" />
+    <link rel="stylesheet" href="~/client/css/news_content.css" />
+    <link rel="stylesheet" href="~/client/css/news_item.css" />
+}
+
+<div class="container news-detail" id="news-detail">
+    <div class="row">
+        <div class="col-12">
+        <!--- <div class="col-12(newsDetail.RelativedNews.Count > 0 ? " col-lg-9" : "")"> --->
+            <div class="news-detail-name">
+                <h1 class="news-detail-title">@newsDetail.News.Name</h1>
+            </div>
+            <div class="d-flex justify-content-between align-items-center py-3">
+                <div class="news-detail-info d-flex flex-column flex-sm-row">
+                    <a class="text-uppercase news-detail-type" href="/news/@newsDetail.News.TypeUd">@newsDetail.News.TypeName</a>
+                    <p class="news-detail-separate d-none d-sm-block">&nbsp;|&nbsp;</p>
+                    <p class="news-detail-date"><i class="fa-solid fa-clock"></i> @newsDetail.News.CreatedDate.ToString("HH:mm dd/MM/yyyy")</p>
+                </div>
+                <button class="news-detail-share" title="Copy link bài viết" onclick="addToClipBoard(window.location.origin + '/news/detail/@newsDetail.News.Ud')">
+                    Copy link
+                </button>
+            </div>
+            <div class="news-content pt-3">
+                @Html.Raw(newsDetail.News.Content)
+            </div>
+            <div class="news-hint py-4">
+                @if (newsDetail.HintType == 1)
+                {
+                    <div class="hint-left d-flex">
+                        <i class="fa-solid fa-angles-left"></i>
+                        <a href="@newsDetail.HintLeftUd">@newsDetail.HintLeftName</a>
+                    </div>
+                }
+                else if (newsDetail.HintType == 2)
+                {
+                    <div class="hint-right d-flex">
+                        <i class="fa-solid fa-angles-right"></i>
+                        <a href="@newsDetail.HintRightUd">@newsDetail.HintRightName</a>
+                    </div>
+                }
+                else if (newsDetail.HintType == 3)
+                {
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <div class="hint-left d-flex align-items-center">
+                                <i class="fa-solid fa-angles-left pe-1"></i>
+                                <a href="/news/detail/@newsDetail.HintLeftUd">@newsDetail.HintLeftName</a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 float-lg-end">
+                            <div class="hint-left d-flex align-items-center">
+                                <i class="fa-solid fa-angles-right pe-1"></i>
+                                <a href="/news/detail/@newsDetail.HintRightUd">@newsDetail.HintRightName</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="news-hint-previous"></div>
+            </div>
+        </div>
+        <!---
+        // if (newsDetail.RelativedNews.Count > 0)
+        // {
+        //     <div class="col-12 col-lg-3 news-detail-relative">
+        //         <div class="news-detail-relative-wrap">
+        //             <p class="news-detail-title">Tin liên quan</p>
+        //             foreach (var news in newsDetail.RelativedNews)
+        //             {
+        //                 await Html.PartialAsync("~/Views/Shared/Components/NewsItemRelative.cshtml", news)
+        //                 ;
+        //             }
+        //         </div>
+        //     </div>
+        // } 
+        // --->
+    </div>
+</div>
+
+<script type="text/javascript">
+</script>

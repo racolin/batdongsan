@@ -1,0 +1,191 @@
+﻿@{
+}
+<!-- Modal Gallery -->
+<div class="modal fade" id="gallery-modal-" tabindex="-1" aria-labelledby="gallery-modalLabel-" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="gallery-modalLabel-">Chọn ảnh từ thư viện</h5>
+                <button type="button" class="btn-close form-control" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row justify-content-end my-2">
+                    <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+                        <div class="input-group">
+                            <input id="valueGallery" name="valueGallery" type="text" class="form-control" placeholder="Nhập tiêu đề ảnh...">
+                            <span class="input-group-text">Số ảnh/trang</span>
+                            <input id="perPageGallery" name="perPageGallery"value="16" class="form-control flex-grow-0" type="number" style="width: 4rem" />
+                            <button class="btn btn-save" type="button" onclick="search()">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="modal-none" class="d-none">
+                    khong co
+                </div>
+                <div id="modal-data" class="row"></div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <div class="paging-cover d-flex justify-content-center">
+                    <div id="paging-previous-" class="paging-previous d-none" onclick="previous()"></div>
+                    <div class="paging d-flex" id="paging-">
+                        <input type="hidden" value="@Model.Amount" id="paging-amount-" name="paging-amount-" />
+                        <input type="hidden" value="" id="paging-current-" name="paging-current-" />
+                        <input type="hidden" value="" id="paging-left-" name="paging-left-" />
+                        <input type="hidden" value="" id="paging-right-" name="paging-right-" />
+                        <input type="hidden" value="" id="paging-max-" name="paging-max-" />
+                        <div class="d-flex paging-wrap" id="paging-wrap-">
+                        </div>
+                    </div>
+                    <div id="paging-next-" class="paging-next d-none" onclick="next()"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    var dataGallery = {};
+    var valueGallery = '';
+    var perPageGallery = 16;
+
+    $("#gallery-modal-").on('shown.bs.modal', function () {
+        if ($.isEmptyObject(dataGallery)) {
+            search();
+        }
+    });
+
+    function search() {
+        valueGallery = $("#valueGallery").val();
+        perPageGallery = $("#perPageGallery").val();
+        if (!parseInt(perPageGallery)) {
+            perPageGallery = 16;
+            $("#perPageGallery").val('16');
+        }
+        getApiExplicit(
+            '/api/admin/image/get-short-images?value=' + valueGallery + '&perPage=' + perPageGallery + '&currentPage=' + 1,
+            // Success: function (data) {}
+            function (data) {
+                if (data != null) {
+                    console.log(data, 123);
+                    setupPaging(data.max);
+                    dataGallery = {};
+                    dataGallery[data.current] = data.list;
+                    generateGallery(data.current);
+                } else {
+                    $('#modal-none').removeClass('d-none');
+                    $('#modal-data').addClass('d-none');
+                }
+            },
+            // Warning: function(textMessage, data) {}
+            // Error: function(message) {}
+            // Error Api function() {}
+        );
+    }
+    function load(current) {
+        if (dataGallery[current] == null) {
+            getApiExplicit(
+                '/api/admin/image/get-short-images?value=' + valueGallery + '&perPage=' + perPageGallery + '&currentPage=' + current,
+                // Success: function (data) {}
+                function (data) {
+                    if (data != null) {
+                        dataGallery[data.current] = data.list;
+                        generateGallery(data.current);
+                    } else {
+                        $('#modal-none').removeClass('d-none');
+                        $('#modal-data').addClass('d-none');
+                    }
+                },
+                // Warning: function(textMessage, data) {}
+                // Error: function(message) {}
+                // Error Api function() {}
+            );
+        } else {
+            generateGallery(current);
+        }
+    }
+    function selectedImageGallery(id, src) {
+        selectedImageId(imageKey, id);
+        setDisplayImage(imageKey, src);
+        showMessage('success', 'Chọn thành công, bạn có thể tiếp tục chọn ảnh khác!');
+    }
+    function generateGallery(current) {
+
+        var items = $(".modal-item");
+
+        var lengthItem = items.length;
+        var lengthData = dataGallery[current].length;
+
+        if (lengthData >= lengthItem) {
+            for (var i = 0; i < lengthItem; i++) {
+                items.eq(i).find("img").attr('src', dataGallery[current][i].name);
+                items.eq(i).find("p").text(dataGallery[current][i].title);
+                items.eq(i).find(".modal-item-wrap").attr('onclick', 'selectedImageGallery(' + dataGallery[current][i].id + ', \'' + dataGallery[current][i].name + '\')');
+            }
+            for (var i = 0; i < lengthData - lengthItem; i++) {
+                $("#modal-data").append(
+                    $('<div class="modal-item col-12 col-sm-6 col-md-4 col-lg-3"><div onclick="selectedImageGallery(' + dataGallery[current][i + lengthItem].id + ', \'' + dataGallery[current][i + lengthItem].name + '\')" class="modal-item-wrap">' +
+                    '<img class="" src ="' + dataGallery[current][i + lengthItem].name + '" />' +
+                    '<p>' + dataGallery[current][i + lengthItem].title + '</p>' +
+                    '</div></div>')
+                )
+            }
+        } else {
+            for (var i = 0; i < lengthData; i++) {
+                items.eq(i).find("img").attr('src', dataGallery[current][i].name);
+                items.eq(i).find("p").text(dataGallery[current][i].title);
+                items.eq(i).find(".modal-item-wrap").attr('onclick', 'selectedImageGallery(' + dataGallery[current][i].id + ', \'' + dataGallery[current][i].name + '\')');
+            }
+            for (var i = 0; i < lengthItem - lengthData; i++) {
+                items.eq(i + lengthData).remove();
+            }
+        }
+    }
+    function setupPaging(max) {
+        console.log(max);
+        if (max < 1) {
+            $("#modal-none").removeClass("d-none");
+            $("#modal-data").addClass("d-none");
+        }
+        var current = 1;
+        $("#paging-max-").val(max);
+        $("#paging-current-").val(1);
+        $("#paging-left-").val(1);
+        var amount = parseInt($("#paging-amount-").val());
+        var right = max > amount ? amount : max;
+        $("#paging-right-").val(right);
+
+        var width = right * 2.7;
+        var paging = document.getElementById('paging-').style.width = width + 'rem';
+        var wrap = document.getElementById("paging-wrap-");
+        wrap.style.translate = '0 0';
+        var content = '';
+        if (max > 1) {
+            for (var i = 1; i <= max; i++) {
+                content += '<div class="paging-item paging-item-' + (i == current ? ' active' : '') + '" onclick="selectPaging(\'' + '\', ' + i + ')"><p class="paging-number">' + i + '</p></div>';
+            }
+        }
+        wrap.innerHTML = content;
+        if (amount < max) {
+            $('#paging-next-').removeClass('d-none')
+            $('#paging-next-').addClass('active')
+            $('#paging-previous-').removeClass('d-none')
+        }
+    }
+    function next() {
+        var max = parseInt($("#paging-max-").val())
+        pageControl('', 1, max)
+    }
+    function previous() {
+        var max = parseInt($("#paging-max-").val())
+        pageControl('', -1, max)
+    }
+    function selectPage(key, page) {
+        var current = parseInt($("#paging-current-").val());
+        $(".paging-item-").eq(current - 1).removeClass("active");
+        current = page;
+        $(".paging-item-").eq(current - 1).addClass("active");
+        $("#paging-current-").val(current);
+        load(current);
+    }
+</script>

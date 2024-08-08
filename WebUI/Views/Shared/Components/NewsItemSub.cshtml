@@ -1,0 +1,22 @@
+﻿@using Application.Common.Responses.Views
+@{
+    var news = Model as NewsView ?? new NewsView();
+}
+<div class="news-item-sub">
+    <div class="row news-item-wrap">
+        <div class="col-12 col-md-4 news-item-img">
+            <img title="@news.Name" src="@news.Image" onclick="window.location.href = '/news/detail/@news.Ud'" />
+        </div>
+        <div class="col-12 col-md-8 news-item-info">
+            <div class="news-item-title">
+                <h1 onclick="window.location.href = '/news/detail/@news.Ud'">@news.Name</h1>
+            </div>
+            <div class="d-flex news-item-detail align-items-center">
+                <a class="text-uppercase news-item-type" href="/news/@news.TypeUd">@news.TypeName</a>
+                <p class="news-item-separate">&nbsp;|&nbsp;</p>
+                <p class="news-item-date"><i class="fa-solid fa-clock"></i> @news.CreatedDate.ToString("HH:mm dd/MM/yyyy")</p>
+            </div>
+        </div>
+        <p class="news-item-content">@news.Description</p>
+    </div>
+</div>

@@ -1,0 +1,296 @@
+﻿@using Application.Common.Responses.Views
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ProjectIndexView model = Model ?? new ProjectIndexView();
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/client/css/projects.css" />
+    <link rel="stylesheet" href="~/client/css/project_item.css" />
+}
+
+@section AddToFooter {
+    <script src="~/client/js/paging.js"></script>
+}
+
+<div class="container-fluid projects pb-5" id="projects">
+    @if (model.Slides.Count > 1)
+    {
+        <div class="projects-top-slider" id="projects-top-slider">
+            <div id="projects-top-image-inner"></div>
+            <div id="pjCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#pjCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="@(model.Slides[0].ImageTitle)"></button>
+                    @for (var i = 1; i < model.Slides.Count; i++)
+                    {
+                        <button type="button" data-bs-target="#pjCarousel" data-bs-slide-to="@i" class="" aria-current="true" aria-label="@(model.Slides[i].ImageTitle)"></button>
+                    }
+                </div>
+                <div class="carousel-inner" id="pjCarouselInner">
+                    <div class="carousel-item active" @(string.IsNullOrEmpty(model.Slides[0].Link) ? "" : "onclick='window.location.href = '" + model.Slides[0].Link+ "'")>
+                        <img src="@(model.Slides[0].Image)" class="d-block w-100" title="@(model.Slides[0].ImageTitle)" alt="@(model.Slides[0].ImageAlt)">
+                    </div>
+                    @for (var i = 1; i < model.Slides.Count; i++)
+                    {
+                        <div class="carousel-item" @(string.IsNullOrEmpty(model.Slides[i].Link) ? "" : "onclick='window.location.href = '" + model.Slides[i].Link + "'")>
+                            <img src="@(model.Slides[i].Image)" class="d-block w-100" title="@(model.Slides[i].ImageTitle)" alt="@(model.Slides[i].ImageAlt)">
+                        </div>
+                    }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#pjCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#pjCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    } else if (model.Slides.Count == 1)
+    {
+        <div class="projects-top-image" id="projects-top-image" style="background-image: url(@(model.Slides[0].Image));">
+            <div id="projects-top-image-inner"></div>
+        </div>
+    } 
+    else
+    {
+        <div class="projects-top-image" id="projects-top-image" style="background-image: url(../upload/images/background-5.jpg);">
+            <div id="projects-top-image-inner"></div>
+        </div>
+    }
+
+    <div class="projects-section projects-apartment container-fluid" id="apartment">
+        <div class="projects-head row">
+            <div class="line-wrap col-2 col-md-3 col-lg-4">
+                <div class="row line"></div>
+            </div>
+            <h1 class="projects-head-title col-8 col-md-6 col-lg-4">Căn hộ</h1>
+            <div class="line-wrap col-2 col-md-3 col-lg-4">
+                <div class="row line"></div>
+            </div>
+        </div>
+        @if (model.Apartment.Count == 0)
+        {
+            <div class="no-data">
+                <img title="Không có dữ liệu" alt="Hình ảnh biểu thị cho danh sách trống" src="/shared/images/no_data.svg" />
+                <p>Chưa có dự án căn hộ nào!</p>
+            </div>
+            
+        } else
+        {
+            @foreach (var group in model.Apartment)
+            {
+                <div class="container projects-group mt-5">
+                    <div class="projects-group-title">
+                        <h1>@group.StateName</h1>
+                    </div>
+                    <div class="projects-group-wrap row mt-4">
+                        @if (group.Projects.Count % 2 == 1)
+                        {
+                            <div class="col-12 project-full">
+                                @await Html.PartialAsync("~/Views/Shared/Components/ProjectItemTB.cshtml", group.Projects[0])
+                            </div>
+                            @for (var i = 1; i < group.Projects.Count; i++)
+                            {
+                                <div class="col-12 col-md-6">
+                                    @await Html.PartialAsync("~/Views/Shared/Components/ProjectItemTB.cshtml", group.Projects[i])
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            @foreach (var project in group.Projects)
+                            {
+                                <div class="col-12 col-md-6">
+                                    @await Html.PartialAsync("~/Views/Shared/Components/ProjectItemTB.cshtml", project)
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        } 
+    </div>
+    <div class="projects-section projects-ground container-fluid" id="ground">
+        <div class="projects-head row">
+            <div class="line-wrap col-2 col-md-3 col-lg-4">
+                <div class="row line"></div>
+            </div>
+            <h1 class="projects-head-title col-8 col-md-6 col-lg-4">Đất nền</h1>
+            <div class="line-wrap col-2 col-md-3 col-lg-4">
+                <div class="row line"></div>
+            </div>
+        </div>
+        @if (model.Apartment.Count == 0)
+        {
+            <div class="no-data">
+                <img title="Không có dữ liệu" alt="Hình ảnh biểu thị cho danh sách trống" src="/shared/images/no_data.svg" />
+                <p>Chưa có dự án đất nền nào!</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var group in model.Ground)
+            {
+                <div class="container projects-group mt-5">
+                    <div class="projects-group-title">
+                        <h1>@group.StateName</h1>
+                    </div>
+                    <div class="projects-group-wrap row mt-4">
+                        @if (group.Projects.Count % 2 == 1)
+                        {
+                            <div class="col-12 project-full">
+                                @await Html.PartialAsync("~/Views/Shared/Components/ProjectItemTB.cshtml", group.Projects[0])
+                            </div>
+                            @for (var i = 1; i < group.Projects.Count; i++)
+                            {
+                                <div class="col-12 col-md-6">
+                                    @await Html.PartialAsync("~/Views/Shared/Components/ProjectItemTB.cshtml", group.Projects[i])
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            @foreach (var project in group.Projects)
+                            {
+                                <div class="col-12 col-md-6">
+                                    @await Html.PartialAsync("~/Views/Shared/Components/ProjectItemTB.cshtml", project)
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    <div class="projects-section projects-resort-real-estate container-fluid" id="resort-real-estate">
+        <div class="projects-head row">
+            <div class="line-wrap col-2 col-md-3 col-lg-4">
+                <div class="row line"></div>
+            </div>
+            <h1 class="projects-head-title col-8 col-md-6 col-lg-4">Bất động sản nghỉ dưỡng</h1>
+            <div class="line-wrap col-2 col-md-3 col-lg-4">
+                <div class="row line"></div>
+            </div>
+        </div>
+        @if (model.ResortRealEstate.Count == 0)
+        {
+            <div class="no-data">
+                <img title="Không có dữ liệu" alt="Hình ảnh biểu thị cho danh sách trống" src="/shared/images/no_data.svg" />
+                <p>Chưa có dự án bất động sản nghỉ dưỡng nào!</p>
+            </div>
+
+        }
+        else
+        {
+            @foreach (var group in model.ResortRealEstate)
+            {
+                <div class="container projects-group mt-5">
+                    <div class="projects-group-title">
+                        <h1>@group.StateName</h1>
+                    </div>
+                    <div class="projects-group-wrap row mt-4">
+                        @if (group.Projects.Count % 2 == 1)
+                        {
+                            <div class="col-12 project-full">
+                                @await Html.PartialAsync("~/Views/Shared/Components/ProjectItemTB.cshtml", group.Projects[0])
+                            </div>
+                            @for (var i = 1; i < group.Projects.Count; i++)
+                            {
+                                <div class="col-12 col-md-6">
+                                    @await Html.PartialAsync("~/Views/Shared/Components/ProjectItemTB.cshtml", group.Projects[i])
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            @foreach (var project in group.Projects)
+                            {
+                                <div class="col-12 col-md-6">
+                                    @await Html.PartialAsync("~/Views/Shared/Components/ProjectItemTB.cshtml", project)
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    <div class="projects-section projects-villa container-fluid" id="villa">
+        <div class="projects-head row">
+            <div class="line-wrap col-2 col-md-3 col-lg-4">
+                <div class="row line"></div>
+            </div>
+            <h1 class="projects-head-title col-8 col-md-6 col-lg-4">Biệt thự</h1>
+            <div class="line-wrap col-2 col-md-3 col-lg-4">
+                <div class="row line"></div>
+            </div>
+        </div>
+        @if (model.Apartment.Count == 0)
+        {
+            <div class="no-data">
+                <img title="Không có dữ liệu" alt="Hình ảnh biểu thị cho danh sách trống" src="/shared/images/no_data.svg" />
+                <p>Chưa có dự án biệt thự nào!</p>
+            </div>
+        } else
+        {
+            @foreach (var group in model.Villa)
+            {
+                <div class="container projects-group mt-5">
+                    <div class="projects-group-title">
+                        <h1>@group.StateName</h1>
+                    </div>
+                    <div class="projects-group-wrap row mt-4">
+                        @if (group.Projects.Count % 2 == 1)
+                        {
+                            <div class="col-12 project-full">
+                                @await Html.PartialAsync("~/Views/Shared/Components/ProjectItemTB.cshtml", group.Projects[0])
+                            </div>
+                            @for (var i = 1; i < group.Projects.Count; i++)
+                            {
+                                <div class="col-12 col-md-6">
+                                    @await Html.PartialAsync("~/Views/Shared/Components/ProjectItemTB.cshtml", group.Projects[i])
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            @foreach (var project in group.Projects)
+                            {
+                                <div class="col-12 col-md-6">
+                                    @await Html.PartialAsync("~/Views/Shared/Components/ProjectItemTB.cshtml", project)
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    onProjectsScroll();
+    function onProjectsScroll() {
+        var scrollY = window.scrollY;
+        var y = 36 * 16 - scrollY;
+        y = y < 0 ? 0 : y / 36 / 16 * 100;
+
+        var projects = document.getElementById("projects-top-image");
+        if (projects == undefined) {
+            projects = document.getElementById("projects-top-slider");
+            if (scrollY == 0) {
+                document.getElementById("pjCarouselInner").style.zIndex = 3;
+            } else {
+                document.getElementById("pjCarouselInner").style.zIndex = 0;
+            }
+        }
+        projects.style.backgroundPositionY = y + '%';
+
+        var projectsInner = document.getElementById("projects-top-image-inner");
+        projectsInner.style.opacity = (100 - y) + '%';
+        console.log(window.scrollY);
+    }
+</script>

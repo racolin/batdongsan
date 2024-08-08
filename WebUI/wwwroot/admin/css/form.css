@@ -1,0 +1,97 @@
+﻿.form-title {
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 0;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}
+
+.input-group .form-control-between {
+    border-radius: 0 !important;
+    background-color: white;
+    color: #212121;
+}
+
+.input-group .form-control-left {
+    border-radius: var(--bs-border-radius) 0 0 var(--bs-border-radius) !important;
+    background-color: white;
+    color: #212121;
+}
+
+.input-group .form-control-right {
+    border-radius: 0 var(--bs-border-radius) var(--bs-border-radius) 0 !important;
+    background-color: white;
+    color: #212121;
+}
+
+.btn-right {
+    border-radius: 0 var(--bs-border-radius) var(--bs-border-radius) 0 !important;
+}
+
+.btn-check:checked + .btn {
+    background-color: #FF8F28 !important;
+    color: white;
+}
+
+.btn-check:checked + .btn i {
+    color: white;
+}
+
+.form-control:focus {
+    outline: none !important;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.datepicker table {
+    width: 14rem;
+}
+
+.datepicker table td, .datepicker table th {
+    height: 2rem;
+    width: 2rem;
+}
+
+.btn-danger {
+    font-weight: 500;
+}
+
+.btn-edit {
+    font-weight: 500;
+    color: white;
+    background-color: #FF8F28DD;
+}
+
+.btn-edit:hover {
+    color: white;
+    background-color: #FF8F28;
+}
+
+.btn-save {
+    font-weight: 500;
+    color: white;
+    background-color: #18A2DDDD;
+}
+
+.btn-save:hover {
+    color: white;
+    background-color: #18A2DD;
+}
+
+.btn-create {
+    font-weight: 500;
+    color: white;
+    background-color: #275E29DD;
+}
+
+.btn-create:hover {
+    color: white;
+    background-color: #275E29;
+}

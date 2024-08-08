@@ -1,0 +1,63 @@
+﻿@{
+    var Current = Model.Current < 1 ? 1 : Model.Current > Model.Max ? Model.Max : Model.Current;
+    var Amount = Model.Amount < 1 ? 1 : Model.Amount;
+
+    var Left = 0;
+    var Right = 0;
+
+    if (Model.Max <= Amount)
+    {
+        Left = 1;
+        Right = Model.Max;
+    } 
+    else
+    {
+        if (Current + Amount > Model.Max)
+        {
+            Right = Model.Max;
+            Left = Model.Max - (Amount - 1);
+        } 
+        else
+        {
+            Left = Current - 1;
+            Left = Left > 0 ? Left : 1;
+            Right = Left + (Amount - 1);
+        }
+    }
+    var CanPrevious = Left > 1;
+    var CanNext = Right < Model.Max;
+}
+@if (Model.Max > 1)
+{
+    <div class="paging-cover d-flex justify-content-center">
+        @if (Model.Max > Amount)
+        {
+            <div id="paging-previous-@Model.Key" class="paging-previous@(CanPrevious ? " active" : "")" onclick="pageControl('@Model.Key', -1, @Model.Max)"></div>
+        }
+        <div class="paging d-flex@(Model.Max > Amount ? "" : " justify-content-center")" id="paging-@Model.Key">
+            <input type="hidden" value="@Current" id="paging-current-@Model.Key" name="paging-current-@Model.Key" />
+            <input type="hidden" value="@Left" id="paging-left-@Model.Key" name="paging-left-@Model.Key" />
+            <input type="hidden" value="@Right" id="paging-right-@Model.Key" name="paging-right-@Model.Key" />
+            <div class="d-flex paging-wrap" id="paging-wrap-@Model.Key">
+                @for (var i = 1; i < Model.Max + 1; i++)
+                {
+                    <div class="paging-item@(i == Current ? " active" : "")" onclick="selectPaging('@Model.Key', @i)">
+                        <p class="paging-number">@i</p>
+                    </div>
+                }
+            </div>
+        </div>
+        @if (Model.Max > Amount)
+        {
+            <div id="paging-next-@Model.Key" class="paging-next@(CanNext ? " active" : "")" onclick="pageControl('@Model.Key', 1, @Model.Max)"></div>
+        }
+    </div>
+
+    <script type="text/javascript">
+        var left = @Left;
+        var width = parseInt(@Model.Amount) * 2.7;
+        var paging = document.getElementById('paging-@Model.Key').style.width = width + 'rem';
+        var wrap = document.getElementById("paging-wrap-" + '@Model.Key');
+        wrap.style.translate = (left * -2.7 + 2.7) + 'rem 0';
+    </script>
+}

@@ -1,0 +1,231 @@
+﻿@using Domain.Entities
+@using Application.Common.Supports
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ImagePageEntity? home = ViewBag.Home;
+    ImagePageEntity? bgHome = ViewBag.BgHome;
+    ImagePageEntity? news = ViewBag.News;
+    ImagePageEntity? contact = ViewBag.Contact;
+    SliderEntity slider = ViewBag.Slider;
+    SectionEntity section = ViewBag.Section;
+    
+    var sliderCount = 0;
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/admin/css/gallery.css" />
+    <link rel="stylesheet" href="~/admin/css/form.css" />
+    <link rel="stylesheet" href="~/admin/css/image_upload.css" />
+    <link rel="stylesheet" href="~/admin/css/paging.css" />
+    <link rel="stylesheet" href="~/libs/summernote/summernote-bs5.css" />
+    <script src="/libs/summernote/summernote-bs5.js"></script>
+}
+
+<p class="layout-title">
+    Chỉnh sửa Web
+</p>
+
+<div class="container-fluid flex-grow-1 lb-body">
+    <div class="py-3 d-flex justify-content-end">
+        <button type="button" id="btn-save" class="btn btn-save ms-3" title="Lưu ảnh">Lưu</button>
+    </div>
+    <div class="image-pages">
+        <div class="row image-pages-wrap my-2">
+            <div class="form-title-wrap">
+                <p class="form-title">Ảnh ở các trang</p>
+            </div>
+            @if (home != null)
+            {
+                <input id="id-home-screen" name="id-home-screen" type="hidden" value="@(home.Id)" />
+                <input id="position-home-screen" name="position-home-screen" type="hidden" value="@(home.Position)" />
+                <input id="imageId-home-screen" name="imageId-home-screen" type="hidden" value="@(home.Image.Id)" />
+                <div class="image-page col-12 col-md-6 col-lg-3 my-2">
+                    <div class="content-item">
+                        <label for="filter-name" class="form-label">Ảnh trên cùng trang chủ: (<span class='text-danger'>*</span>)</label>
+                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
+                                 new
+                                 {
+                                     Key = "home-screen",
+                                     Src = PathSupport.GetUploadImagePath(home!.Image.Name),
+                                 }
+                                 )
+                    </div>
+                </div>
+            }
+            @if (bgHome != null)
+            {
+                <input id="id-bg-home" name="id-bg-home" type="hidden" value="@(bgHome.Id)" />
+                <input id="position-bg-home" name="position-bg-home" type="hidden" value="@(bgHome.Position)" />
+                <input id="imageId-bg-home" name="imageId-bg-home" type="hidden" value="@(bgHome.Image.Id)" />
+                <div class="image-page col-12 col-md-6 col-lg-3 my-2">
+                    <div class="content-item">
+                        <label for="filter-name" class="form-label">Ảnh nền trang chủ: (<span class='text-danger'>*</span>)</label>
+                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
+                                 new
+                                 {
+                                     Key = "bg-home",
+                                     Src = PathSupport.GetUploadImagePath(bgHome!.Image.Name),
+                                 }
+                                 )
+                    </div>
+                </div>
+            }
+            @if (news != null)
+            {
+                <input id="id-news-screen" name="id-news-screen" type="hidden" value="@(news.Id)" />
+                <input id="position-news-screen" name="position-news-screen" type="hidden" value="@(news.Position)" />
+                <input id="imageId-news-screen" name="imageId-news-screen" type="hidden" value="@(news.Image.Id)" />
+                <div class="image-page col-12 col-md-6 col-lg-3 my-2">
+                    <div class="content-item">
+                        <label for="filter-name" class="form-label">Ảnh trên cùng tin tức: (<span class='text-danger'>*</span>)</label>
+                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
+                                 new
+                                 {
+                                     Key = "news-screen",
+                                     Src = PathSupport.GetUploadImagePath(news!.Image.Name),
+                                 }
+                                 )
+                    </div>
+                </div>
+            }
+            @if (contact != null)
+            {
+                <input id="id-contact-screen" name="id-contact-screen" type="hidden" value="@(contact.Id)" />
+                <input id="position-contact-screen" name="position-contact-screen" type="hidden" value="@(contact.Position)" />
+                <input id="imageId-contact-screen" name="imageId-contact-screen" type="hidden" value="@(contact.Image.Id)" />
+                <div class="image-page col-12 col-md-6 col-lg-3 my-2">
+                    <div class="content-item">
+                        <label for="filter-name" class="form-label">Ảnh trên cùng liên hệ: (<span class='text-danger'>*</span>)</label>
+                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
+                                 new
+                                 {
+                                     Key = "contact-screen",
+                                     Src = PathSupport.GetUploadImagePath(contact!.Image.Name),
+                                 }
+                                 )
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="sliders">
+        @if (slider != null)
+        {
+            <div class="row sliders-wrap my-2" id="slider-project">
+                <div class="form-title-wrap">
+                    <p class="form-title">Slider trên cùng trang dự án</p>
+                </div>
+                <div class="slider col-12 my-2">
+                    <div class="row slider">
+                        <input id="sliderProjectId" name="sliderProjectId" type="hidden" value="@(slider.Id)" />
+                        <input id="sliderProjectPosition" name="sliderProjectPosition" type="hidden" value="@(slider.Position)" />
+                        @foreach (var item in slider!.Items)
+                        {
+                            <div class="col-12 col-md-6 col-lg-4 slider-image my-3" id="item-slider-project-@(sliderCount)">
+                                <div class="content-item">
+                                    <div class="d-flex justify-content-between align-items-end input-group mt-2 mb-3">
+                                        <input type="hidden" name="id-@("slider-project-" + sliderCount)" value="@(item.Id)" id="id-@("slider-project-" + sliderCount)" />
+                                        <input type="hidden" name="imageId-@("slider-project-" + sliderCount)" value="@(item.Image.Id)" id="imageId-@("slider-project-" + sliderCount)" />
+                                        <div class="flex-grow-1">
+                                            <label for="link-@("slider-project-" + sliderCount)" class="form-label">Liên kết: </label>
+                                            <input type="text" class="form-control form-control-left" name="link-@("slider-project-" + sliderCount)" value="@(item.Link)" id="link-@("slider-project-" + sliderCount)" autocomplete="off" />
+                                        </div>
+                                        <div class="" style="width: 5rem">
+                                            <label for="order-@("slider-project-" + sliderCount)" class="form-label">Thứ tự: (<span class="text-danger">*</span>)</label>
+                                            <input type="number" class="form-control form-control-between" name="order-@("slider-project-" + sliderCount)" value="@(item.Order)" id="order-@("slider-project-" + sliderCount)" autocomplete="off" />
+                                        </div>
+                                        <button type="button" onclick="deleteSlider('#item-slider-project-@(sliderCount)')" class="btn btn-danger btn-right" title="Xóa ảnh khỏi slider">Xóa</button>
+                                    </div>
+                                    <div class="my-2">
+                                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
+                                                 new
+                                                 {
+                                                     Key = "slider-project-" + sliderCount.ToString(),
+                                                     Src = PathSupport.GetUploadImagePath(item.Image.Name),
+                                                 }
+                                                 )
+                                    </div>  
+                                </div>
+                            </div>
+                            sliderCount++;
+                        }
+                        <div class="col-6 col-md-4 col-lg-2 add-slider my-3" id="add-slider-project">
+                            <div class="content-item dash add-slider-wrap">
+                                <button title="Thêm ảnh slider" type="button" onclick="addSlider('project')">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="section">
+        <div class="section-wrap my-2">
+
+            <div class="form-title-wrap">
+                <p class="form-title">Soạn nội dung giới thiệu</p>
+            </div>
+            <div class="row">
+                <div class="col-12 my-2">
+                    <div class="form-group">
+                        <input id="sectionId" name="contactId" type="hidden" value="@(section?.Id)" />
+                        <input id="sectionPosition" name="contactPosition" type="hidden" value="@(section?.Position)" />
+                        <label class="form-label" for="section">Nội dung: (<span class="text-danger">*</span>)</label>
+                        <textarea id="sectionContent">@(Html.Raw(Uri.UnescapeDataString(section?.Content ?? "")))</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="" style="height:10rem"></div>
+</div>
+
+@await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/GalleryModal.cshtml", new { Key = "", Amount = 5 })
+
+@section AddToFooter {
+    <script type="text/javascript">
+        var sliderCount = @sliderCount;
+        var imageKey = '';
+        function selectedImageId(key, id) {
+            $("#imageId-" + key).val(id);
+        }
+        function removedImageId(key) {
+            $("#imageId-" + key).val("");
+        }
+        $(document).ready(function () {
+            $('#sectionContent').summernote({
+                placeholder: 'Tạo nội dung giới thiệu',
+                height: 400,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ]
+            });
+        });
+        function deleteSlider(query) {
+            $(query).remove();
+        }
+        function addSlider(key) {
+            var item = $("#slider-" + key).find(".slider-image")[0].outerHTML.replaceAll(new RegExp('slider-' + key + '-' + '\\d+', 'g'), 'slider-' + key + '-' + sliderCount);
+            $("#add-slider-" + key).before(item)
+            clearDisplayImage('slider-' + key + '-' + sliderCount)
+            $('#link-slider-' + key + '-' + sliderCount).val("")
+            $('#order-slider-' + key + '-' + sliderCount).val("")
+            $('#id-slider-' + key + '-' + sliderCount).val("")
+            sliderCount++;
+        }
+    </script>
+    <script src="~/admin/js/Content/index.js"></script>
+    <script src="~/admin/js/choose_or_upload_image.js"></script>
+    <script src="~/admin/js/image_upload.js"></script>
+    <script src="~/admin/js/verify.js"></script>
+    <script src="~/admin/js/paging.js"></script>
+    <script src="~/admin/js/api_service.js"></script>
+}

@@ -1,0 +1,130 @@
+﻿<footer class="footer container-fluid">
+    <div class="container">
+        <div class="row pt-5 pb-4">
+            <div class="col-12 col-lg-6 mb-3">
+                <div class="d-flex align-items-center footer-logo mb-3" onclick="window.location.href = '/'">
+                    <div class="">
+                        <img src="~/shared/images/logo/logo-lg-light.png" title="Logo" />
+                    </div>
+                    <div class="footer-name ps-3">
+                        <h1 class="mb-0">BDS Hot</h1>
+                    </div>
+                </div>
+                <div class="form-register-mail">
+                    <p class="mb-2">Nhập email để đăng ký nhận tin tức dự án sớm nhất!</p>
+                    <div class="footer-input-email">
+                        <form id="register-mail">
+                            @Html.AntiForgeryToken()
+                            <input title="Input your email" onkeyup="typeRegisterMail()" placeholder="Email (*)" type="email" id="register-mail-input" name="email">
+                            <a href="javascript:void(0)" class="d-none" onclick="clearRegisterMail()" id="register-mail-clear"><i class="fa-solid fa-xmark"></i></a>
+                            <button type="button" onclick="checkEmail()" title="Tin tức dự án sẽ được gửi qua mail">Nhận tin</button>
+                        </form>
+                    </div>
+                    <p id="register-mail-message" class="my-1"></p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 footer-xh">
+                <p class="footer-xh-title">Kết nối với chúng tôi</p>
+                <div class="d-flex">
+                    <a class="footer-xh-item" style="background-color: white;"
+                       href="https://zalo.me/0868754872" target="_blank">
+                        <img src="~/client/images/icon/zalo.svg" title="Zalo Icon" />
+                    </a>
+                    <a class="footer-xh-item d-flex align-items-center justify-content-center" style="background-color: #3b5998;"
+                       href="https://www.facebook.com/" target="_blank">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <a class="footer-xh-item d-flex align-items-center justify-content-center" style="background-color: #FF0000;"
+                       href="https://www.youtube.com/" target="_blank">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="text-center m-0 py-2 text-white">Copyrights © 2024 by BDSHot</p>
+</footer>
+
+<script type="text/javascript">
+    function clearRegisterMail() {
+        var input = document.getElementById("register-mail");
+        input.value = "";
+        input.focus();
+        var e = document.getElementById("register-mail-clear");
+        e.classList.add("d-none");
+        var msg = document.getElementById("register-mail-message");
+        msg.classList.remove("text-danger");
+        msg.classList.remove("text-success");
+        msg.textContent = "";
+    }
+    function typeRegisterMail() {
+        var email = document.getElementById("register-mail").value;
+        var e = document.getElementById("register-mail-clear");
+
+        var msg = document.getElementById("register-mail-message");
+        msg.classList.remove("text-danger");
+        msg.classList.remove("text-success");
+        msg.textContent = "";
+        if (email == null || email == undefined || email == "") {
+            e.classList.add("d-none");
+        } else {
+            e.classList.remove("d-none");
+        }
+    }
+    function checkEmail() {
+        var result = validateEmail(document.getElementById("register-mail-input").value);
+        var msg = document.getElementById("register-mail-message");
+        if (result) {
+            registerMail(function() {
+                msg.classList.remove("text-danger");
+                msg.classList.add("text-success")
+                msg.textContent = "Bạn đã đăng ký nhận tin thành công!";
+            });
+        } else {
+            msg.classList.remove("text-success");
+            msg.classList.add("text-danger")
+            msg.textContent = "Email không hợp lệ, hãy kiểm tra lại!";
+        }
+    }
+    function validateEmail(email) {
+        if (email.length < 1 || email.length > 100) {
+            return false;
+        }
+        var re = /^[\w\-\.]+@@([\w-]+\.)+[\w-]{2,}$/
+        return re.test(email);
+    }
+
+    function registerMail(onSuccess) {
+        console.log($("#register-mail").serialize());
+        $.ajax({
+            url: 'api/contact/register-mail',
+            type: 'POST',
+            data: $("#register-mail").serialize(),//dataJson,
+            datatype: 'json',
+            beforeSend: loading,
+            complete: loaded,
+            success: function (data) {
+                // do something if warning
+                if (data.message.type == 1) {
+                    showMessage('warning', data.message.name)
+                    return;
+                }
+                // do something if error
+                if (data.message.type == 2) {
+                    showMessage('error', data.message.name)
+                    return;
+                }
+                // success response
+                // do something if success
+                onSuccess();
+                // showMessage('success', data.message.name);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                // error api
+                // do something if error
+                // alert(xhr.responseJSON.name);
+                showMessage('error', xhr.responseJSON.name)
+            },
+        });
+    }
+</script>

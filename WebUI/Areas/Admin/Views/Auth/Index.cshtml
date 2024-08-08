@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>Đăng nhập - BDS Hot</title>
+
+    <link rel="icon" type="image/x-icon" href="~/shared/images/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="~/libs/jquery/jquery.js"></script>
+    <script src="~/libs/bootstrap/js/bootstrap.js"></script>
+
+    <link rel="stylesheet" href="~/libs/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/libs/font-awesome/css/all.min.css">
+
+    <link rel="stylesheet" href="~/shared/css/font.css" />
+    <link rel="stylesheet" href="~/admin/css/auth.css" />
+    <link rel="stylesheet" href="~/shared/css/loader.css" />
+    <link rel="stylesheet" href="~/shared/css/notify.css" />
+
+</head>
+<body>
+
+    <div class="container auth">
+        <div class="auth-wrap row">
+            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 auth-form-wrap">
+                <div class="auth-form p-4 p-sm-5">
+                    <div class="logo mb-3">
+                        <img id="auth-logo" title="Logo của BDS Hot" alt="Hình ảnh logo của BDS Hot" src="/shared/images/logo/logo-md.png" />
+                    </div>
+                    <div class="auth-title mb-3">
+                        <p>Đăng nhập</p>
+                    </div>
+                    <form action="" method="post" id="form-login" autocomplete="off">
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            <input id="username" name="username" type="text" class="form-control" placeholder="Nhập tên đăng nhập" />
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="position-relative password-wrap mb-3">
+                                <input id="password" name="password" type="password" class="form-control pe-5 password-input" placeholder="Nhập mật khẩu" />
+                                <button id="password-eye" title="Xem/ẩn mật khẩu" onclick="updatePasswordStatus()" class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-eye" type="button">
+                                    <i id="eye-open" class="fa-solid fa-eye align-middle"></i>
+                                    <i id="eye-close" class="fa-solid fa-eye-slash align-middle d-none"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="login-forgot-password">
+                            <a href="/admin/auth/forgotpassword" class="mb-3 text-muted float-end">Quên mật khẩu?</a>
+                        </div>
+
+                        <div class="mt-4">
+                            <input id="btn-login" title="Đăng nhập" type="button" name="btn-login" value="Đăng nhập" class="btn btn-auth w-100" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loader -->
+    <div id="loader" class="d-none">
+        <div class="loader-wrap">
+            <div class="loader-circle"></div>
+        </div>
+    </div>
+
+    <!-- Message -->
+    <div class="container position-absolute bottom-0">
+        <div class="messages row">
+            <div class="messages-wrap col-12 col-md-10 col-lg-8 col-lg-6" id="message-wrap">
+                <div class="alert alert-danger message message-error alert-dismissible fade d-none" role="alert">
+                    <i class="fa-solid fa-circle-xmark me-1"></i>
+                    <strong>Error! </strong>
+                    <span></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div class="alert alert-warning message message-warning alert-dismissible fade d-none" role="alert">
+                    <i class="fa-solid fa-circle-exclamation me-1"></i>
+                    <strong>Warning! </strong>
+                    <span></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div class="alert alert-success message message-success alert-dismissible fade d-none" role="alert">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <strong>Success! </strong>
+                    <span></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/shared/js/notify.js"></script>
+    <script src="~/shared/js/loader.js"></script>
+    <script type="text/javascript">
+        function setCookie(key, name) {
+            console.log(document.cookie);
+            document.cookie = key + "=" + name + ";";
+            console.log(document.cookie);
+        }
+
+        var hidePassword = true; 
+        
+        $(document).on('keypress', function (e) {
+            if (e.which == 13) {
+                login();
+            }
+        });
+
+        function updatePasswordStatus() {
+            if (hidePassword) {
+                turnOnPassword();
+                return;
+            }
+            turnOffPassword();
+        }
+
+        function turnOffPassword() {
+            hidePassword = true;
+            $("#password").attr("type", "password");
+            $("#eye-open").toggleClass('d-none');
+            $("#eye-close").toggleClass('d-none');
+        }
+
+        function turnOnPassword() {
+            hidePassword = false;
+            $("#password").attr("type", "text");
+            $("#eye-open").toggleClass('d-none');
+            $("#eye-close").toggleClass('d-none');
+        }
+
+        $("#btn-login").click(function (event) {
+            login();
+        });
+
+        function login() {
+            $.ajax({
+                url: 'api/admin/auth/login',
+                type: 'POST',
+                data: $("#form-login").serialize(),//dataJson,
+                datatype: 'json',
+                beforeSend: loading,
+                complete: loaded,
+                success: function (data) {
+                    // do something if warning
+                    if (data.message.type == 1) {
+                        return;
+                    }
+                    // do something if error
+                    if (data.message.type == 2) {
+                        showMessage('error', data.message.name)
+                        return;
+                    }
+                    // success response
+                    // do something if success
+                    setCookie("name", data.data);
+
+                    const urlParams = new URLSearchParams(window.location.search);
+                    var redirect = urlParams.get("ReturnUrl");
+                    redirect = !redirect ? '/admin' : redirect;
+                    window.location.href = redirect
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // error api
+                    // do something if error
+                    // alert(xhr.responseJSON.name);
+                    showMessage('error', xhr.responseJSON.name)
+                },
+            });
+        }
+
+    </script>
+</body>
+</html>
+

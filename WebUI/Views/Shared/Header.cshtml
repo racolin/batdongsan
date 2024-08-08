@@ -1,0 +1,186 @@
+﻿@{
+    var menuParent = ViewBag.MenuParentActive ?? 0;
+    var menuChild = ViewBag.MenuChildActive ?? 0;
+
+    var home = menuParent == 1 ? " active" : "";
+    var projects = menuParent == 2 ? " active" : "";
+    var news = menuParent == 3 ? " active" : "";
+    var contact = menuParent == 4 ? " active" : "";
+
+    var newsProjects = menuChild == 31 ? " active" : "";
+    var newsMarket = menuChild == 32 ? " active" : "";
+}
+<div class="header-fake"></div>
+
+<div class="container-fluid header py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-10 col-md-4 col-lg-4 col-xl-3">
+                <div class="d-flex align-items-center header-logo" onclick="window.location.href = '/'">
+                    <div class="">
+                        <img src="~/shared/images/logo/logo-lg-light.png" title="Logo" />
+                    </div>
+                    <div class="header-name ps-3">
+                        <h1 class="mb-0">BDS Hot</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="d-none col-12 col-md-8 col-lg-7 header-nav d-md-flex align-items-center justify-content-around">
+                <div class="header-nav-item@(home)">
+                    <span onclick="window.location.href = '/'">
+                        Trang chủ
+                    </span>
+                </div>
+                <div class="header-nav-item@(projects)">
+                    <span onclick="window.location.href = '/project'">
+                        Dự án <i class="fa fa-caret-down ms-1" aria-hidden="true"></i>
+                    </span>
+                    <div class="nav-dropdown">
+                        <div class="nav-dropdown-item pj-item" id="pj-apartment" onclick="window.location.href = '/project#apartment'; updateProjectItemActive('pj-apartment');">
+                            Căn hộ
+                        </div>
+                        <div class="nav-dropdown-item pj-item" id="pj-ground" onclick="window.location.href = '/project#ground'; updateProjectItemActive('pj-ground');">
+                            Đất nền
+                        </div>
+                        <div class="nav-dropdown-item pj-item" id="pj-resort-real-estate" onclick="window.location.href = '/project#resort-real-estate'; updateProjectItemActive('pj-resort-real-estate');">
+                            Bất động sản nghỉ dưỡng
+                        </div>
+                        <div class="nav-dropdown-item pj-item" id="pj-villa" onclick="window.location.href = '/project#villa'; updateProjectItemActive('pj-villa');">
+                            Biệt thự
+                        </div>
+                    </div>
+                </div>
+                <div class="header-nav-item@(news)">
+                    <span onclick="window.location.href = '/news'">
+                        Tin tức <i class="fa fa-caret-down ms-1" aria-hidden="true"></i>
+                    </span>
+                    <div class="nav-dropdown">
+                        <div class="nav-dropdown-item@(newsProjects)" onclick="window.location.href = '/news/projects'">
+                            Tin dự án
+                        </div>
+                        <div class="nav-dropdown-item@(newsMarket)" onclick="window.location.href = '/news/market'">
+                            Tin thị trường
+                        </div>
+                    </div>
+                </div>
+                <div class="header-nav-item@(contact)">
+                    <span onclick="window.location.href = '/contact'">
+                        Liên hệ
+                    </span>
+                </div>
+            </div>
+            <div class="d-md-none col-2">
+                <div class="position-relative w-100 h-100">
+                    <div onclick="convertMenuMobile()" id="menu-bar" class="menu-bar float-right position-absolute top-50 end-0 translate-middle-y">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="menu-mobile hide" id="menu-mobile">
+    <div class="container-fluid p-0">
+        <div class="header-nav-mb d-md-flex flex-column align-items-center justify-content-around">
+            <div class="header-nav-item-mb@(home)">
+                <span onclick="window.location.href = '/'">
+                    Trang chủ
+                </span>
+            </div>
+            <div class="header-nav-item-mb@(projects)">
+                <span onclick="window.location.href = '/project'">
+                    Dự án <i class="fa fa-caret-down ms-1" aria-hidden="true"></i>
+                </span>
+                <div class="nav-dropdown-mb">
+                    <div class="nav-dropdown-item-mb pj-item" id="pj-apartment-mb" onclick="window.location.href = '/project#apartment'; updateProjectItemActive('pj-apartment');">
+                        Căn hộ
+                    </div>
+                    <div class="nav-dropdown-item-mb pj-item" id="pj-ground-mb" onclick="window.location.href = '/project#ground'; updateProjectItemActive('pj-ground');">
+                        Đất nền
+                    </div>
+                    <div class="nav-dropdown-item-mb pj-item" id="pj-resort-real-estate-mb" onclick="window.location.href = '/project#resort-real-estate'; updateProjectItemActive('pj-resort-real-estate');">
+                        Bất động sản nghỉ dưỡng
+                    </div>
+                    <div class="nav-dropdown-item-mb pj-item" id="pj-villa-mb" onclick="window.location.href = '/project#villa'; updateProjectItemActive('pj-villa');">
+                        Biệt thự
+                    </div>
+                </div>
+            </div>
+            <div class="header-nav-item-mb@(news)">
+                <span onclick="window.location.href = '/news'">
+                    Tin tức <i class="fa fa-caret-down ms-1" aria-hidden="true"></i>
+                </span>
+                <div class="nav-dropdown-mb">
+                    <div class="nav-dropdown-item-mb@(newsProjects)" onclick="window.location.href = '/news/projects'">
+                        Tin dự án
+                    </div>
+                    <div class="nav-dropdown-item-mb@(newsMarket)" onclick="window.location.href = '/news/market'">
+                        Tin thị trường
+                    </div>
+                </div>
+            </div>
+            <div class="header-nav-item-mb@(contact)">
+                <span onclick="window.location.href = '/contact'">
+                    Liên hệ
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function updateProjectItemActive(id) {
+        var allpjItem = document.getElementsByClassName('pj-item');
+        if (allpjItem != undefined) {
+            for (var i = 0; i < allpjItem.length; i++) {
+                allpjItem[i].classList.remove('active')
+            }
+        }
+        var pj = document.getElementById(id);
+        var pjMb = document.getElementById(id + '-mb');
+        if (pj != undefined) {
+            pj.classList.add('active');
+        }
+        if (pjMb != undefined) {
+            pjMb.classList.add('active');
+        }
+    }
+
+    if (window.location.pathname == "/project") {
+        var tag = 'pj-' + window.location.hash.substring(1);
+        var tagMb = 'pj-' + window.location.hash.substring(1) + '-mb';
+        var pj = document.getElementById(tag);
+        if (pj != undefined) {
+            pj.classList.add('active');
+        }
+        var pjMb = document.getElementById(tagMb);
+        if (pj != undefined) {
+            pjMb.classList.add('active');
+        }
+    }
+
+    function convertMenuMobile() {
+        var menuBar = document.getElementById("menu-bar");
+        var menuMobile = document.getElementById("menu-mobile");
+        if (menuBar.classList.toggle("times")) {
+            menuMobile.classList.add("show")
+            menuMobile.classList.remove("hide")
+        } else {
+            menuMobile.classList.remove("show")
+            menuMobile.classList.add("hide")
+        }
+    } 
+    var oldWidth = window.innerWidth;
+    window.onresize = function (event) {
+        var width = (event.srcElement || event.currentTarget).innerWidth;
+        if (oldWidth < 768 && width >= 768) {
+            var menuBar = document.getElementById("menu-bar");
+            menuBar.classList.remove("times");
+            var menuMobile = document.getElementById("menu-mobile");
+            menuMobile.classList.remove("show")
+            menuMobile.classList.add("hide")
+        }
+        oldWidth = width;
+    };
+</script>

@@ -1,0 +1,133 @@
+﻿body {
+    height: 100%;
+}
+
+.page-not-found {
+    padding: 11rem 8rem 5rem 8rem;
+    background-color: #393939;
+    width: 100%;
+    position: fixed;
+    top: 0rem;
+    height: 100%;
+    z-index: 1;
+}
+
+.pnf-code {
+    font-size: 15rem;
+    font-weight: 900;
+    font-family: Inter;
+    background: -webkit-linear-gradient(45deg, #ff6a00, #CB2474 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.pnf-name {
+    font-size: 4rem;
+    line-height: 1.25;
+    font-weight: 900;
+    font-family: Inter;
+    background: -webkit-linear-gradient(45deg, #ff6a00, #CB2474 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.pnf-detail {
+    font-size: 1rem;
+    color: white;
+    font-weight: 600;
+    font-family: Roboto;
+    text-align: center;
+    padding: 0 1rem;
+}
+
+.pnf-button {
+    background-color: #ff6a00;
+    border: none;
+    border-radius: .5rem;
+    padding: .5rem 1rem;
+    font-size: 1rem;
+    color: white;
+    width: max-content;
+}
+
+
+.pnf-button:hover {
+    font-weight: 600;
+}
+@media only screen and (max-width: 1400px) {
+    .pnf-code {
+        font-size: 15rem;
+    }
+    .pnf-name {
+        font-size: 4rem;
+    }
+    .page-not-found {
+        padding: 8rem 4rem 2rem 4rem;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .pnf-code {
+        font-size: 15rem;
+    }
+
+    .pnf-name {
+        font-size: 4rem;
+    }
+
+    .page-not-found {
+        padding: 8rem 4rem 2rem 4rem;
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    .pnf-code {
+        font-size: 15rem;
+    }
+
+    .pnf-name {
+        font-size: 4rem;
+    }
+
+    .page-not-found {
+        padding: 8rem 4rem 2rem 4rem;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .pnf-code {
+        font-size: 12rem;
+    }
+
+    .pnf-name {
+        font-size: 3rem;
+    }
+
+    .page-not-found {
+        padding: 7.5rem 1rem 1.5rem 1rem;
+    }
+    .pnf-detail {
+        font-size: 1.25rem;
+    }
+    .pnf-button {
+        font-size: 1.25rem;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .pnf-code {
+        font-size: 8rem;
+    }
+
+    .pnf-name {
+        font-size: 2.1rem;
+    }
+    .page-not-found {
+        padding: 7.5rem 1rem 1.5rem 1rem;
+    }
+}

@@ -1,0 +1,77 @@
+﻿@using Application.Common.Responses.Views
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ContactIndexView model = Model ?? new ContactIndexView();
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/client/css/contact.css" />
+}
+
+<div class="contact" style="background-image: url(@(model.TopImage.Image))">
+    <div class="container contact-wrap">
+        <div class="row">
+            <div class="contact-info col-12 col-lg-5 col-xl-4">
+                <p class="contact-info-title">Liên hệ chúng tôi</p>
+                <p class="contact-info-name">Số điện thoại&nbsp;&nbsp;&nbsp;</p>
+                <p class="contact-info-data me-2">0868754872</p>
+                <div class="d-flex mb-2">
+                    <div class="d-flex contact-info-copy me-2">
+                        <button type="button" title="Copy số điện thoại" onclick="addToClipBoard('0868754872')"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                    <div class="d-flex contact-info-open">
+                        <button type="button" onclick="window.open('tel:0868754872', '_blank')" title="Gọi ngay">Gọi ngay</button>
+                    </div>
+                </div>
+                <p class="contact-info-name">Email&nbsp;&nbsp;&nbsp;</p>
+                <p class="contact-info-data me-2">phantrungtin01@gmail.com</p>
+                <div class="d-flex mb-2">
+                    <div class="d-flex contact-info-copy me-2">
+                        <button type="button" title="Copy địa chỉ email" onclick="addToClipBoard('phantrungtin01@gmail.com')"><i class="fa-regular fa-copy"></i> Copy</button>
+                    </div>
+                </div>
+                <p class="contact-info-name">Kết nối với chúng tôi&nbsp;&nbsp;&nbsp;</p>
+                <div class="d-flex mt-3">
+                    <a class="footer-xh-item" style="background-color: white;"
+                       href="https://zalo.me/0868754872" target="_blank">
+                        <img src="~/client/images/icon/zalo.svg" title="Zalo Icon" />
+                    </a>
+                    <a class="footer-xh-item d-flex align-items-center justify-content-center" style="background-color: #3b5998;"
+                       href="https://www.facebook.com/" target="_blank">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <a class="footer-xh-item d-flex align-items-center justify-content-center" style="background-color: #FF0000;"
+                       href="https://www.youtube.com/" target="_blank">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="contact-form col-12 col-lg-7 col-xl-8">
+                <p class="contact-form-title">Thông tin liên hệ</p>
+                <form class="" id="send-contact" method="post" action="">
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <input type="text" name="name" title="Họ và tên" placeholder="Họ và tên (*)" id="name" />
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <input type="text" name="address" title="Địa chỉ" placeholder="Địa chỉ" id="address" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <input type="tel" name="phone" title="Số điện thoại" placeholder="Số điện thoại (*)" id="phone" />
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <input type="email" name="email" title="Email" placeholder="Email (*)" id="email" />
+                        </div>
+                    </div>
+
+                    <textarea name="content" id="content" title="Nhập nội dung cần liên hệ" placeholder="Nhập nội dung cần liên hệ (*)"></textarea>
+                    <button type="button" title="Gửi thông tin" onclick="sendContact('send-contact')">GỬI THÔNG TIN</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

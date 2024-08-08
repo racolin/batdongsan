@@ -1,0 +1,52 @@
+﻿.news {
+    padding: 0;
+}
+
+.news-top-image {
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position-y: 100%;
+    background-size: cover;
+    height: 36rem;
+}
+
+#news-top-image-inner {
+    width: 100%;
+    height: 100%;
+    background-color: #18A2DD;
+    opacity: 0;
+}
+
+.news-head {
+    padding-top: 8rem;
+    padding-bottom: 0rem;
+    margin-bottom: 3rem;
+}
+
+.news-head-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    font-family: Inter;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.line-wrap {
+    position: relative;
+}
+
+.news-head .line {
+    height: 2px;
+    background-color: #212121;
+    position: absolute;
+    transform: translateY(-50%);
+    top: 50%;
+    width: 100%;
+}
+
+#news-projects .news-item-separate,
+#news-market .news-item-separate,
+#news-projects .news-item-type,
+#news-market .news-item-type {
+    display: none !important;
+}

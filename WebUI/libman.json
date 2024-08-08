@@ -1,0 +1,34 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "font-awesome@6.6.0",
+      "destination": "wwwroot/libs/font-awesome/"
+    },
+    {
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/libs/jquery/"
+    },
+    {
+      "library": "bootstrap@5.3.3",
+      "destination": "wwwroot/libs/bootstrap/"
+    },
+    {
+      "library": "bootstrap-datepicker@1.10.0",
+      "destination": "wwwroot/libs/bootstrap-datepicker/"
+    },
+    {
+      "library": "moment.js@2.30.1",
+      "destination": "wwwroot/libs/moment.js/"
+    },
+    {
+      "library": "popper.js@2.11.8",
+      "destination": "wwwroot/libs/popper.js/"
+    },
+    {
+      "library": "summernote@0.8.20",
+      "destination": "wwwroot/libs/summernote/"
+    }
+  ]
+}

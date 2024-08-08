@@ -1,0 +1,355 @@
+﻿html {
+    overflow: scroll;
+    height: 100%;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    background: transparent;
+}
+* {
+    font-family: Roboto;
+    font-weight: 400;
+    color: #616161;
+    font-size: 1rem;
+}
+
+font {
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
+    font-size: inherit;
+}
+
+msreadoutspan {
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
+    font-size: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: Inter;
+    font-weight: 600;
+    color: #212121;
+}
+
+.no-data {
+    padding: 4rem 0 2rem 0;
+    text-align: center;
+}
+
+.no-data img {
+    height: 16rem;
+}
+
+.no-data p {
+    margin-top: 2rem;
+    margin-bottom: 0rem;
+    font-size: 2rem;
+    font-weight: 500;
+    color: #8A96A3;
+}
+
+/*Contact float*/
+.contact-float {
+    position: fixed;
+    right: 1rem;
+    cursor: pointer;
+    z-index: 7;
+}
+
+.contact-float-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+}
+
+.contact-float:hover .contact-float-item, .contact-float:hover .contact-float-button {
+    display: block;
+}
+
+.contact-float-icon i {
+    font-size: 1.25rem;
+    color: white;
+}
+
+.contact-float-icon img {
+    width: 3rem;
+    height: 3rem;
+    color: white;
+}
+
+.contact-float-item {
+    display: none;  
+    cursor: auto;
+    padding: 1rem;
+    position: absolute;
+    width: 15rem;
+    right: 3rem;
+    bottom: 0rem;
+    background-color: antiquewhite;
+    border-radius: 1rem 1rem 0 1rem;
+    z-index: 1;
+}
+
+.contact-float-button {
+    padding-right: 4rem;
+    padding-left: 1rem;
+    font-weight: 500;
+    font-size: 1.15rem;
+    display: none;
+    border: none;
+    height: 3rem;
+    border-radius: 1.5rem;
+
+}
+
+.contact-float-item::after {
+    content: '';
+    position: absolute;
+    right: -1.5rem;
+    bottom: 0rem;
+    width: 2rem;
+    height: 3rem;
+    z-index: 1;
+}
+
+.contact-float-open button {
+    background-color: #FF8F28;
+    border: none;
+    border-radius: .25rem;
+    font-size: .75rem;
+    height: 1.75rem;
+    padding: 0 .75rem;
+    color: white;
+}
+
+.contact-float-copy button {
+    border: none;
+    border-radius: .25rem;
+    font-size: .75rem;
+    height: 1.75rem;
+    padding: 0 .75rem;
+}
+
+.contact-float-item p {
+    color: #FFFFFF !important;
+    font-size: 1rem;
+}
+
+.contact-float-item label {
+    color: #FFFFFF !important;
+    font-size: .75rem;
+}
+
+.contact-float-send-button {
+    border-radius: 0.25rem;
+    border: none;
+    float: right;
+    height: 1.75rem;
+    width: 4rem;
+    background-color: #FF8F28;
+    color: white;
+    font-size: .75rem;
+}
+
+.contact-float-item .contact-float-header {
+    color: #FFFFFF !important;
+    font-size: 1.15rem;
+    line-height: 1.25;
+    font-weight: 700;
+    font-family: Inter;
+}
+
+.contact-float-item input {
+    font-size: 1rem;
+    padding-left: 0.25rem;
+    height: 1.75rem;
+    width: 4rem;
+    border: none;
+    border-radius: 0.25rem;
+    width: 100%;
+    margin-bottom: .5rem;
+}
+
+.contact-float-item input:focus {
+    outline: none;
+}
+
+
+.contact-float-header > p {
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: Inter;
+}
+
+.contact-float-copy > p{
+
+}
+/*Scroll to top*/
+.scroll-to-top {
+    z-index: 3;
+    width: 3rem;
+    height: 3rem;
+    background-color: antiquewhite;
+    border-radius: 50%;
+    border: 1px solid #FF8F28;
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    cursor: pointer;
+}
+
+.scroll-to-top:hover {
+    background-color: #FF8F28;
+}
+
+.scroll-to-top:hover::before {
+    border-bottom-color: antiquewhite;
+}
+
+.scroll-to-top::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    transform: translate(-50%, 50%);
+    width: 0;
+    height: 0;
+    border-left: .5rem solid transparent;
+    border-right: .5rem solid transparent;
+    border-bottom: .75rem solid #FF8F28;
+    clear: both;
+}
+
+@keyframes ring {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    5% {
+        transform: rotate(-15deg);
+    }
+
+    10% {
+        transform: rotate(30deg);
+    }
+
+    15% {
+        transform: rotate(-5deg);
+    }
+
+    20% {
+        transform: rotate(20deg);
+    }
+
+    25% {
+        transform: rotate(0deg);
+    }
+
+    30% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+
+
+.modal-content.contact-form {
+    background-color: black;
+    /*opacity: .85;*/
+    padding: 0; 
+}
+
+.contact-float-icon i, .contact-float-icon img {
+    animation: ring 3s ease-in-out infinite;
+    transform-origin: 50% 50%;
+}
+.contact-float-phone .contact-float-icon i {
+    animation-delay: 0;
+}
+
+.contact-float-zalo .contact-float-icon img {
+    animation-delay: 1s;
+}
+
+.contact-float-send .contact-float-icon i {
+    animation-delay: 2s;
+}
+
+.contact-form {
+    padding: 1.5rem;
+}
+
+.contact-form-title {
+    color: white;
+    font-family: Inter;
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: .5rem;
+}
+
+.modal-title.contact-form-title {
+    margin-bottom: 0!important;
+}
+
+.contact-form input {
+    width: 100%;
+    margin-top: .25rem;
+    margin-bottom: 1rem;
+    border: none;
+    font-size: 1rem;
+    padding: .5rem .75rem;
+    color: black;
+    font-weight: 400;
+}
+
+.contact-form input:focus, .contact-form textarea:focus {
+    outline: none;
+}
+
+.contact-form textarea {
+    width: 100%;
+    margin-top: .25rem;
+    margin-bottom: 1rem;
+    border: none;
+    font-size: 1rem;
+    height: 6rem;
+    padding: .5rem .75rem;
+    color: black;
+    font-weight: 400;
+    resize: none;
+}
+
+.contact-form .modal-header button {
+    --bs-btn-close-color: white!important;
+    --bs-btn-close-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e")!important;
+    position: relative;
+}
+
+/*.contact-form .modal-header button::after {
+
+}*/
+
+.contact-form form button {
+    background-color: #ff6a00;
+    padding: .75rem 1.25rem;
+    color: white;
+    font-family: Inter;
+    font-weight: 500;
+    border: none;
+    float: right;
+}
+
+.modal .contact-form button.btn-close {
+    background: transparent var(--bs-btn-close-bg) center / 1em auto no-repeat !important;
+}
