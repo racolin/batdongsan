@@ -548,7 +548,7 @@ public class ApplicationDbContextInitializer
                     {
                         Ud = "terra-rosa-binh-chanh",
                         Name = "Dự án Terra Rosa Bình Chánh",
-                        Type = NewsTypeConstant.Project,
+                        Type = ProjectTypeConstant.Apartment,
                         Address = "TP. Hồ Chí Minh",
                         State = "implemented",
                         Content = content,
@@ -562,7 +562,7 @@ public class ApplicationDbContextInitializer
                     {
                         Ud = "astra-city-binh-duong",
                         Name = "Phức Hợp Thương Mại & Căn Hộ Cao Cấp Astral City",
-                        Type = NewsTypeConstant.Project,
+                        Type = ProjectTypeConstant.Apartment,
                         Address = "Bình Dương",
                         State = "implementing",
                         Content = content,
@@ -576,7 +576,7 @@ public class ApplicationDbContextInitializer
                     {
                         Ud = "eco-green-saigon",
                         Name = "Tổ hợp thương mại, dịch vụ, khách sạn và nhà ở cao cấp Eco Green Saigon",
-                        Type = NewsTypeConstant.Project,
+                        Type = ProjectTypeConstant.Apartment,
                         Address = "TP. Hồ Chí Minh",
                         State = "implemented",
                         Content = content,
@@ -590,7 +590,7 @@ public class ApplicationDbContextInitializer
                     {
                         Ud = "citigrand-tp-hcm",
                         Name = "Dự án căn hộ chất lượng cao cấp Citigrand",
-                        Type = NewsTypeConstant.Project,
+                        Type = ProjectTypeConstant.Apartment,
                         Address = "TP. Hồ Chí Minh",
                         State = "implemented",
                         Content = content,
@@ -604,7 +604,7 @@ public class ApplicationDbContextInitializer
                     {
                         Ud = "lagi-new-city-binh-thuan",
                         Name = "Phức hợp Đô thị Thương mại Dịch vụ & Du lịch biển Lagi New City",
-                        Type = NewsTypeConstant.Project,
+                        Type = ProjectTypeConstant.Ground,
                         Address = "Bình Thuận",
                         State = "implementing",
                         Content = content,
@@ -618,7 +618,7 @@ public class ApplicationDbContextInitializer
                     {
                         Ud = "hiep-phuoc-harbour-view-long-an",
                         Name = "Dự án Hiệp Phước Harbour View",
-                        Type = NewsTypeConstant.Project,
+                        Type = ProjectTypeConstant.Ground,
                         Address = "Long An",
                         State = "implementing",
                         Content = content,
@@ -632,7 +632,7 @@ public class ApplicationDbContextInitializer
                     {
                         Ud = "waterpoint-tp-hcm",
                         Name = "Dự án Waterpoint - Riverside Community",
-                        Type = NewsTypeConstant.Project,
+                        Type = ProjectTypeConstant.Ground,
                         Address = "TP. Hồ Chí Minh",
                         State = "implemented",
                         Content = content,
@@ -646,7 +646,7 @@ public class ApplicationDbContextInitializer
                     {
                         Ud = "cadia-quy-nhon",
                         Name = "Dự án căn hộ - du lịch biển Cadia Quy Nhơn",
-                        Type = NewsTypeConstant.Project,
+                        Type = ProjectTypeConstant.ResortRealEstate,
                         Address = "Quy Nhơn",
                         State = "implementing",
                         Content = content,
@@ -660,7 +660,7 @@ public class ApplicationDbContextInitializer
                     {
                         Ud = "zenna-villas-vung-tau",
                         Name = "Dự án biệt thự cap cấp Zenna Villas",
-                        Type = NewsTypeConstant.Project,
+                        Type = ProjectTypeConstant.ResortRealEstate,
                         Address = "Vũng Tàu",
                         State = "implemented",
                         Content = content,
@@ -674,7 +674,7 @@ public class ApplicationDbContextInitializer
                     {
                         Ud = "thanh-long-bay-binh-thuan",
                         Name = "Tổ hợp du lịch - nghỉ dưỡng - giải trí - thể thao biển Thanh Long Bay",
-                        Type = NewsTypeConstant.Project,
+                        Type = ProjectTypeConstant.ResortRealEstate,
                         Address = "Bình Thuận",
                         State = "implemented",
                         Content = content,
@@ -688,7 +688,7 @@ public class ApplicationDbContextInitializer
                     {
                         Ud = "sol-villas-tp-hcm",
                         Name = "Khu biệt thự compound cao cấp Sol Villas",
-                        Type = NewsTypeConstant.Project,
+                        Type = ProjectTypeConstant.Villa,
                         Address = "TP. Hồ Chí Minh",
                         State = "implementing",
                         Content = content,
@@ -702,7 +702,7 @@ public class ApplicationDbContextInitializer
                     {
                         Ud = "the-sholi-tp-hcm",
                         Name = "Tổ hợp phố thương mại cao cấp The SHOLI",
-                        Type = NewsTypeConstant.Project,
+                        Type = ProjectTypeConstant.Villa,
                         Address = "TP. Hồ Chí Minh",
                         State = "implementing",
                         Content = content,
@@ -716,7 +716,7 @@ public class ApplicationDbContextInitializer
                     {
                         Ud = "e-city-tan-duc-long-an",
                         Name = "Khu đô thị thương mại dịch vụ E.City Tân Đức",
-                        Type = NewsTypeConstant.Project,
+                        Type = ProjectTypeConstant.Villa,
                         Address = "implemented",
                         State = "implemented",
                         Content = content,
@@ -730,7 +730,7 @@ public class ApplicationDbContextInitializer
                     {
                         Ud = "queen-pearl-binh-thuan",
                         Name = "Nhà phố biển thương mại Queen Pearl Marina Complex",
-                        Type = NewsTypeConstant.Project,
+                        Type = ProjectTypeConstant.Villa,
                         Address = "Bình Thuận",
                         State = "implemented",
                         Content = content,
