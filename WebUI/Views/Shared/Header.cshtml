@@ -16,57 +16,57 @@
     <div class="container">
         <div class="row">
             <div class="col-10 col-md-4 col-lg-4 col-xl-3">
-                <div class="d-flex align-items-center header-logo" onclick="window.location.href = '/'">
+                <a class="d-flex align-items-center header-logo" href="/">
                     <div class="">
                         <img src="~/shared/images/logo/logo-lg-light.png" title="Logo" />
                     </div>
                     <div class="header-name ps-3">
                         <h1 class="mb-0">BDS Hot</h1>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="d-none col-12 col-md-8 col-lg-7 header-nav d-md-flex align-items-center justify-content-around">
                 <div class="header-nav-item@(home)">
-                    <span onclick="window.location.href = '/'">
+                    <a href="/" title="Tới trang chủ">
                         Trang chủ
-                    </span>
+                    </a>
                 </div>
                 <div class="header-nav-item@(projects)">
-                    <span onclick="window.location.href = '/project'">
+                    <a href="/project" title="Tới trang dự án">
                         Dự án <i class="fa fa-caret-down ms-1" aria-hidden="true"></i>
-                    </span>
+                    </a>
                     <div class="nav-dropdown">
-                        <div class="nav-dropdown-item pj-item" id="pj-apartment" onclick="window.location.href = '/project#apartment'; updateProjectItemActive('pj-apartment');">
+                        <a class="nav-dropdown-item pj-item" id="pj-apartment" href="/project#apartment" onclick="updateProjectItemActive('pj-apartment');">
                             Căn hộ
-                        </div>
-                        <div class="nav-dropdown-item pj-item" id="pj-ground" onclick="window.location.href = '/project#ground'; updateProjectItemActive('pj-ground');">
+                        </a>
+                        <a class="nav-dropdown-item pj-item" id="pj-ground" href="/project#ground" onclick="updateProjectItemActive('pj-ground');">
                             Đất nền
-                        </div>
-                        <div class="nav-dropdown-item pj-item" id="pj-resort-real-estate" onclick="window.location.href = '/project#resort-real-estate'; updateProjectItemActive('pj-resort-real-estate');">
+                        </a>
+                        <a class="nav-dropdown-item pj-item" id="pj-resort-real-estate" href="/project#resort-real-estate" onclick="updateProjectItemActive('pj-resort-real-estate');">
                             Bất động sản nghỉ dưỡng
-                        </div>
-                        <div class="nav-dropdown-item pj-item" id="pj-villa" onclick="window.location.href = '/project#villa'; updateProjectItemActive('pj-villa');">
+                        </a>
+                        <a class="nav-dropdown-item pj-item" id="pj-villa" href="/project#villa" onclick="updateProjectItemActive('pj-villa');">
                             Biệt thự
-                        </div>
+                        </a>
                     </div>
                 </div>
                 <div class="header-nav-item@(news)">
-                    <span onclick="window.location.href = '/news'">
+                    <a href="/news" title="Tới trang tin tức">
                         Tin tức <i class="fa fa-caret-down ms-1" aria-hidden="true"></i>
-                    </span>
+                    </a>
                     <div class="nav-dropdown">
-                        <div class="nav-dropdown-item@(newsProjects)" onclick="window.location.href = '/news/projects'">
+                        <a class="nav-dropdown-item@(newsProjects)" href="/news/projects">
                             Tin dự án
-                        </div>
-                        <div class="nav-dropdown-item@(newsMarket)" onclick="window.location.href = '/news/market'">
+                        </a>
+                        <a class="nav-dropdown-item@(newsMarket)" href="/news/market">
                             Tin thị trường
-                        </div>
+                        </a>
                     </div>
                 </div>
                 <div class="header-nav-item@(contact)">
-                    <span onclick="window.location.href = '/contact'">
+                    <a href="/contact" title="Tới trang liên hệ">
                         Liên hệ
-                    </span>
+                    </a>
                 </div>
             </div>
             <div class="d-md-none col-2">
@@ -83,46 +83,46 @@
     <div class="container-fluid p-0">
         <div class="header-nav-mb d-md-flex flex-column align-items-center justify-content-around">
             <div class="header-nav-item-mb@(home)">
-                <span onclick="window.location.href = '/'">
+                <a href="/" title="Tới trang chủ">
                     Trang chủ
-                </span>
+                </a>
             </div>
             <div class="header-nav-item-mb@(projects)">
-                <span onclick="window.location.href = '/project'">
+                <a href="/project" title="Tới trang dự án">
                     Dự án <i class="fa fa-caret-down ms-1" aria-hidden="true"></i>
-                </span>
+                </a>
                 <div class="nav-dropdown-mb">
-                    <div class="nav-dropdown-item-mb pj-item" id="pj-apartment-mb" onclick="window.location.href = '/project#apartment'; updateProjectItemActive('pj-apartment');">
+                    <a class="nav-dropdown-item-mb pj-item" id="pj-apartment-mb" href="/project#apartment" onclick="updateProjectItemActive('pj-apartment');">
                         Căn hộ
-                    </div>
-                    <div class="nav-dropdown-item-mb pj-item" id="pj-ground-mb" onclick="window.location.href = '/project#ground'; updateProjectItemActive('pj-ground');">
+                    </a>
+                    <a class="nav-dropdown-item-mb pj-item" id="pj-ground-mb" href="/project#ground" onclick="updateProjectItemActive('pj-ground');">
                         Đất nền
-                    </div>
-                    <div class="nav-dropdown-item-mb pj-item" id="pj-resort-real-estate-mb" onclick="window.location.href = '/project#resort-real-estate'; updateProjectItemActive('pj-resort-real-estate');">
+                    </a>
+                    <a class="nav-dropdown-item-mb pj-item" id="pj-resort-real-estate-mb" href="/project#resort-real-estate" onclick="updateProjectItemActive('pj-resort-real-estate');">
                         Bất động sản nghỉ dưỡng
-                    </div>
-                    <div class="nav-dropdown-item-mb pj-item" id="pj-villa-mb" onclick="window.location.href = '/project#villa'; updateProjectItemActive('pj-villa');">
+                    </a>
+                    <a class="nav-dropdown-item-mb pj-item" id="pj-villa-mb" href="/project#villa" onclick="updateProjectItemActive('pj-villa');">
                         Biệt thự
-                    </div>
+                    </a>
                 </div>
             </div>
             <div class="header-nav-item-mb@(news)">
-                <span onclick="window.location.href = '/news'">
+                <a href="/news"title="Tới trang tin tức">
                     Tin tức <i class="fa fa-caret-down ms-1" aria-hidden="true"></i>
-                </span>
+                </a>
                 <div class="nav-dropdown-mb">
-                    <div class="nav-dropdown-item-mb@(newsProjects)" onclick="window.location.href = '/news/projects'">
+                    <a class="nav-dropdown-item-mb@(newsProjects)" href="/news/projects">
                         Tin dự án
-                    </div>
-                    <div class="nav-dropdown-item-mb@(newsMarket)" onclick="window.location.href = '/news/market'">
+                    </a>
+                    <a class="nav-dropdown-item-mb@(newsMarket)" href="/news/market">
                         Tin thị trường
-                    </div>
+                    </a>
                 </div>
             </div>
             <div class="header-nav-item-mb@(contact)">
-                <span onclick="window.location.href = '/contact'">
+                <a href="/contact" title="Tới trang liên hệ">
                     Liên hệ
-                </span>
+                </a>
             </div>
         </div>
     </div>

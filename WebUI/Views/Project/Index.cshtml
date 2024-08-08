@@ -27,14 +27,14 @@
                     }
                 </div>
                 <div class="carousel-inner" id="pjCarouselInner">
-                    <div class="carousel-item active" @(string.IsNullOrEmpty(model.Slides[0].Link) ? "" : "onclick='window.location.href = '" + model.Slides[0].Link+ "'")>
+                    <a class="carousel-item active" @(string.IsNullOrEmpty(model.Slides[0].Link) ? "" : "href=\"" + model.Slides[0].Link + "\"")>
                         <img src="@(model.Slides[0].Image)" class="d-block w-100" title="@(model.Slides[0].ImageTitle)" alt="@(model.Slides[0].ImageAlt)">
-                    </div>
+                    </a>
                     @for (var i = 1; i < model.Slides.Count; i++)
                     {
-                        <div class="carousel-item" @(string.IsNullOrEmpty(model.Slides[i].Link) ? "" : "onclick='window.location.href = '" + model.Slides[i].Link + "'")>
+                        <a class="carousel-item" @(string.IsNullOrEmpty(model.Slides[i].Link) ? "" : "href=\"" + model.Slides[i].Link + "\"")>
                             <img src="@(model.Slides[i].Image)" class="d-block w-100" title="@(model.Slides[i].ImageTitle)" alt="@(model.Slides[i].ImageAlt)">
-                        </div>
+                        </a>
                     }
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#pjCarousel" data-bs-slide="prev">
@@ -83,7 +83,7 @@
             {
                 <div class="container projects-group mt-5">
                     <div class="projects-group-title">
-                        <h1>@group.StateName</h1>
+                        <h2>@group.StateName</h2>
                     </div>
                     <div class="projects-group-wrap row mt-4">
                         @if (group.Projects.Count % 2 == 1)
@@ -135,7 +135,7 @@
             {
                 <div class="container projects-group mt-5">
                     <div class="projects-group-title">
-                        <h1>@group.StateName</h1>
+                        <h2>@group.StateName</h2>
                     </div>
                     <div class="projects-group-wrap row mt-4">
                         @if (group.Projects.Count % 2 == 1)
@@ -188,7 +188,7 @@
             {
                 <div class="container projects-group mt-5">
                     <div class="projects-group-title">
-                        <h1>@group.StateName</h1>
+                        <h2>@group.StateName</h2>
                     </div>
                     <div class="projects-group-wrap row mt-4">
                         @if (group.Projects.Count % 2 == 1)
@@ -239,7 +239,7 @@
             {
                 <div class="container projects-group mt-5">
                     <div class="projects-group-title">
-                        <h1>@group.StateName</h1>
+                        <h2>@group.StateName</h2>
                     </div>
                     <div class="projects-group-wrap row mt-4">
                         @if (group.Projects.Count % 2 == 1)

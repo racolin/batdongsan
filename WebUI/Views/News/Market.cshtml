@@ -78,7 +78,16 @@
         </div>
     </div>
     <div class="my-5">
-        @await Html.PartialAsync("~/Views/Shared/Components/Paging.cshtml", new { Current = model.Paging.Current, Amount = 5, Max = model.Paging.Max, Key = "news" })
+        @await Html.PartialAsync("~/Views/Shared/Components/Paging.cshtml", 
+            new { 
+                Current = model.Paging.Current, 
+                Amount = 5, 
+                Max = model.Paging.Max, 
+                Key = "news",
+                Path = "news",
+                Head = "news-head"
+            }
+        )
     </div>
 </div>
 

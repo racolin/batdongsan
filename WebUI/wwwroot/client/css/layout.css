@@ -353,3 +353,9 @@ h1, h2, h3, h4, h5, h6 {
 .modal .contact-form button.btn-close {
     background: transparent var(--bs-btn-close-bg) center / 1em auto no-repeat !important;
 }
+
+.modal .contact-form button.btn-close:focus {
+    outline: none !important;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}

@@ -3,6 +3,10 @@
     margin-bottom: .75rem;
 }
 
+.news-item-title {
+    text-decoration: none;
+}
+
 .news-item-title h1 {
     font-weight: 600;
     font-size: 1.25rem;
@@ -17,6 +21,10 @@
 
 .news-item-title h1:hover {
     color: darkslategrey;
+}
+
+.news-item-img {
+    text-decoration: none;
 }
 
 .news-item-img img {

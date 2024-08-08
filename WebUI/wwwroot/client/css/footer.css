@@ -4,6 +4,7 @@
 
 .footer-logo {
     cursor: pointer;
+    text-decoration: none;
 }
 
 .footer-logo img {

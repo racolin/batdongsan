@@ -5,7 +5,6 @@
     position: relative;
     margin-top: .75rem;
     margin-bottom: .75rem;
-    cursor: pointer;
     overflow: hidden;
 }
 
@@ -57,6 +56,10 @@
     background-color: white;
     opacity: 0.75;
     width: calc(100% - 4px);
+}
+
+.project-item-title {
+    text-decoration: none;
 }
 
 .project-item-title h1 {

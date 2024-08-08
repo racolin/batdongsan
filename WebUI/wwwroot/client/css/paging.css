@@ -6,6 +6,7 @@
     transition: all linear .25s;
     border-radius: .25rem;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .paging-item .paging-number {

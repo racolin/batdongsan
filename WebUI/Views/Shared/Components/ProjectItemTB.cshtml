@@ -3,15 +3,15 @@
     var model = Model as ProjectView ?? new ProjectView();
 }
 <div class="project-item project-item-tb">
-    <div class="project-item-wrap" onclick="window.location.href = '/project/detail/@(model.Ud)'">
-        <div class="project-item-img">
+    <div class="project-item-wrap">
+        <a class="project-item-img" href="/project/detail/@(model.Ud)">
             <img title="@(model.Name)" src="@(model.Image)" />
-        </div>
+        </a>
         <div class="project-item-info">
             <p class="project-item-state">@(model.StateName)</p>
-            <div class="project-item-title">
+            <a class="project-item-title" href="/project/detail/@(model.Ud)">
                 <h1>@(model.Name)</h1>
-            </div>
+            </a>
             <div class="d-flex project-item-detail align-items-center">
                 <a class="project-item-type" href="/project#@(model.TypeUd)"><i class="fa-solid fa-layer-group"></i> @(model.TypeName)</a>
                 <p class="project-item-address"><i class="fa-solid fa-location-dot"></i> @(model.Address)</p>

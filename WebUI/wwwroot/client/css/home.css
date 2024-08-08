@@ -50,20 +50,20 @@
     margin-bottom: 1rem;
 }
 
-.home-projects-head button, .home-news-head button {
+.home-projects-head a, .home-news-head a {
     border: none;
     border-radius: .5rem;
-    height: 3rem;
-    padding: 0 1.25rem;
+    padding: .75rem 1.25rem;
     font-size: 1rem;
     font-weight: 600;
+    background-color: lightgray;
 }
 
-.home-projects-head button:hover, .home-news-head button:hover {
+.home-projects-head a:hover, .home-news-head a:hover {
     background-color: #FF8F28;
 }
 
-.home-projects-head button:hover i, .home-news-head button:hover i {
+.home-projects-head a:hover i, .home-news-head a:hover i {
     color: white;
 }
 
@@ -76,7 +76,8 @@
 .home-project-type-item {
     margin: .75rem;
     height: 5rem;
-    cursor: pointer
+    cursor: pointer;
+    text-decoration: none;
 }
 
 
@@ -132,6 +133,8 @@
     height: 100%;
     padding: 1.5rem;
     cursor: pointer;
+    text-decoration: none;  
+    display: block;
 }
 
 .home-news-type-item-wrap:hover {

@@ -4,9 +4,9 @@
 }
 <div class="news-item-max">
     <div class="news-item-wrap row">
-        <div class="news-item-img col-12 col-md-4">
-            <img title="@news.Name" src="@news.Image" onclick="window.location.href = '/news/detail/@news.Ud'" />
-        </div>
+        <a class="news-item-img col-12 col-md-4" href="/news/detail/@news.Ud">
+            <img title="@news.Name" src="@news.Image" />
+        </a>
         <div class="news-item-info col-12 col-md-8">
             <div class="news-item-title">
                 <h1 onclick="window.location.href = '/news/detail/@news.Ud'">@news.Name</h1>

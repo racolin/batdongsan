@@ -4,13 +4,13 @@
 }
 <div class="news-item-lr">
     <div class="row news-item-wrap">
-        <div class="col-12 col-md-3 news-item-img">
-            <img title="@news.Name" src="@news.Image" onclick="window.location.href = '/news/detail/@news.Ud'" />
-        </div>
+        <a class="col-12 col-md-3 news-item-img" href="/news/detail/@news.Ud">
+            <img title="@news.Name" src="@news.Image" />
+        </a>
         <div class="col-12 col-md-9 news-item-info">
-            <div class="news-item-title">
-                <h1 onclick="window.location.href = '/news/detail/@news.Ud'">@news.Name</h1>
-            </div>
+            <a class="news-item-title" href="/news/detail/@news.Ud">
+                <h1>@news.Name</h1>
+            </a>
             <div class="d-flex news-item-detail align-items-center">
                 <a class="text-uppercase news-item-type" href="/news/@news.TypeUd">@news.TypeName</a>
                 <p class="news-item-separate">&nbsp;|&nbsp;</p>

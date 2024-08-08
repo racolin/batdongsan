@@ -41,9 +41,9 @@
             <div class="d-flex paging-wrap" id="paging-wrap-@Model.Key">
                 @for (var i = 1; i < Model.Max + 1; i++)
                 {
-                    <div class="paging-item@(i == Current ? " active" : "")" onclick="selectPaging('@Model.Key', @i)">
+                    <a class="paging-item@(i == Current ? " active" : "")" href="/@(Model.Path ?? Model.Key)?page=@i@(Model.Head == null ? "" : "#" + Model.Head)">
                         <p class="paging-number">@i</p>
-                    </div>
+                    </a>
                 }
             </div>
         </div>
