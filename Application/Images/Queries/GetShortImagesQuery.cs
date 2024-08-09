@@ -35,8 +35,9 @@ public class GetShortImagesQuery : IRequest<DataResponse<PagingResponse<ShortIma
                 .CountAsync(cancellationToken);
 
             // Lấy danh sách theo phân trang
-            if (request.Request.Start >= count) {
-                request.Request.Start = 0;
+            if (count < request.Request.Start)
+            {
+                request.Request.CurrentPage = 0;
             }
             var images = await _context.Images.AsNoTracking()
                 .Select(x => new ShortImageResponse

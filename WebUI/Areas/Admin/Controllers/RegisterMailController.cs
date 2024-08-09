@@ -6,55 +6,12 @@ namespace WebUI.Areas.Admin.Controllers
 {
     public class RegisterMailController : BaseAdminController
     {
-        public async Task<IActionResult> Index(string? search, int? perPage, int? currentPage, string? order, string? startDate, string? endDate)
+        public async Task<IActionResult> Index([FromQuery] SearchRequest request)
         {
-            int current = currentPage ?? 1;
-            current = current! < 1 ? 1 : current;
+            request.CurrentPage = request.CurrentPage ?? 1;
+            request.PerPage = request.PerPage ?? 12;
 
-            int length = perPage ?? 12;
-            length = length < 1 ? 12 : length;
-
-            DateTime? start = null;
-            if (startDate != null)
-            {
-                try
-                {
-                    start = DateTime.ParseExact(startDate, "dd/MM/yyyy", null);
-                }
-                catch (Exception ex)
-                {
-
-                }
-            }
-
-            DateTime? end = null;
-            if (endDate != null)
-            {
-                try
-                {
-                    end = DateTime.ParseExact(endDate, "dd/MM/yyyy", null);
-                    end = end.Value.AddDays(1);
-                }
-                catch (Exception ex)
-                {
-
-                }
-            }
-
-            List<string> ls = order?.Split("-").ToList() ?? new List<string>();
-
-            var form = new SearchRequest
-            {
-                Value = search,
-                Start = (current - 1) * length,
-                Length = length,
-                Order = ls.Count > 1 ? ls[1] : "date",
-                IsAsc = ls.Count > 1 ? ls[0].Equals("asc") : true,
-                EndDate = end,
-                StartDate = start,
-            };
-
-            var result = await Mediator.Send(new GetRegisterMailsQuery(form));
+            var result = await Mediator.Send(new GetRegisterMailsQuery(request));
 
             return View(result.Data);
         }

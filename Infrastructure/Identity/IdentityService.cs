@@ -181,16 +181,12 @@ public class IdentityService : IIdentityService
     {
 
         bool? isLock = null;
-        if (request.ValueFilter2 != null)
+        if (request.IsLock.Count == 0 || (request.IsLock.Contains(true) && request.IsLock.Contains(false))) 
         {
-            try
-            {
-                isLock = bool.Parse(request.ValueFilter2!);
-            }
-            catch (Exception ex)
-            {
-
-            }
+            isLock = null;
+        } else
+        {
+            isLock = request.IsLock.Contains(true);
         }
 
         var userName = request.Value;
@@ -201,20 +197,20 @@ public class IdentityService : IIdentityService
             .Where(x =>
                 (x.UserName == null ? false : x.UserName.Contains(userName ?? ""))
                 && (x.Email == null ? false : x.Email.Contains(email ?? ""))
-                && (isLock == null ? true : isLock == !x.LockoutEnabled)
+                && (isLock == null ? true : isLock == (x.LockoutEnd != null))
             ).CountAsync(cancellationToken);
 
         // Lấy danh sách theo phân trang
-        if (request.Start >= count)
+        if (count < request.Start)
         {
-            request.Start = 0;
+            request.CurrentPage = 0;
         }
         var users = await _userManager.Users
             .Include(x => x.UserRoles).ThenInclude(x => x.Role)
             .Where(x =>
                 (x.UserName == null ? false : x.UserName.Contains(userName ?? ""))
                 && (x.Email == null ? false : x.Email.Contains(email ?? ""))
-                && (isLock == null ? true : isLock == !x.LockoutEnabled)
+                && (isLock == null ? true : isLock == (x.LockoutEnd != null))
             )
             .Skip(request.Start)
             .Take(request.Length)

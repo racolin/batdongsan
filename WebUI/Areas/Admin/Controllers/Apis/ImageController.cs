@@ -23,8 +23,8 @@ namespace WebUI.Areas.Admin.Controllers.Apis
                 new GetShortImagesQuery(
                     new SearchRequest { 
                         Value = value, 
-                        Length = perPage ?? 16, 
-                        Start = ((currentPage ?? 1) - 1) * perPage ?? 16 
+                        PerPage = perPage ?? 16, 
+                        CurrentPage = currentPage,
                     })
                 );
             return result ?? DataResponse<PagingResponse<ShortImageResponse>>.Error("Có lỗi khi tải dữ liệu!");

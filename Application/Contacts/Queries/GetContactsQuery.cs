@@ -34,8 +34,8 @@ public class GetContactsQuery : IRequest<DataResponse<PagingResponse<ContactEnti
                 .Where(x =>
                     (value == null ? true : x.Email.Contains(value))
                     && (!x.CreatedDate.HasValue
-                        || ((!request.Request.StartDate.HasValue || request.Request.StartDate.Value <= x.CreatedDate.Value)
-                            && (!request.Request.EndDate.HasValue || request.Request.EndDate.Value >= x.CreatedDate.Value)))
+                        || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
+                            && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
                 ).CountAsync(cancellationToken);
 
             // Order
@@ -50,9 +50,9 @@ public class GetContactsQuery : IRequest<DataResponse<PagingResponse<ContactEnti
             }
 
             // Lấy danh sách theo phân trang
-            if (request.Request.Start >= count)
+            if (count < request.Request.Start)
             {
-                request.Request.Start = 0;
+                request.Request.CurrentPage = 0;
             }
             List<ContactEntity> contacts;
             if (isAsc)
@@ -61,8 +61,8 @@ public class GetContactsQuery : IRequest<DataResponse<PagingResponse<ContactEnti
                     .Where(x =>
                         (value == null ? true : x.Email.Contains(value))
                         && (!x.CreatedDate.HasValue
-                            || ((!request.Request.StartDate.HasValue || request.Request.StartDate.Value <= x.CreatedDate.Value)
-                                && (!request.Request.EndDate.HasValue || request.Request.EndDate.Value >= x.CreatedDate.Value)))
+                            || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
+                                && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
                     )
                     .OrderBy(x => x.CreatedDate)
                     .Skip(request.Request.Start)
@@ -75,8 +75,8 @@ public class GetContactsQuery : IRequest<DataResponse<PagingResponse<ContactEnti
                 .Where(x =>
                     (value == null ? true : x.Email.Contains(value))
                     && (!x.CreatedDate.HasValue
-                        || ((!request.Request.StartDate.HasValue || request.Request.StartDate.Value <= x.CreatedDate.Value)
-                            && (!request.Request.EndDate.HasValue || request.Request.EndDate.Value >= x.CreatedDate.Value)))
+                        || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
+                            && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
                 )
                 .OrderByDescending(order)
                 .Skip(request.Request.Start)

@@ -6,24 +6,12 @@ namespace WebUI.Areas.Admin.Controllers
 {
     public class UserController : BaseAdminController
     {
-        public async Task<IActionResult> Index(string? search, string? email, bool? isLock, int? perPage, int? currentPage)
+        public async Task<IActionResult> Index([FromQuery] SearchRequest request)
         {
-            int current = currentPage ?? 1;
-            current = current! < 1 ? 1 : current;
+            request.CurrentPage = request.CurrentPage ?? 1;
+            request.PerPage = request.PerPage ?? 8;
 
-            int length = perPage ?? 8;
-            length = length < 1 ? 8 : length;
-
-            var form = new SearchRequest
-            {
-                Value = search,
-                ValueFilter1 = email,
-                ValueFilter2 = isLock?.ToString(),
-                Start = (current - 1) * length,
-                Length = length,
-            };
-
-            var result = await Mediator.Send(new GetUsersQuery(form));
+            var result = await Mediator.Send(new GetUsersQuery(request));
 
             return View(result.Data);
         }

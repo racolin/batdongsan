@@ -8,58 +8,12 @@ namespace WebUI.Areas.Admin.Controllers
 {
     public class NewsController : BaseAdminController
     {
-        public async Task<IActionResult> Index(string? search, string? status, string? highLight, string? type, int? perPage, int? currentPage, string? order, string? startDate, string? endDate)
+        public async Task<IActionResult> Index([FromQuery] SearchRequest request)
         {
-            int current = currentPage ?? 1;
-            current = current! < 1 ? 1 : current;
+            request.CurrentPage = request.CurrentPage ?? 1;
+            request.PerPage = request.PerPage ?? 12;
 
-            int length = perPage ?? 8;
-            length = length < 1 ? 8 : length;
-
-            DateTime? start = null;
-            if (startDate != null)
-            {
-                try
-                {
-                    start = DateTime.ParseExact(startDate, "dd/MM/yyyy", null);
-                }
-                catch (Exception ex)
-                {
-
-                }
-            }
-
-            DateTime? end = null;
-            if (endDate != null)
-            {
-                try
-                {
-                    end = DateTime.ParseExact(endDate, "dd/MM/yyyy", null);
-                    end = end.Value.AddDays(1);
-                }
-                catch (Exception ex)
-                {
-
-                }
-            }
-
-            List<string> ls = order?.Split("-").ToList() ?? new List<string>();
-
-            var form = new SearchRequest
-            {
-                Value = search,
-                Start = (current - 1) * length,
-                Length = length,
-                Order = ls.Count > 1 ? ls[1] : "order",
-                IsAsc = ls.Count > 1 ? ls[0].Equals("asc") : false,
-                EndDate = end,
-                StartDate = start,
-                Status = status?.Split(",").ToList() ?? StatusConstant.GetAllProperties(),
-                ValueFilter1 = highLight,
-                ValuesFilter1 = type?.Split(",").ToList() ?? NewsTypeConstant.GetAllProperties(),
-            };
-
-            var result = await Mediator.Send(new GetNewsListQuery(form));
+            var result = await Mediator.Send(new GetNewsListQuery(request));
 
             return View(result.Data);
         }

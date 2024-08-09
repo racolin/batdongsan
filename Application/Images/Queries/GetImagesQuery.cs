@@ -34,8 +34,8 @@ public class GetImagesQuery : IRequest<DataResponse<PagingResponse<ImageEntity>>
                 .Where(x =>
                     (value == null ? true : x.Title.Contains(value))
                     && (!x.CreatedDate.HasValue
-                        || ((!request.Request.StartDate.HasValue || request.Request.StartDate.Value <= x.CreatedDate.Value)
-                            && (!request.Request.EndDate.HasValue || request.Request.EndDate.Value >= x.CreatedDate.Value)))
+                        || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
+                            && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
                 ).CountAsync(cancellationToken);
 
             // Order
@@ -49,18 +49,18 @@ public class GetImagesQuery : IRequest<DataResponse<PagingResponse<ImageEntity>>
                     break;
             }
 
-            // Lấy danh sách theo phân trang
-            if (request.Request.Start >= count) {
-                request.Request.Start = 0;
+            if (count < request.Request.Start) { 
+                request.Request.CurrentPage = 0;
             }
+
             List<ImageEntity> images;
             if (isAsc) {
                 images = await _context.Images.AsNoTracking()
                     .Where(x =>
                         (value == null ? true : x.Title.Contains(value))
                         && (!x.CreatedDate.HasValue
-                            || ((!request.Request.StartDate.HasValue || request.Request.StartDate.Value <= x.CreatedDate.Value)
-                                && (!request.Request.EndDate.HasValue || request.Request.EndDate.Value >= x.CreatedDate.Value)))
+                            || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
+                                && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
                     )
                     .OrderBy(x => x.CreatedDate)
                     .Skip(request.Request.Start)
@@ -72,8 +72,8 @@ public class GetImagesQuery : IRequest<DataResponse<PagingResponse<ImageEntity>>
                 .Where(x =>
                     (value == null ? true : x.Title.Contains(value))
                     && (!x.CreatedDate.HasValue
-                        || ((!request.Request.StartDate.HasValue || request.Request.StartDate.Value <= x.CreatedDate.Value)
-                            && (!request.Request.EndDate.HasValue || request.Request.EndDate.Value >= x.CreatedDate.Value)))
+                        || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
+                            && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
                 )
                 .OrderByDescending(order)
                 .Skip(request.Request.Start)

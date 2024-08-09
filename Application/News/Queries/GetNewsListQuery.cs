@@ -29,28 +29,9 @@ public class GetNewsListQuery : IRequest<DataResponse<PagingResponse<NewsEntity>
 
         public async Task<DataResponse<PagingResponse<NewsEntity>>> Handle(GetNewsListQuery request, CancellationToken cancellationToken)
         {
-            var status = request.Request.Status;
-
-            var highLight = new List<bool>();
-            var lst = request.Request.ValueFilter1?.Split(",");
-            if (lst == null || lst.Length == 0) {
-                highLight.AddRange([false, true]);
-            } else
-            {
-                foreach (var h in request.Request.ValueFilter1?.Split(",")!)
-                {
-                    if (h.ToLower().Equals("true"))
-                    {
-                        highLight.Add(true);
-                    }
-                    if (h.ToLower().Equals("false"))
-                    {
-                        highLight.Add(false);
-                    }
-                }
-            }
-
-            var type = request.Request.ValuesFilter1;
+            var status = request.Request.Status.Count > 0 ? request.Request.Status : StatusConstant.GetAllProperties();
+            var highLight = request.Request.HighLight.Count > 0 ? request.Request.HighLight : new List<bool> { true, false };
+            var type = request.Request.Type.Count > 0 ? request.Request.Type : NewsTypeConstant.GetAllProperties();
 
             var value = request.Request.Value;
             // Lấy số lượng tin được lọc theo yêu cầu
@@ -58,8 +39,8 @@ public class GetNewsListQuery : IRequest<DataResponse<PagingResponse<NewsEntity>
                 .Where(x =>
                     (value == null ? true : x.Name.Contains(value))
                     && (!x.CreatedDate.HasValue
-                        || ((!request.Request.StartDate.HasValue || request.Request.StartDate.Value <= x.CreatedDate.Value)
-                            && (!request.Request.EndDate.HasValue || request.Request.EndDate.Value >= x.CreatedDate.Value)))
+                        || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
+                            && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
                     && type.Contains(x.Type)
                     && highLight.Contains(x.IsHighlight)
                     && status.Contains(x.Status)
@@ -70,30 +51,30 @@ public class GetNewsListQuery : IRequest<DataResponse<PagingResponse<NewsEntity>
             var isAsc = request.Request.IsAsc ?? true;
             switch (request.Request.Order)
             {
-                case "date":
-                    order = item => item.CreatedDate;
-                    break;
                 case "order":
-                default:
                     order = item => item.Order;
+                    break;
+                case "date":
+                default:
+                    order = item => item.CreatedDate;
                     break;
             }
 
-            // Lấy danh sách theo phân trang
-            if (request.Request.Start >= count)
+            if (count < request.Request.Start)
             {
-                request.Request.Start = 0;
+                request.Request.CurrentPage = 0;
             }
-            List<NewsEntity> images;
+
+            List<NewsEntity> newsList;
             if (isAsc)
             {
-                images = await _context.News.AsNoTracking()
+                newsList = await _context.News.AsNoTracking()
                     .Include(x => x.Image)
                     .Where(x =>
                         (value == null ? true : x.Name.Contains(value))
                         && (!x.CreatedDate.HasValue
-                            || ((!request.Request.StartDate.HasValue || request.Request.StartDate.Value <= x.CreatedDate.Value)
-                                && (!request.Request.EndDate.HasValue || request.Request.EndDate.Value >= x.CreatedDate.Value)))
+                            || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
+                                && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
                         && type.Contains(x.Type)
                         && highLight.Contains(x.IsHighlight)
                         && status.Contains(x.Status)
@@ -105,13 +86,13 @@ public class GetNewsListQuery : IRequest<DataResponse<PagingResponse<NewsEntity>
             }
             else
             {
-                images = await _context.News.AsNoTracking()
+                newsList = await _context.News.AsNoTracking()
                 .Include(x => x.Image)
                 .Where(x =>
                     (value == null ? true : x.Name.Contains(value))
                     && (!x.CreatedDate.HasValue
-                        || ((!request.Request.StartDate.HasValue || request.Request.StartDate.Value <= x.CreatedDate.Value)
-                            && (!request.Request.EndDate.HasValue || request.Request.EndDate.Value >= x.CreatedDate.Value)))
+                        || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
+                            && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
                     && type.Contains(x.Type)
                     && highLight.Contains(x.IsHighlight)
                     && status.Contains(x.Status)
@@ -127,7 +108,7 @@ public class GetNewsListQuery : IRequest<DataResponse<PagingResponse<NewsEntity>
 
             var paging = new PagingResponse<NewsEntity>
             {
-                List = images,
+                List = newsList,
                 PerPage = request.Request.Length,
                 Max = max,
                 Current = current,

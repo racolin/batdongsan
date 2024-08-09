@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Requests;
 using Application.Common.Responses;
+using Domain.Constants;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -28,39 +29,21 @@ public class GetProjectsQuery : IRequest<DataResponse<PagingResponse<ProjectEnti
 
         public async Task<DataResponse<PagingResponse<ProjectEntity>>> Handle(GetProjectsQuery request, CancellationToken cancellationToken)
         {
-            var status = request.Request.Status;
-
-            var highLight = new List<bool>();
-            var lst = request.Request.ValueFilter1?.Split(",");
-            if (lst == null || lst.Length == 0) {
-                highLight.AddRange([false, true]);
-            } else
-            {
-                foreach (var h in request.Request.ValueFilter1?.Split(",")!)
-                {
-                    if (h.ToLower().Equals("true"))
-                    {
-                        highLight.Add(true);
-                    }
-                    if (h.ToLower().Equals("false"))
-                    {
-                        highLight.Add(false);
-                    }
-                }
-            }
-            var address = request.Request.ValueFilter2;
-            var type = request.Request.ValuesFilter1;
-            var state = request.Request.ValuesFilter2;
-
+            var status = request.Request.Status.Count > 0 ? request.Request.Status : StatusConstant.GetAllProperties();
+            var highLight = request.Request.HighLight.Count > 0 ? request.Request.HighLight : new List<bool> { true, false };
+            var type = request.Request.Type.Count > 0 ? request.Request.Type : ProjectTypeConstant.GetAllProperties();
+            var state = request.Request.State.Count > 0 ? request.Request.State : ProjectStateConstant.GetAllProperties();
+            var address = request.Request.ValueFilter1;
             var value = request.Request.Value;
+
             // Lấy số lượng dự án được lọc theo yêu cầu
             var count = await _context.Projects.AsNoTracking()
                 .Where(x =>
                     (value == null ? true : x.Name.Contains(value))
                     &&(address == null ? true : x.Address.Contains(address))
                     && (!x.CreatedDate.HasValue
-                        || ((!request.Request.StartDate.HasValue || request.Request.StartDate.Value <= x.CreatedDate.Value)
-                            && (!request.Request.EndDate.HasValue || request.Request.EndDate.Value >= x.CreatedDate.Value)))
+                        || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
+                            && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
                     && state.Contains(x.State)
                     && type.Contains(x.Type)
                     && highLight.Contains(x.IsHighlight)
@@ -81,42 +64,42 @@ public class GetProjectsQuery : IRequest<DataResponse<PagingResponse<ProjectEnti
                     break;
             }
 
-            // Lấy danh sách theo phân trang
-            if (request.Request.Start >= count)
+            if (count < request.Request.Start)
             {
-                request.Request.Start = 0;
+                request.Request.CurrentPage = 0;
             }
-            List<ProjectEntity> images;
+
+            List<ProjectEntity> projects;
             if (isAsc)
             {
-                images = await _context.Projects.AsNoTracking()
+                projects = await _context.Projects.AsNoTracking()
                     .Include(x => x.Image)
                     .Where(x =>
                         (value == null ? true : x.Name.Contains(value))
                         && (address == null ? true : x.Address.Contains(address))
                         && (!x.CreatedDate.HasValue
-                            || ((!request.Request.StartDate.HasValue || request.Request.StartDate.Value <= x.CreatedDate.Value)
-                                && (!request.Request.EndDate.HasValue || request.Request.EndDate.Value >= x.CreatedDate.Value)))
+                            || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
+                                && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
                         && state.Contains(x.State)
                         && type.Contains(x.Type)
                         && highLight.Contains(x.IsHighlight)
                         && status.Contains(x.Status)
                     )
-                    .OrderBy(x => x.CreatedDate)
+                    .OrderBy(order)
                     .Skip(request.Request.Start)
                     .Take(request.Request.Length)
                     .ToListAsync(cancellationToken);
             }
             else
             {
-                images = await _context.Projects.AsNoTracking()
+                projects = await _context.Projects.AsNoTracking()
                 .Include(x => x.Image)
                 .Where(x =>
                     (value == null ? true : x.Name.Contains(value))
                     && (address == null ? true : x.Address.Contains(address))
                     && (!x.CreatedDate.HasValue
-                        || ((!request.Request.StartDate.HasValue || request.Request.StartDate.Value <= x.CreatedDate.Value)
-                            && (!request.Request.EndDate.HasValue || request.Request.EndDate.Value >= x.CreatedDate.Value)))
+                        || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
+                            && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
                     && state.Contains(x.State)
                     && type.Contains(x.Type)
                     && highLight.Contains(x.IsHighlight)
@@ -133,7 +116,7 @@ public class GetProjectsQuery : IRequest<DataResponse<PagingResponse<ProjectEnti
 
             var paging = new PagingResponse<ProjectEntity>
             {
-                List = images,
+                List = projects,
                 PerPage = request.Request.Length,
                 Max = max,
                 Current = current,
