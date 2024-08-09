@@ -200,9 +200,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .lb-body {
-    border-radius: .5rem;
+    border-radius: .375rem;
     overflow: scroll;
-    box-shadow: 0 .3rem .3rem lightgray, 0-0.3rem .3rem lightgray;
+    box-shadow: 0 .15rem .15rem lightgray, 0 -0.15rem .15rem lightgray;
 }
 
 .lb-message {
@@ -212,8 +212,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .no-data {
-    padding: 4rem 0 2rem 0;
-    text-align: center;
+    padding: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    display: flex;
 }
 
 .no-data img {
@@ -261,4 +265,14 @@ h1, h2, h3, h4, h5, h6 {
 .add-slider-wrap button {
     background: none;
     border: none;
+}
+
+.modal button.btn-close {
+    background: transparent var(--bs-btn-close-bg) center / 1em auto no-repeat !important;
+}
+
+.modal button.btn-close:focus {
+    outline: none !important;
+    box-shadow: none;
+    -webkit-box-shadow: none;
 }

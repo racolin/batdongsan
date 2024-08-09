@@ -3,32 +3,24 @@
 }
 
 .list-control {
-    position: relative;
     background-color: #f1f7fe;
+    position: relative;
     height: 100%;
 }
 
 .list-control-wrap {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
     overflow: scroll;
 }
 
 .list-data {
-    background-color: white;
+    background-color: #dde5f4;
     position: relative;
     height: 100%;
 }
 
 .list-data-wrap {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
     overflow: scroll;
 }
 
@@ -40,25 +32,17 @@
     }
 
     .list-control-wrap {
-        position: initial;
-        top: initial;
-        left: initial;
-        width: 100%;
         height: initial;
         overflow: initial;
     }
 
     .list-data {
-        background-color: white;
         position: initial;
+        background-color: #dde5f4;
         height: initial;
     }
 
     .list-data-wrap {
-        position: initial;
-        top: initial;
-        left: initial;
-        width: 100%;
         height: initial;
         overflow: initial;
     }
@@ -156,4 +140,24 @@
 
 table > tbody > tr > td {
     vertical-align: middle;
+}
+
+.check-item {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    pointer-events: none;
+}
+
+.check-item + label {
+    border-radius: 0.375rem!important;
+    margin-right: .5rem;
+    margin-top: .5rem;
+}
+
+input.check-item[type=checkbox] + label {
+    display: none;
+}
+
+input.check-item[type=checkbox]:checked + label {
+    display: block;
 }

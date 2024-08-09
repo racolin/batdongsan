@@ -1,0 +1,187 @@
+﻿@using Application.Common.Responses
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    var max = ViewBag.Max;
+    var current = ViewBag.Current;
+    var count = ViewBag.Count;
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/admin/css/list.css" />
+    <link rel="stylesheet" href="~/admin/css/paging.css" />
+    <link rel="stylesheet" href="~/admin/css/form.css" />
+    @if (IsSectionDefined("AddToHead"))
+    {
+        @RenderSection("AddToHead", required: false)
+    }
+}
+
+
+@if (IsSectionDefined("FilterForm"))
+{
+    <link rel="stylesheet" href="~/admin/css/form.css" />
+}
+
+<p class="layout-title">
+    @(ViewBag.LayoutTitle ?? "Danh sách")
+</p>
+
+@if (IsSectionDefined("FilterForm"))
+{
+    <div class="container-fluid flex-grow-1 lb-body">
+        <div class="row">
+            <div class="list-control col-12 col-lg-4 col-xl-3 d-flex flex-column justify-content-between">
+                <div class="list-control-wrap flex-grow-1 p-3">
+                    <form id="form-search">
+                        @RenderSection("FilterForm", required: false)
+                        @if (IsSectionDefined("FilterAdvanced"))
+                        {
+                            <div class="col-12 my-2">
+                                <div class="d-flex justify-content-between align-items-end">
+                                    <label class="form-label">Lọc nâng cao: </label>
+                                    <button type="button" class="btn btn-save" data-bs-toggle="modal" data-bs-target="#filter-advanced-modal">Chỉnh sửa</button>
+                                </div>
+                                @RenderSection("FilterAdvanced", required: false)
+                            </div>
+                        }
+                        @if (max > 0)
+                        {
+                            <div class="paging-control my-2">
+                                <div class="form-title-wrap">
+                                    <p class="form-title">Điều khiển trang</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6 col-md-3 col-lg-6 my-2">
+                                        <label for="page-amount" class="form-label">Số lượng/trang:</label>
+                                        <input type="number" class="form-control" name="perPage" id="perPage">
+                                    </div>
+                                    <div class="col-6 col-md-3 col-lg-6 my-2">
+                                        <label for="page-number" class="form-label">Nhập trang: </label>
+                                        <input type="number" class="form-control" name="currentPage" id="currentPage">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </form>
+                    <div class="paging-small my-2">
+                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/Paging.cshtml", new { Current = current, Max = max, Amount = 4, Key = "small" })
+                    </div>
+                </div>
+                <hr class="d-none d-lg-block" style="margin: .25rem 0 0 0" />
+                <div class="btn-search-wrap my-3">
+                    <button id="btn-search" onclick="search()" title="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button>
+                </div>
+            </div>
+            <div class="list-data col-12 col-lg-8 col-xl-9 d-flex flex-column justify-content-between">
+                @if (IsSectionDefined("ControlTools"))
+                {
+                    @RenderSection("ControlTools", required: false)
+                    <hr class="d-none d-lg-block" style="margin: 0 0 .25rem 0" />
+                }
+                <div class="list-data-wrap flex-grow-1">
+                    @if (count > 0)
+                    {
+                        @RenderBody()
+                        <div class="col-12 paging-large my-2">
+                            @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/Paging.cshtml", new { Current = current, Max = max, Amount = 5, Key = "large" })
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="no-data">
+                            <img title="Không có dữ liệu" alt="Hình ảnh biểu thị cho danh sách trống" src="/shared/images/no_data.svg" />
+                            <p>Danh sách trống!</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    @if (IsSectionDefined("ControlTools"))
+    {
+        @RenderSection("ControlTools", required: false)
+    }
+
+    @RenderBody()
+}
+
+@if (IsSectionDefined("FilterAdvancedModal"))
+{
+    <div class="modal" tabindex="-1" id="filter-advanced-modal">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Lọc nâng cao</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row  ">
+                    @RenderSection("FilterAdvancedModal", required: false)
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@if (IsSectionDefined("FilterAdvancedModal"))
+{
+    <script type="text/javascript">
+        function updateFilterAdvanced(name, value, isInForm) {
+            if (isInForm) {
+                var checked = $("#filter-advanced > input[name=" + name + "][value='" + value + "']").is(":checked");
+                $("#filter-advanced-modal input[name=" + name + "][value='" + value + "']").prop("checked", checked);
+            } else {
+                var checked = $("#filter-advanced-modal input[name=" + name + "][value='" + value + "']").is(":checked");
+                $("#filter-advanced > input[name=" + name + "][value='" + value + "']").prop("checked", checked);
+            }
+        }
+    </script>
+}
+
+@section AddToFooter {
+    <script type="text/javascript">
+
+        function search() {
+            var query = $("#form-search :input")
+                .filter(function (index, element) {
+                    return $(element).val() != '';
+                })
+                .serialize();
+
+            window.location.search = query;
+        }
+
+        function initCheckboxFromUrl(name, defaults) {
+            var values = window.location.search.match(new RegExp(name + "=[^&]*", 'g'));
+            if (values != null && values.length > 0) {
+                for (var i = 0; i < values.length; i++) {
+                    var val = values[i].split('=')[1];
+                    $("input[name='" + name + "'][value='" + val + "']").prop('checked', true);
+                }
+            } else if (defaults != null && defaults.length > 0) {
+                for (var i = 0; i < defaults.length; i++) {
+                    $("input[name='" + name + "'][value='" + defaults[i] + "']").prop('checked', true);
+                }
+            }
+        }
+
+        function selectPage(key, page) {
+            if (key == "large" || key == "small") {
+                $("#currentPage").val(page);
+                search();
+            }
+        }
+    </script>
+    @if (IsSectionDefined("AddToFooter"))
+    {
+        @RenderSection("AddToFooter", required: false)
+    }
+    <script src="~/admin/js/paging.js"></script>
+}

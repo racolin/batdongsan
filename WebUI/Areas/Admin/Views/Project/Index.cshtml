@@ -2,243 +2,238 @@
 @using Application.Common.Supports
 @using Domain.Entities
 @{
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.LayoutTitle = "Danh sách dự án";
+    ViewBag.Title = "Danh sách dự án";
+
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutIndex.cshtml";
+
     PagingResponse<ProjectEntity> model = Model ?? new PagingResponse<ProjectEntity>();
+
+    ViewBag.Max = model.Max;
+    ViewBag.Current = model.Current;
+    ViewBag.Count = model.List.Count;
 }
 
 @section AddToHead {
-    <link rel="stylesheet" href="~/admin/css/list.css" />
-    <link rel="stylesheet" href="~/admin/css/form.css" />
-    <link rel="stylesheet" href="~/admin/css/paging.css" />
     <link rel="stylesheet" href="~/libs/bootstrap-datepicker/css/bootstrap-datepicker.css" />
     <script src="~/libs/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="~/libs/moment.js/moment.js"></script>
 }
 
-<p class="layout-title">
-    Danh sách dự án
-</p>
-
-<div class="container-fluid flex-grow-1 lb-body">
-    <div class="row">
-        <div class="list-control col-12 col-lg-4 col-xl-3">
-            <div class="list-control-wrap p-3">
-                <div class="row">
-                    <div class="filter-control my-2">
-                        <div class="form-title-wrap">
-                            <p class="form-title">Lọc danh sách</p>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 my-2">
-                                <label for="search" class="form-label">Lọc theo tiêu đề:</label>
-                                <input type="text" class="form-control" name="search" id="search" autocomplete="off" placeholder="Nhập nội dung tìm kiếm">
-                            </div>
-                            <div class="col-12 my-2">
-                                <label for="address" class="form-label">Lọc theo địa chỉ:</label>
-                                <input type="text" class="form-control" name="search" id="address" autocomplete="off" placeholder="Nhập địa chỉ tìm kiếm">
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-12 my-2">
-                                <label for="filter-range-date" class="form-label">Lọc loại tin tức: </label>
-                                <div class="input-group" id="filter-type">
-                                    <input type="checkbox" class="btn-check" name="type" value="apartment" id="apartment" autocomplete="off" />
-                                    <label class="btn btn-outline-warning form-control-left" for="apartment">Căn hộ</label>
-
-                                    <input type="checkbox" class="btn-check" name="type" value="ground" id="ground" autocomplete="off" />
-                                    <label class="btn btn-outline-warning form-control-between" for="ground">Đất nền</label>
-
-                                    <input type="checkbox" class="btn-check" name="type" value="resort-real-estate" id="resort-real-estate" autocomplete="off" />
-                                    <label class="btn btn-outline-warning form-control-between" for="resort-real-estate">BĐS nghỉ dưỡng</label>
-
-                                    <input type="checkbox" class="btn-check" name="type" value="villa" id="villa" autocomplete="off" />
-                                    <label class="btn btn-outline-warning form-control-right" for="villa">Biệt thự</label>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-12 my-2">
-                                <label for="filter-range-date" class="form-label">Lọc loại tin tức: </label>
-                                <div class="input-group" id="filter-type">
-                                    <input type="checkbox" class="btn-check" name="state" value="implementing" id="implementing" autocomplete="off" />
-                                    <label class="btn btn-outline-warning form-control-left" for="implementing">Đang triển khai</label>
-
-                                    <input type="checkbox" class="btn-check" name="state" value="implemented" id="implemented" autocomplete="off" />
-                                    <label class="btn btn-outline-warning form-control-right" for="implemented">Đã triển khai</label>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-lg-12 my-2">
-                                <label for="filter-range-date" class="form-label">Lọc dự án nổi bật: </label>
-                                <div class="input-group" id="filter-highlight">
-                                    <input type="checkbox" class="btn-check" name="highlight" value="true" id="true" autocomplete="off" />
-                                    <label class="btn btn-outline-warning form-control-left" for="true">Nổi bật</label>
-
-                                    <input type="checkbox" class="btn-check" name="highlight" value="false" id="false" autocomplete="off" />
-                                    <label class="btn btn-outline-warning form-control-right" for="false">Bình thường</label>
-                                </div>
-                            </div>
-
-                            <div class="col-12 my-2">
-                                <label for="filter-range-date" class="form-label">Lọc trạng thái: </label>
-                                <div class="input-group" id="filter-status">
-                                    <input type="checkbox" class="btn-check" name="status" value="Draft" id="Draft" autocomplete="off" />
-                                    <label class="btn btn-outline-warning form-control-left" for="Draft">Nháp</label>
-
-                                    <input type="checkbox" class="btn-check" name="status" value="Active" id="Active" autocomplete="off" />
-                                    <label class="btn btn-outline-warning form-control-between" for="Active">Hoạt động</label>
-
-                                    <input type="checkbox" class="btn-check" name="status" value="InActive" id="InActive" autocomplete="off" />
-                                    <label class="btn btn-outline-warning form-control-right" for="InActive">Ngừng</label>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-12 my-2">
-                                <label for="filter-range-date" class="form-label">Lọc theo ngày đăng: </label>
-                                <div class="input-group input-daterange" id="filter-range-date">
-                                    <input type="text" class="form-control form-control-left" name="startDate" id="startDate">
-                                    <div class="input-group-text"><i class="fa-solid fa-caret-right"></i></div>
-                                    <input type="text" class="form-control form-control-right" name="endDate" id="endDate">
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-12 my-2">
-                                <label for="order" class="form-label">Sắp xếp:</label>
-                                <select class="form-select form-control" id="order" name="order" aria-label="Chọn chế độ sắp xếp">
-                                    <option value="asc-order">Tăng dần số thứ tự</option>
-                                    <option value="desc-order">Giảm dần số thứ tự</option>
-                                    <option value="asc-date">Tăng dần theo ngày</option>
-                                    <option value="desc-date">Giảm dần theo ngày</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    @if (model.Max > 0)
-                    {
-                        <div class="paging-control my-2">
-                            <div class="form-title-wrap">
-                                <p class="form-title">Điều khiển trang</p>
-                            </div>
-                            <div class="row">
-                                <div class="col-6 col-md-3 col-lg-6 my-2">
-                                    <label for="page-amount" class="form-label">Số lượng/trang:</label>
-                                    <input type="number" class="form-control" name="perPage" id="perPage">
-                                </div>
-                                <div class="col-6 col-md-3 col-lg-6 my-2">
-                                    <label for="page-number" class="form-label">Nhập trang: </label>
-                                    <input type="number" class="form-control" name="currentPage" id="currentPage">
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-12 paging-small my-2">
-                                @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/Paging.cshtml", new { Current = model.Current, Max = model.Max, Amount = 4, Key = "small" })
-                            </div>
-                        </div>
-                    }
-                    <div class="col-12 btn-search-wrap my-2">
-                        <button id="btn-search" onclick="search()" title="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button>
-                    </div>
+@section FilterForm {
+    <div class="filter-control my-2">
+        <div class="form-title-wrap">
+            <p class="form-title">Lọc danh sách</p>
+        </div>
+        <div class="row">
+            <div class="col-12 my-2">
+                <label for="value" class="form-label">Lọc theo tiêu đề:</label>
+                <input type="text" class="form-control" name="value" id="value" autocomplete="off" placeholder="Nhập nội dung tìm kiếm">
+            </div>
+            <div class="col-12 my-2">
+                <label for="valueFilter1" class="form-label">Lọc theo địa chỉ:</label>
+                <input type="text" class="form-control" name="valueFilter1" id="valueFilter1" autocomplete="off" placeholder="Nhập địa chỉ tìm kiếm">
+            </div>
+            <div class="col-12 col-md-6 col-lg-12 my-2">
+                <label for="filter-range-date" class="form-label">Lọc theo ngày đăng: </label>
+                <div class="input-group input-daterange" id="filter-range-date">
+                    <input type="text" class="form-control form-control-left" name="startDate" id="startDate">
+                    <div class="input-group-text"><i class="fa-solid fa-caret-right"></i></div>
+                    <input type="text" class="form-control form-control-right" name="endDate" id="endDate">
                 </div>
             </div>
-        </div>
-        <div class="list-data col-12 col-lg-8 col-xl-9">
-            <div class="list-data-wrap p-3">
-                <div class="py-2 d-flex justify-content-end">
-                    <button type="button" onclick="window.location.href = '/admin/project/item'" class="btn btn-create" title="Tạo mới ảnh">Tạo mới</button>
-                </div>
-                @if (model.List.Count > 0)
-                {
-                    <table class="table table-striped table-bordered table-hover">
-                        <thead class="table-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th class="d-none d-md-table-cell" scope="col">Ảnh</th>
-                                <th scope="col">Tiêu đề</th>
-                                <th class="d-md-table-cell" scope="col">Thứ tự</th>
-                                <th class="d-none d-md-table-cell" scope="col">Thông tin thêm</th>
-                                <th class="d-md-table-cell" scope="col">Trạng thái</th>
-                                <th class="d-none d-md-table-cell" scope="col">Ngày tạo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (var i = 0; i < model.List.Count; i++)
-                            {
-                                <tr>
-                                    <td class="">@((model.Current - 1) * model.PerPage + i + 1)</td>
-                                    <td class="d-none d-md-table-cell td-image">
-                                        @if (model.List[i].Image == null)
-                                        {
-                                            <img src="/shared/images/no_image.svg" />
-                                        }
-                                        else
-                                        {
-                                            <img src="@(PathSupport.GetUploadThumbDefaultPath(model.List[i].Image!.Name, model.List[i].Image!.Type))" />
-                                        }
-                                    </td>
-                                    <td class="">
-                                        <a class="item-link" href="/admin/project/item?id=@(model.List[i].Id)" title="Chuyển sang trang chi tiết tin tức">
-                                            @(model.List[i].Name)
-                                            @if (model.List[i].IsHighlight)
-                                            {
-                                                <span class="item-Highlight">Nổi bật</span>
-                                            }
-                                        </a>
-                                    </td>
-                                    <td class="">
-                                        @(model.List[i].Order)
-                                    </td>
-                                    <td class="d-none d-md-table-cell">
-                                        <p class="mb-1">
-                                            Loại: @(NameSupport.GetProjectTypeName(model.List[i].Type))
-                                        </p>
-                                        <p class="mb-1">
-                                            Địa chỉ: @(model.List[i].Address)
-                                        </p>
-                                        <p class="item-@(model.List[i].State) mb-1">
-                                            Tình hình: @(NameSupport.GetProjectStateName(model.List[i].State))
-                                        </p>
-                                    </td>
-                                    <td class="">
-                                        <p class="item-@(model.List[i].Status)">
-                                            @(NameSupport.GetStatusName(model.List[i].Status))
-                                        </p>
-                                    </td>
-                                    <td class="d-none d-md-table-cell">
-                                        @(model.List[i].CreatedDate?.ToString("dd/MM/yyyy"))
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                    <div class="col-12 paging-large my-2">
-                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/Paging.cshtml", new { Current = model.Current, Max = model.Max, Amount = 5, Key = "large" })
-                    </div>
-                }
-                else
-                {
-                    <div class="no-data">
-                        <img title="Không có dữ liệu" alt="Hình ảnh biểu thị cho danh sách trống" src="/shared/images/no_data.svg" />
-                        <p>Chưa có dự án nào!</p>
-                    </div>
-                }
+
+            <div class="col-12 col-md-6 col-lg-12 my-2">
+                <label for="order" class="form-label">Sắp xếp:</label>
+                <select class="form-select form-control" id="order" name="order" aria-label="Chọn chế độ sắp xếp">
+                    <option value="asc-order">Tăng dần số thứ tự</option>
+                    <option value="desc-order">Giảm dần số thứ tự</option>
+                    <option value="asc-date">Tăng dần theo ngày</option>
+                    <option value="desc-date">Giảm dần theo ngày</option>
+                </select>
             </div>
         </div>
     </div>
-</div>
+}
 
-@section AddToFooter {
-    <script src="~/admin/js/paging.js"></script>
+@section FilterAdvanced {
+    <div class="input-group" id="filter-advanced">
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('type', 'apartment', true)" name="type" value="apartment" id="apartment" />
+        <label class="btn btn-danger" title='Bỏ lọc loại "Căn hộ"' for="apartment">Bỏ "Căn hộ"</label>
+
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('type', 'ground', true)" name="type" value="ground" id="ground" />
+        <label class="btn btn-danger" title='Bỏ lọc loại "Đất nền"' for="ground">Bỏ "Đất nền"</label>
+
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('type', 'resort-real-estate', true)" name="type" value="resort-real-estate" id="resort-real-estate" />
+        <label class="btn btn-danger" title='Bỏ lọc loại "BĐS nghỉ dưỡng"' for="resort-real-estate">Bỏ "BĐS nghỉ dưỡng"</label>
+
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('type', 'villa', true)" name="type" value="villa" id="villa" />
+        <label class="btn btn-danger" title='Bỏ lọc loại "Biệt thự"' for="villa">Bỏ "Biệt thự"</label>
+
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('highlight', 'true', true)" name="highlight" value="true" id="true" />
+        <label class="btn btn-danger" title='Bỏ lọc "Dự án nổi bật"' for="true">Bỏ "Dự án nổi bật"</label>
+
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('highlight', 'false', true)" name="highlight" value="false" id="false" />
+        <label class="btn btn-danger" title='Bỏ lọc "Dự án bình thường"' for="false">Bỏ "Dự án bình thường"</label>
+
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('state', 'implementing', true)" name="state" value="implementing" id="implementing" />
+        <label class="btn btn-danger" title='Bỏ lọc tình hình "Đang triển khai"' for="implementing">Bỏ "Đang triển khai"</label>
+
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('state', 'implemented', true)" name="state" value="implemented" id="implemented" />
+        <label class="btn btn-danger" title='Bỏ lọc tình hình "Đã triển khai"' for="implemented">Bỏ "Đã triển khai"</label>
+
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('status', 'Draft', true)" name="status" value="Draft" id="Draft" />
+        <label class="btn btn-danger" title='Bỏ lọc trạng thái "Nháp"' for="Draft">Bỏ "Nháp"</label>
+
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('status', 'Active', true)" name="status" value="Active" id="Active" />
+        <label class="btn btn-danger" title='Bỏ lọc trạng thái "Hoạt động"' for="Active">Bỏ "Hoạt động"</label>
+
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('status', 'InActive', true)" name="status" value="InActive" id="InActive" />
+        <label class="btn btn-danger" title='Bỏ lọc trạng thái "Ngừng"' for="InActive">Bỏ "Ngừng"</label>
+    </div>
+}
+
+@section FilterAdvancedModal {
+    <div class="col-12 col-lg-8 my-2">
+        <label class="form-label">Lọc loại dự án: </label>
+        <div class="input-group" id="filter-type-modal">
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('type', 'apartment', false)" name="type" value="apartment" id="apartmentModal" />
+            <label class="btn btn-outline-warning form-control-left" for="apartmentModal">Căn hộ</label>
+
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('type', 'ground', false)" name="type" value="ground" id="groundModal" />
+            <label class="btn btn-outline-warning form-control-between" for="groundModal">Đất nền</label>
+
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('type', 'resort-real-estate', false)" name="type" value="resort-real-estate" id="resort-real-estateModal" />
+            <label class="btn btn-outline-warning form-control-between" for="resort-real-estateModal">BĐS nghỉ dưỡng</label>
+
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('type', 'villa', false)" name="type" value="villa" id="villaModal" />
+            <label class="btn btn-outline-warning form-control-right" for="villaModal">Biệt thự</label>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-4 my-2">
+        <label class="form-label">Lọc dự án nổi bật: </label>
+        <div class="input-group" id="filter-highlight-modal">
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('highlight', 'true', false)" name="highlight" value="true" id="trueModal" />
+            <label class="btn btn-outline-warning form-control-left" for="trueModal">Nổi bật</label>
+
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('highlight', 'false', false)" name="highlight" value="false" id="falseModal" />
+            <label class="btn btn-outline-warning form-control-right" for="falseModal">Bình thường</label>
+        </div>
+    </div>
+
+
+    <div class="col-12 col-lg-6 my-2">
+        <label class="form-label">Lọc tình hình dự án: </label>
+        <div class="input-group" id="filter-state-modal">
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('state', 'implementing', false)" name="state" value="implementing" id="implementingModal" />
+            <label class="btn btn-outline-warning form-control-left" for="implementingModal">Đang triển khai</label>
+
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('state', 'implemented', false)" name="state" value="implemented" id="implementedModal" />
+            <label class="btn btn-outline-warning form-control-right" for="implementedModal">Đã triển khai</label>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-6 my-2">
+        <label class="form-label">Lọc trạng thái: </label>
+        <div class="input-group" id="filter-status-modal">
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('status', 'Draft', false)" name="status" value="Draft" id="DraftModal" />
+            <label class="btn btn-outline-warning form-control-left" for="DraftModal">Nháp</label>
+
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('status', 'Active', false)" name="status" value="Active" id="ActiveModal" />
+            <label class="btn btn-outline-warning form-control-between" for="ActiveModal">Hoạt động</label>
+
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('status', 'InActive', false)" name="status" value="InActive" id="InActiveModal" />
+            <label class="btn btn-outline-warning form-control-right" for="InActiveModal">Ngừng</label>
+        </div>
+    </div>
+}
+
+@section ControlTools {
+    <div class="py-3 d-flex justify-content-end">
+        <button type="button" onclick="window.location.href = '/admin/project/item'" class="btn btn-create" title="Tạo mới">Tạo mới</button>
+    </div>
+}
+
+<table class="table table-striped table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th class="d-none d-md-table-cell" scope="col">Ảnh</th>
+            <th scope="col">Tiêu đề</th>
+            <th class="d-md-table-cell" scope="col">Thứ tự</th>
+            <th class="d-none d-md-table-cell" scope="col">Thông tin thêm</th>
+            <th class="d-md-table-cell" scope="col">Trạng thái</th>
+            <th class="d-none d-md-table-cell" scope="col">Ngày tạo</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (var i = 0; i < model.List.Count; i++)
+        {
+            <tr>
+                <td class="">@((model.Current - 1) * model.PerPage + i + 1)</td>
+                <td class="d-none d-md-table-cell td-image">
+                    @if (model.List[i].Image == null)
+                    {
+                        <img src="/shared/images/no_image.svg" />
+                    }
+                    else
+                    {
+                        <img src="@(PathSupport.GetUploadThumbDefaultPath(model.List[i].Image!.Name, model.List[i].Image!.Type))" />
+                    }
+                </td>
+                <td class="">
+                    <a class="item-link" href="/admin/project/item?id=@(model.List[i].Id)" title="Chuyển sang trang chi tiết tin tức">
+                        @(model.List[i].Name)
+                        @if (model.List[i].IsHighlight)
+                        {
+                            <span class="item-Highlight">Nổi bật</span>
+                        }
+                    </a>
+                </td>
+                <td class="">
+                    @(model.List[i].Order)
+                </td>
+                <td class="d-none d-md-table-cell">
+                    <p class="mb-1">
+                        Loại: @(NameSupport.GetProjectTypeName(model.List[i].Type))
+                    </p>
+                    <p class="mb-1">
+                        Địa chỉ: @(model.List[i].Address)
+                    </p>
+                    <p class="item-@(model.List[i].State) mb-1">
+                        Tình hình: @(NameSupport.GetProjectStateName(model.List[i].State))
+                    </p>
+                </td>
+                <td class="">
+                    <p class="item-@(model.List[i].Status)">
+                        @(NameSupport.GetStatusName(model.List[i].Status))
+                    </p>
+                </td>
+                <td class="d-none d-md-table-cell">
+                    @(model.List[i].CreatedDate?.ToString("dd/MM/yyyy"))
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section AddToFooter {>
     <script type="text/javascript">
-        // $("input[name=asc][value='" + urlParams.get("asc") + "']").prop('checked', true);
         var urlParams = new URLSearchParams(window.location.search);
-        $("#search").val(urlParams.get("search"));
-        $("#startDate").val(urlParams.get("startDate") ?? '01/01/2024');
-        $("#endDate").val(urlParams.get("endDate") ?? new Date().toLocaleDateString('vi-VN'));
+        $("#value").val(urlParams.get("value"));
+        $("#valueFilter1").val(urlParams.get("valueFilter1"));
+        $("#startDate").val(urlParams.get("startDate") ?? '01-01-2024');
+        $("#endDate").val(urlParams.get("endDate") ?? moment(new Date()).format("DD-MM-YYYY"))
         var perPage = urlParams.get("perPage") ?? '';
         $("#perPage").val(perPage == '' ? @(model.PerPage) : perPage);
         $("#currentPage").val(@(model.Current));
         $("#order").val(urlParams.get("order") ?? 'desc-order');
 
-        initCheckBox(urlParams.get("status"), 'status');
-        initCheckBox(urlParams.get("state"), 'state');
-        initCheckBox(urlParams.get("type"), 'type');
-        initCheckBox(urlParams.get("highlight"), 'highlight');
+        initCheckboxFromUrl('status');
+        initCheckboxFromUrl('state');
+        initCheckboxFromUrl('type');
+        initCheckboxFromUrl('highlight');
 
         $('#filter-range-date').datepicker({
             format: 'dd/mm/yyyy',
@@ -250,80 +245,5 @@
             todayHighlight: true,
             endDate: new Date(),
         });
-
-        function search() {
-            var params = [];
-            var key = '';
-            key = $("#search").val();
-            if (key != null && key != '') {
-                params.push('search=' + key);
-            }
-            key = $("#startDate").val();
-            if (key != null && key != '') {
-                params.push('startDate=' + key);
-            }
-            key = $("#endDate").val();
-            if (key != null && key != '') {
-                params.push('endDate=' + key);
-            }
-            key = $("#perPage").val();
-            if (key != null && key != '') {
-                params.push('perPage=' + key);
-            }
-            key = $("#order").val();
-            if (key != null && key != '') {
-                params.push('order=' + key);
-            }
-            key = $("#currentPage").val();
-            if (key != null && key != '') {
-                params.push('currentPage=' + key);
-            }
-            key = getChecked('status');
-            if (key != null && key != '') {
-                params.push('status=' + key);
-            }
-            key = getChecked('state');
-            if (key != null && key != '') {
-                params.push('state=' + key);
-            }
-            key = getChecked('highlight');
-            if (key != null && key != '') {
-                params.push('highlight=' + key);
-            }
-            key = getChecked('type');
-            if (key != null && key != '') {
-                params.push('type=' + key);
-            }
-
-            window.location.search = params.join("&");
-        }
-
-        function selectPage(key, page) {
-            if (key == "large" || key == "small") {
-                $("#currentPage").val(page);
-                search();
-            }
-        }
-
-        function initCheckBox(ids, name) {
-            if (!ids) {
-                $("[name='" + name + "']").prop('checked', true);
-            } else {
-                var sts = ids.split(',');
-                for (var i = 0; i < sts.length; i++) {
-                    if (!sts[i] == false && $("#" + sts[i]) != null) {
-                        $("#" + sts[i]).prop('checked', true);
-                    }
-                }
-            }
-        }
-
-        function getChecked(name) {
-            var list = [];
-            $("[name='" + name + "']:checked").each(function () {
-                list.push($(this).val());
-            });
-            return list.join(',');
-        }
     </script>
 }

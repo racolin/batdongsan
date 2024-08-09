@@ -1,201 +1,100 @@
 ﻿@using Application.Common.Responses
 @using Application.Common.Responses.Admin
 @{
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.LayoutTitle = "Danh sách người dùng";
+    ViewBag.Title = "Danh sách người dùng";
+
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutIndex.cshtml";
     PagingResponse<UserResponse> model = Model ?? new PagingResponse<UserResponse>();
-}
 
+    ViewBag.Max = model.Max;
+    ViewBag.Current = model.Current;
+    ViewBag.Count = model.List.Count;
+}
+@* 
 @section AddToHead {
-    <link rel="stylesheet" href="~/admin/css/list.css" />
-    <link rel="stylesheet" href="~/admin/css/form.css" />
-    <link rel="stylesheet" href="~/admin/css/paging.css" />
-}
+} *@
 
-<p class="layout-title">
-    Danh sách người dùng
-</p>
-
-<div class="container-fluid flex-grow-1 lb-body">
-    <div class="row">
-        <div class="list-control col-12 col-lg-4 col-xl-3">
-            <div class="list-control-wrap p-3">
-                <div class="row">
-                    <div class="filter-control my-2">
-                        <div class="form-title-wrap">
-                            <p class="form-title">Lọc danh sách</p>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 my-2">
-                                <label for="filter-name" class="form-label">Lọc theo username:</label>
-                                <input type="text" class="form-control" name="search" id="search" autocomplete="off" placeholder="Nhập nội dung tìm kiếm">
-                            </div>
-                            <div class="col-12 my-2">
-                                <label for="filter-name" class="form-label">Lọc theo email:</label>
-                                <input type="text" class="form-control" name="email" id="email" autocomplete="off" placeholder="Nhập nội dung tìm kiếm">
-                            </div>
-
-                            <div class="col-12 my-2">
-                                <label for="filter-range-date" class="form-label">Lọc trạng thái: </label>
-                                <div class="input-group" id="filter-isLock">
-                                    <input type="checkbox" class="btn-check" name="isLock" value="true" id="isLock-true" autocomplete="off" />
-                                    <label class="btn btn-outline-warning form-control-left" for="isLock-true">Bị khóa</label>
-
-                                    <input type="checkbox" class="btn-check" name="isLock" value="false" id="isLock-false" autocomplete="off" />
-                                    <label class="btn btn-outline-warning form-control-right" for="isLock-false">Đang hoạt động</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @if (model.Max > 0)
-                    {
-                        <div class="paging-control my-2">
-                            <div class="form-title-wrap">
-                                <p class="form-title">Điều khiển trang</p>
-                            </div>
-                            <div class="row">
-                                <div class="col-6 col-md-3 col-lg-6 my-2">
-                                    <label for="page-amount" class="form-label">Số lượng/trang:</label>
-                                    <input type="number" class="form-control" name="perPage" id="perPage">
-                                </div>
-                                <div class="col-6 col-md-3 col-lg-6 my-2">
-                                    <label for="page-number" class="form-label">Nhập trang: </label>
-                                    <input type="number" class="form-control" name="currentPage" id="currentPage">
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-12 paging-small my-2">
-                                @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/Paging.cshtml", new { Current = model.Current, Max = model.Max, Amount = 4, Key = "small" })
-                            </div>
-                        </div>
-                    }
-                    <div class="col-12 btn-search-wrap my-2">
-                        <button id="btn-search" onclick="search()" title="Tìm kiếm"><i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button>
-                    </div>
-                </div>
-            </div>
+@section FilterForm {
+    <div class="filter-control my-2">
+        <div class="form-title-wrap">
+            <p class="form-title">Lọc danh sách</p>
         </div>
-        <div class="list-data col-12 col-lg-8 col-xl-9">
-            <div class="list-data-wrap p-3">
-                <div class="py-2 d-flex justify-content-end">
-                    <button type="button" onclick="window.location.href = '/admin/user/item'" class="btn btn-create" title="Tạo mới ảnh">Tạo mới</button>
+        <div class="row">
+            <div class="col-12 my-2">
+                <label for="value" class="form-label">Lọc theo username:</label>
+                <input type="text" class="form-control" name="value" id="value" autocomplete="off" placeholder="Nhập nội dung tìm kiếm">
+            </div>
+            <div class="col-12 my-2">
+                <label for="valueFilter1" class="form-label">Lọc theo email:</label>
+                <input type="text" class="form-control" name="valueFilter1" id="valueFilter1" autocomplete="off" placeholder="Nhập nội dung tìm kiếm">
+            </div>
+
+            <div class="col-12 my-2">
+                <label for="filter-range-date" class="form-label">Lọc loại tin tức: </label>
+                <div class="input-group" id="filter-lock">
+                    <input type="checkbox" class="btn-check" name="isLock" value="true" id="true" />
+                    <label class="btn btn-outline-warning form-control-left" for="true">Đã bị khóa</label>
+
+                    <input type="checkbox" class="btn-check" name="isLock" value="false" id="false" />
+                    <label class="btn btn-outline-warning form-control-right" for="false">Đang hoạt động</label>
                 </div>
-                @if (model.List.Count > 0)
-                {
-                    <table class="table table-striped table-bordered table-hover">
-                        <thead class="table-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th class="" scope="col">Tên</th>
-                                <th class="" scope="col">Thông tin</th>
-                                <th scope="col">Trạng thái</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (var i = 0; i < model.List.Count; i++)
-                            {
-                                <tr>
-                                    <td class="">@((model.Current - 1) * model.PerPage + i + 1)</td>
-                                    <td class="">
-                                        <a class="item-link" href="/admin/user/item?id=@(model.List[i].Id)" title="Chuyển sang trang chi tiết">
-                                            @(model.List[i].Name)
-                                        </a>
-                                    </td>
-                                    <td class="">
-                                        <p class="mb-0">@(model.List[i].Username)</p>
-                                        <p class="mb-0">@(model.List[i].Email)</p>
-                                    </td>
-                                    <td class="">
-                                        @(model.List[i].LockoutEnd == null ? "Đang hoạt động" : "Bị khóa")
-                                        @if (model.List[i].LockoutEnd != null)
-                                        {
-                                            <p class="mb-0">
-                                                Thời hạn @(model.List[i].LockoutEnd!.Value.ToString("HH:mm dd/MM/yyyy"))
-                                            </p>
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                    <div class="col-12 paging-large my-2">
-                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/Paging.cshtml", new { Current = model.Current, Max = model.Max, Amount = 5, Key = "large" })
-                    </div>
-                }
-                else
-                {
-                    <div class="no-data">
-                        <img title="Không có dữ liệu" alt="Hình ảnh biểu thị cho danh sách trống" src="/shared/images/no_data.svg" />
-                        <p>Chưa có bài viết nào!</p>
-                    </div>
-                }
             </div>
         </div>
     </div>
-</div>
+}
+
+@section ControlTools {
+    <div class="py-3 d-flex justify-content-end">
+        <button type="button" onclick="window.location.href = '/admin/user/item'" class="btn btn-create" title="Tạo mới">Tạo mới</button>
+    </div>
+}
+
+<table class="table table-striped table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th class="" scope="col">Tên</th>
+            <th class="" scope="col">Thông tin</th>
+            <th scope="col">Trạng thái</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (var i = 0; i < model.List.Count; i++)
+        {
+            <tr>
+                <td class="">@((model.Current - 1) * model.PerPage + i + 1)</td>
+                <td class="">
+                    <a class="item-link" href="/admin/user/item?id=@(model.List[i].Id)" title="Chuyển sang trang chi tiết">
+                        @(model.List[i].Name)
+                    </a>
+                </td>
+                <td class="">
+                    <p class="mb-0">@(model.List[i].Username)</p>
+                    <p class="mb-0">@(model.List[i].Email)</p>
+                </td>
+                <td class="">
+                    @(model.List[i].LockoutEnd == null ? "Đang hoạt động" : "Bị khóa")
+                    @if (model.List[i].LockoutEnd != null)
+                    {
+                        <p class="mb-0">
+                            Thời hạn @(model.List[i].LockoutEnd!.Value.ToString("HH:mm dd/MM/yyyy"))
+                        </p>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @section AddToFooter {
-    <script src="~/admin/js/paging.js"></script>
     <script type="text/javascript">
         var urlParams = new URLSearchParams(window.location.search);
-        $("#search").val(urlParams.get("search"));
-        $("#email").val(urlParams.get("email"));
+        $("#value").val(urlParams.get("value"));
+        $("#valueFilter1").val(urlParams.get("valueFilter1"));
         var perPage = urlParams.get("perPage") ?? '';
         $("#perPage").val(perPage == '' ? @(model.PerPage) : perPage);
         $("#currentPage").val(@(model.Current));
-        initCheckBox(urlParams.get("isLock"), 'isLock');
-
-        function search() {
-            var params = [];
-            var key = '';
-            key = $("#search").val();
-            if (key != null && key != '') {
-                params.push('search=' + key);
-            }
-            key = $("#email").val();
-            if (key != null && key != '') {
-                params.push('email=' + key);
-            }
-            key = $("#perPage").val();
-            if (key != null && key != '') {
-                params.push('perPage=' + key);
-            }
-            key = $("#currentPage").val();
-            if (key != null && key != '') {
-                params.push('currentPage=' + key);
-            }
-            key = getChecked('isLock');
-            if (key != null && key != '') {
-                params.push('isLock=' + key);
-            }
-
-            window.location.search = params.join("&");
-        }
-
-        function selectPage(key, page) {
-            if (key == "large" || key == "small") {
-                $("#currentPage").val(page);
-                search();
-            }
-        }
-
-        function initCheckBox(ids, name) {
-            if (!ids) {
-                $("[name='" + name + "']").prop('checked', true);
-            } else {
-                var sts = ids.split(',');
-                for (var i = 0; i < sts.length; i++) {
-                    if (!sts[i] == false && $("#" + sts[i]) != null) {
-                        $("[name='" + name + "'][value='" + sts[i] + "']").prop('checked', true);
-                    }
-                }
-            }
-        }
-
-        function getChecked(name) {
-            var list = [];
-            $("[name='" + name + "']:checked").each(function () {
-                list.push($(this).val());
-            });
-            return list.join(',');
-        }
+        initCheckboxFromUrl('isLock', [true, false]);
     </script>
 }
