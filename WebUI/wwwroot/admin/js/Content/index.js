@@ -66,15 +66,10 @@ $("#btn-save").click(function () {
         var sliderKeys = Object.keys(newSlider['items'][index]);
         for (var i in sliderKeys) {
             if (sliderKeys[i].split('-')[0] != '#link' && sliderKeys[i].split('-')[0] != '#id') {
-                console.log(!checkNull(newSlider['items'][index][sliderKeys[i]], []));
-                console.log(newSlider['items'][index][sliderKeys[i]]);
-                console.log(sliderKeys[i].split('-')[0]);
                 fillSlider &&= !checkNull(newSlider['items'][index][sliderKeys[i]], []);
             }
         }
     }
-    console.log(!fillImagePages || !fillSection || !fillSlider);
-    console.log(fillImagePages,fillSection,fillSlider);
     if (!fillImagePages || !fillSection || !fillSlider) {
         showMessage('warning', 'Bạn phải điền đầy đủ thông tin trước khi lưu!');
         return;
@@ -105,8 +100,6 @@ $("#btn-save").click(function () {
             }
         }
     }
-    console.log(!isUpdateImagePages && !isUpdateSection && !isUpdateSlider);
-    console.log(isUpdateImagePages,isUpdateSection,isUpdateSlider);
 
     if (!isUpdateImagePages && !isUpdateSection && !isUpdateSlider) {
         showMessage('warning', 'Không phát hiện bất kỳ sự thay đổi dữ liệu nào!');

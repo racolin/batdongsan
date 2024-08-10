@@ -1,34 +1,29 @@
 ﻿@using Domain.Entities
 @using Application.Common.Supports
 @{
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.LayoutTitle = "Nội dung trang web";
+    ViewBag.Title = "Chỉnh sửa nội dung trang web";
+
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutItem.cshtml";
     ImagePageEntity? home = ViewBag.Home;
     ImagePageEntity? bgHome = ViewBag.BgHome;
     ImagePageEntity? news = ViewBag.News;
     ImagePageEntity? contact = ViewBag.Contact;
     SliderEntity slider = ViewBag.Slider;
     SectionEntity section = ViewBag.Section;
+
+    ViewBag.ModelIsNull = false;
+    ViewBag.IncludeSelectImage = true;
     
     var sliderCount = 0;
 }
 
 @section AddToHead {
-    <link rel="stylesheet" href="~/admin/css/gallery.css" />
-    <link rel="stylesheet" href="~/admin/css/form.css" />
-    <link rel="stylesheet" href="~/admin/css/image_upload.css" />
-    <link rel="stylesheet" href="~/admin/css/paging.css" />
     <link rel="stylesheet" href="~/libs/summernote/summernote-bs5.css" />
     <script src="/libs/summernote/summernote-bs5.js"></script>
 }
 
-<p class="layout-title">
-    Chỉnh sửa Web
-</p>
-
-<div class="container-fluid flex-grow-1 lb-body">
-    <div class="py-3 d-flex justify-content-end">
-        <button type="button" id="btn-save" class="btn btn-save ms-3" title="Lưu ảnh">Lưu</button>
-    </div>
+<div class="flex-grow-1 overflow-scroll">
     <div class="image-pages">
         <div class="row image-pages-wrap my-2">
             <div class="form-title-wrap">
@@ -115,13 +110,13 @@
                 <div class="form-title-wrap">
                     <p class="form-title">Slider trên cùng trang dự án</p>
                 </div>
-                <div class="slider col-12 my-2">
+                <div class="slider col-12">
                     <div class="row slider">
                         <input id="sliderProjectId" name="sliderProjectId" type="hidden" value="@(slider.Id)" />
                         <input id="sliderProjectPosition" name="sliderProjectPosition" type="hidden" value="@(slider.Position)" />
                         @foreach (var item in slider!.Items)
                         {
-                            <div class="col-12 col-md-6 col-lg-4 slider-image my-3" id="item-slider-project-@(sliderCount)">
+                            <div class="col-12 col-md-6 col-lg-4 slider-image my-2" id="item-slider-project-@(sliderCount)">
                                 <div class="content-item">
                                     <div class="d-flex justify-content-between align-items-end input-group mt-2 mb-3">
                                         <input type="hidden" name="id-@("slider-project-" + sliderCount)" value="@(item.Id)" id="id-@("slider-project-" + sliderCount)" />
@@ -181,8 +176,10 @@
     </div>
     <div class="" style="height:10rem"></div>
 </div>
-
-@await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/GalleryModal.cshtml", new { Key = "", Amount = 5 })
+<hr class="d-none d-lg-block" style="margin: .25rem 0 0 0" />
+<div class="py-3 d-flex justify-content-end">
+    <button type="button" id="btn-save" class="btn btn-save ms-3" title="Lưu ảnh">Lưu</button>
+</div>
 
 @section AddToFooter {
     <script type="text/javascript">
@@ -223,9 +220,4 @@
         }
     </script>
     <script src="~/admin/js/Content/index.js"></script>
-    <script src="~/admin/js/choose_or_upload_image.js"></script>
-    <script src="~/admin/js/image_upload.js"></script>
-    <script src="~/admin/js/verify.js"></script>
-    <script src="~/admin/js/paging.js"></script>
-    <script src="~/admin/js/api_service.js"></script>
 }

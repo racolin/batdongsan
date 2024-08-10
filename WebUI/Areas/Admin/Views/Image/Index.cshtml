@@ -78,7 +78,7 @@
                     <a class="item-link" href="/admin/image/item?id=@(model.List[i].Id)" title="Chuyển sang trang chi tiết">@(model.List[i].Title)</a>
                 </td>
                 <td class="d-none d-md-table-cell">@(model.List[i].Type == 1 ? "Lớn" : "Lớn/thu nhỏ")</td>
-                <td class="d-none d-md-table-cell">@(model.List[i].CreatedDate?.ToString("dd/MM/yyyy"))</td>
+                <td class="d-none d-md-table-cell">@(model.List[i].CreatedDate?.ToString("dd-MM-yyyy"))</td>
             </tr>
         }
     </tbody>
@@ -96,7 +96,7 @@
         $("#order").val(urlParams.get("order") ?? 'desc-date');
 
         $('#filter-range-date').datepicker({
-            format: 'dd/mm/yyyy',
+            format: 'dd-mm-yyyy',
             weekStart: 1,
             templates: {
                 leftArrow: '<i class="fa-solid fa-angle-left"></i>',

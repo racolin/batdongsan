@@ -30,7 +30,6 @@ $("#btn-save").on("click", function () {
         showMessage('warning', 'Không phát hiện có sự thay đổi dữ liệu nào!');
         return;
     }
-    console.log(same);
 
     var list = [
         { 'value': ud, 'name': 'liên kết' },
@@ -46,22 +45,10 @@ $("#btn-save").on("click", function () {
     var verifies = verify(list);
 
     if (verifies.length == 0) {
-        console.log({
-            id: id,
-            ud: ud,
-            name: name,
-            type: type,
-            description: description,
-            content: content,
-            status: status,
-            order: !order ? null : order,
-            isHighlight: isHighlight == "true" ? true : false,
-            imageId: imageId,
-        });
         // Save
         postJsonApiExplicit(
             '/api/admin/news/save',
-            JSON.stringify({
+            {
                 id: !id ? null : id,
                 ud: ud,
                 name: name,
@@ -73,7 +60,7 @@ $("#btn-save").on("click", function () {
                 isHighlight: isHighlight == "true" ? true : false,
                 imageId: imageId,
                 isUpdateContent: isUpdateContent,
-            }),
+            },
             // Success: function (data) {}
             function (data) {
                 if (data != null) {

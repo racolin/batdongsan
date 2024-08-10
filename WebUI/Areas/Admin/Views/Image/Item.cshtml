@@ -1,130 +1,126 @@
 ﻿@using Application.Common.Responses
 @using Domain.Entities
 @{
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.LayoutTitle = "Ảnh";
+    ViewBag.Title = "Ảnh";
+
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutItem.cshtml";
     DataResponse<ImageEntity>? model = Model;
+
+    ViewBag.ModelIsNull = model == null;
+    ViewBag.IncludeSelectImage = false;
+
+    var errorMessage = model != null && model.Message.Type == MessageType.Error ? model.Message.Name : null;
 }
 
 @section AddToHead {
-    <link rel="stylesheet" href="~/admin/css/form.css" />
     <link rel="stylesheet" href="~/admin/css/image_upload.css" />
-    <link rel="stylesheet" href="~/admin/css/item.css" />
 }
 
-<p class="layout-title">
-    @(model != null ? "Xem chi tiết ảnh" : "Tạo ảnh")
-</p>
-<div class="container-fluid flex-grow-1 lb-body layout-item">
-    @if (model != null && model.Message.Type == MessageType.Error)
-    {
-        <div class="no-data">
-            <img title="Không có dữ liệu" alt="Hình ảnh biểu thị cho danh sách trống" src="/shared/images/no_data.svg" />
-            <p>@(model!.Message.Name)</p>
-        </div>
+@if (errorMessage != null)
+{
+    <div class="no-data">
+        <img title="Không có dữ liệu" alt="Hình ảnh biểu thị không có dữ liệu" src="/shared/images/no_data.svg" />
+        <p>@(errorMessage)</p>
+    </div>
         
-    } else
-    {
+} else
+{
+    <div class="flex-grow-1 overflow-scroll">
         <div class="row">
-            <div class="py-3 d-flex justify-content-end">
-                <button type="button" id="btn-save" onclick="" class="btn btn-save ms-3" title="Lưu ảnh">Lưu</button>
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="my-2">
-                    <input type="hidden" id="id" value="@(model != null ? model.Data.Id : "")" />
-                    <div class="form-title-wrap">
-                        <p class="form-title">Ảnh</p>
+            <div class="col-12 col-md-6 col-lg-4 my-2">
+                <input type="hidden" id="id" value="@(model != null ? model.Data.Id : "")" />
+                <div class="form-title-wrap">
+                    <p class="form-title">Ảnh</p>
+                </div>
+                <div class="row">
+                    <div class="col-12 my-2">
+                        <label for="type" class="form-label">Loại ảnh (<span class="text-danger">*</span>):</label>
+                        <select class="form-select form-control" id="type" name="type" aria-label="Chọn loại ảnh">
+                            <option value="1" @(model == null || model.Data.Type == 1 ? " selected" : "")>Chỉ có ảnh</option>
+                            <option value="2" @(model != null && model.Data.Type == 2 ? " selected" : "")>Ảnh và ảnh thu nhỏ</option>
+                        </select>
                     </div>
-                    <div class="row">
-                        <div class="col-12 my-2">
-                            <label for="order" class="form-label">Loại ảnh (<span class="text-danger">*</span>):</label>
-                            <select class="form-select form-control" id="type" name="type" aria-label="Chọn loại ảnh">
-                                <option value="1"@(model == null || model.Data.Type == 1 ? " selected" : "")>Chỉ có ảnh</option>
-                                <option value="2"@(model != null && model.Data.Type == 2 ? " selected" : "")>Ảnh và ảnh thu nhỏ</option>
-                            </select>
-                        </div>
-                        <div class="col-12 my-2" id="large-image">
-                            <label class="form-label">Ảnh (<span class="text-danger">*</span>):</label>
-                            <div class="file-upload">
-                                <div class="image-upload-wrap@(model != null ? " d-none" : "")">
-                                    <input type="hidden" id="has-large-image" name="has-large-image" value="@(model != null ? "true" : "false")" />
-                                    <input class="file-upload-input" type='file' onchange="readURL(this, 'large-image');loadedImage('has-large-image');" accept="image/*" />
-                                    <div class="drag-text">
-                                        <h3>Kéo và thả ảnh vào hoặc chọn ảnh.</h3>
-                                    </div>
+                    <div class="col-12 my-2" id="large-image">
+                        <label class="form-label">Ảnh (<span class="text-danger">*</span>):</label>
+                        <div class="file-upload">
+                            <div class="image-upload-wrap@(model != null ? " d-none" : "")">
+                                <input type="hidden" id="has-large-image" name="has-large-image" value="@(model != null ? "true" : "false")" />
+                                <input class="file-upload-input" type='file' onchange="readURL(this, 'large-image');loadedImage('has-large-image');" accept="image/*" />
+                                <div class="drag-text">
+                                    <h3>Kéo và thả ảnh vào hoặc chọn ảnh.</h3>
                                 </div>
-                                <div class="file-upload-content@(model != null ? "" : " d-none")">
-                                    <p class="text-start">Định dạng ảnh: <span id="large-image-ext" class="text-danger">@(model != null ? model.Data.Name.Split(".").Last() : "")</span></p>
-                                    <img class="file-upload-image large-image" src="@(model == null  ? "#" : ("/upload/images/" + model.Data.Name + "?lastmod=" + model.Data.UpdatedDate.ToString()))" alt="Ảnh" />
-                                    <div class="image-title-wrap mt-3">
-                                        <button type="button" onclick="removeUpload('large-image');removedImage('has-large-image');" class="btn btn-danger">Bỏ ảnh</button>
-                                        @if (model != null)
-                                        {
-                                            <button type="button" onclick="addToClipBoard(window.location.origin + '/upload/images/@(model.Data.Name)')" class="btn btn-save btn-copy">Copy url</button>
-                                        }
-                                    </div>
+                            </div>
+                            <div class="file-upload-content@(model != null ? "" : " d-none")">
+                                <p class="text-start">Định dạng ảnh: <span id="large-image-ext" class="text-danger">@(model != null ? model.Data.Name.Split(".").Last() : "")</span></p>
+                                <img class="file-upload-image large-image" src="@(model == null  ? "#" : ("/upload/images/" + model.Data.Name + "?lastmod=" + model.Data.UpdatedDate.ToString()))" alt="Ảnh" />
+                                <div class="image-title-wrap mt-3">
+                                    <button type="button" onclick="removeUpload('large-image');removedImage('has-large-image');" class="btn btn-danger">Bỏ ảnh</button>
+                                    @if (model != null)
+                                    {
+                                        <button type="button" onclick="addToClipBoard(window.location.origin + '/upload/images/@(model.Data.Name)')" class="btn btn-save btn-copy">Copy url</button>
+                                    }
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 my-2@(model != null && model.Data.Type == 2 ? "" : " d-none")" id="small-image">
-                            <label class="form-label">Ảnh thu nhỏ (<span class="text-danger">*</span>):</label>
-                            <div class="file-upload">
-                                <div class="image-upload-wrap@(model != null && model.Data.Type == 2 ? " d-none" : "")">
-                                    <input type="hidden" id="has-small-image" name="has-small-image" value="@(model != null && model.Data.Type == 2 ? "true" : "false")" />
-                                    <input class="file-upload-input" type='file' onchange="readURL(this, 'small-image');loadedImage('has-small-image');" accept="image/*" />
-                                    <div class="drag-text">
-                                        <h3>Kéo và thả ảnh vào hoặc chọn ảnh.</h3>
-                                    </div>
+                    </div>
+                    <div class="col-12 my-2@(model != null && model.Data.Type == 2 ? "" : " d-none")" id="small-image">
+                        <label class="form-label">Ảnh thu nhỏ (<span class="text-danger">*</span>):</label>
+                        <div class="file-upload">
+                            <div class="image-upload-wrap@(model != null && model.Data.Type == 2 ? " d-none" : "")">
+                                <input type="hidden" id="has-small-image" name="has-small-image" value="@(model != null && model.Data.Type == 2 ? "true" : "false")" />
+                                <input class="file-upload-input" type='file' onchange="readURL(this, 'small-image');loadedImage('has-small-image');" accept="image/*" />
+                                <div class="drag-text">
+                                    <h3>Kéo và thả ảnh vào hoặc chọn ảnh.</h3>
                                 </div>
-                                <div class="file-upload-content@(model != null && model.Data.Type == 2 ? "" : " d-none")">
-                                    <p class="text-start">Định dạng ảnh: <span id="small-image-ext" class="text-danger">@(model != null && model.Data.Type == 2 ? model.Data.Name.Split(".").Last() : "")</span></p>
-                                    <img class="file-upload-image small-image" src="@(model == null || model.Data.Type != 2 ? "#" : ("/upload/thumbs/" + model.Data.Name + "?lastmod=" + model.Data.UpdatedDate.ToString()))" alt="Ảnh thu nhỏ" />
-                                    <div class="image-title-wrap mt-3">
-                                        <button type="button" onclick="removeUpload('small-image');removedImage('has-small-image');" class="btn btn-danger">Bỏ ảnh</button>
-                                        @if (model != null && model.Data.Type == 2)
-                                        {
-                                            <button type="button" onclick="addToClipBoard(window.location.origin + '/upload/thumbs/@(model.Data.Name)')" class="btn btn-save btn-copy">Copy url</button>
-                                        }
-                                    </div>
+                            </div>
+                            <div class="file-upload-content@(model != null && model.Data.Type == 2 ? "" : " d-none")">
+                                <p class="text-start">Định dạng ảnh: <span id="small-image-ext" class="text-danger">@(model != null && model.Data.Type == 2 ? model.Data.Name.Split(".").Last() : "")</span></p>
+                                <img class="file-upload-image small-image" src="@(model == null || model.Data.Type != 2 ? "#" : ("/upload/thumbs/" + model.Data.Name + "?lastmod=" + model.Data.UpdatedDate.ToString()))" alt="Ảnh thu nhỏ" />
+                                <div class="image-title-wrap mt-3">
+                                    <button type="button" onclick="removeUpload('small-image');removedImage('has-small-image');" class="btn btn-danger">Bỏ ảnh</button>
+                                    @if (model != null && model.Data.Type == 2)
+                                    {
+                                        <button type="button" onclick="addToClipBoard(window.location.origin + '/upload/thumbs/@(model.Data.Name)')" class="btn btn-save btn-copy">Copy url</button>
+                                    }
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-6 col-lg 8">
-                <div class="my-2">
-                    <div class="form-title-wrap">
-                        <p class="form-title">Thông tin chi tiết</p>
+            <div class="col-12 col-md-6 col-lg-8 my-2">
+                <div class="form-title-wrap">
+                    <p class="form-title">Thông tin chi tiết</p>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-6 my-2">
+                        <label for="name" class="form-label">Tên file (<span class="text-danger">*</span>):</label>
+                        <input type="text" class="form-control" name="name" id="name" autocomplete="off" value="@(model != null ? model.Data.Name.Split(".")[0] : "")" placeholder="Nhập tên file">
                     </div>
-                    <div class="row">
-                        <div class="col-12 col-lg-6 my-2">
-                            <label for="name" class="form-label">Tên file (<span class="text-danger">*</span>):</label>
-                            <input type="text" class="form-control" name="name" id="name" autocomplete="off" value="@(model != null ? model.Data.Name.Split(".")[0] : "")" placeholder="Nhập tên file">
-                        </div>
-                        <div class="col-12 col-lg-6 my-2">
-                            <label for="link" class="form-label">Link:</label>
-                            <input type="text" class="form-control" name="link" id="link" autocomplete="off" value="@(model != null ? model.Data.Link : "")" placeholder="Nhập đường dẫn">
-                        </div>
-                        <div class="col-12 my-2">
-                            <label for="alt" class="form-label">Text thay thế nếu ảnh lỗi (<span class="text-danger">*</span>):</label>
-                            <input type="text" class="form-control" name="alt" id="alt" autocomplete="off" value="@(model != null ? model.Data.Alt : "")" placeholder="Nhập text thay thế">
-                        </div>
-                        <div class="col-12 my-2">
-                            <label for="title" class="form-label">Tiêu đề ảnh (<span class="text-danger">*</span>):</label>
-                            <input type="text" class="form-control" name="title" id="title" autocomplete="off" value="@(model != null ? model.Data.Title : "")" placeholder="Nhập tiêu đề">
-                        </div>
+                    <div class="col-12 col-lg-6 my-2">
+                        <label for="link" class="form-label">Link:</label>
+                        <input type="text" class="form-control" name="link" id="link" autocomplete="off" value="@(model != null ? model.Data.Link : "")" placeholder="Nhập đường dẫn">
+                    </div>
+                    <div class="col-12 my-2">
+                        <label for="alt" class="form-label">Text thay thế nếu ảnh lỗi (<span class="text-danger">*</span>):</label>
+                        <input type="text" class="form-control" name="alt" id="alt" autocomplete="off" value="@(model != null ? model.Data.Alt : "")" placeholder="Nhập text thay thế">
+                    </div>
+                    <div class="col-12 my-2">
+                        <label for="title" class="form-label">Tiêu đề ảnh (<span class="text-danger">*</span>):</label>
+                        <input type="text" class="form-control" name="title" id="title" autocomplete="off" value="@(model != null ? model.Data.Title : "")" placeholder="Nhập tiêu đề">
                     </div>
                 </div>
             </div>
         </div>
-    }
-</div>
+    </div>
+    <hr class="d-none d-lg-block" style="margin: .25rem 0 0 0" />
+    <div class="py-3 d-flex justify-content-end">
+        <button type="button" id="btn-save" onclick="" class="btn btn-save ms-3" title="Lưu">Lưu</button>
+    </div>
+}
 
 @section AddToFooter {
-    <script type="text/javascript">
-    </script>
-    <script src="~/admin/js/verify.js"></script>
     <script src="~/admin/js/Image/item.js"></script>
     <script src="~/admin/js/image_upload.js"></script>
-    <script src="~/admin/js/api_service.js"></script>
 }

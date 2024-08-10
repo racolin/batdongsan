@@ -1,4 +1,8 @@
-﻿.form-title {
+﻿.form-title-wrap {
+    margin-top: 1.5rem;
+}
+
+.form-title {
     font-weight: 600;
     font-size: 1.5rem;
     margin-bottom: 0;
@@ -29,6 +33,18 @@ input::-ms-clear {
     border-radius: 0 var(--bs-border-radius) var(--bs-border-radius) 0 !important;
     background-color: white;
     color: #212121;
+}
+
+.form-control-date {
+    background-color: white;
+}
+
+.form-control-date:hover i {
+    color: #ffc107;
+}
+
+.form-control-date:hover {
+    background-color: transparent!important;
 }
 
 .btn-right {

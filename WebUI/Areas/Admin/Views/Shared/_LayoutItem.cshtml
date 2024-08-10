@@ -1,3 +1,52 @@
 ﻿@{
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/admin/css/form.css" />
+    <link rel="stylesheet" href="~/admin/css/item.css" />
+    @if (ViewBag.IncludeSelectImage)
+    {
+        <link rel="stylesheet" href="~/admin/css/gallery.css" />
+        <link rel="stylesheet" href="~/admin/css/paging.css" />
+        <link rel="stylesheet" href="~/admin/css/image_upload.css" />
+    }
+    @if (IsSectionDefined("AddToHead"))
+    {
+        @RenderSection("AddToHead", required: false)
+    }
+}
+
+<p class="layout-title">
+    @((ViewBag.ModelIsNull ? "Tạo " : "Chi tiết ") + ViewBag.LayoutTitle.ToLower()) 
+</p>
+
+<div class="container-fluid flex-grow-1 lb-body layout-item d-flex flex-column">
+    @RenderBody()
+</div>
+
+@if (ViewBag.IncludeSelectImage)
+{
+    @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/GalleryModal.cshtml", new { Key = "", Amount = 5 })
+}
+
+@section AddToFooter {
+    <script src="~/admin/js/verify.js"></script>
+    <script src="~/admin/js/api_service.js"></script>
+    <script type="text/javascript">
+        function initRadio(name, value) {
+            console.log("input[name='" + name + "'][value='" + value + "']");
+            $("input[name='" + name + "'][value='" + value + "']").attr("checked", "checked");
+        }
+    </script>
+    @if (IsSectionDefined("AddToFooter"))
+    {
+        @RenderSection("AddToFooter", required: false)
+    }
+    @if (ViewBag.IncludeSelectImage)
+    {
+        <script src="~/admin/js/paging.js"></script>
+        <script src="~/admin/js/choose_or_upload_image.js"></script>
+        <script src="~/admin/js/image_upload.js"></script>
+    }
+}

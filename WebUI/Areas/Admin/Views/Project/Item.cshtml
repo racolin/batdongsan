@@ -3,153 +3,154 @@
 @using Domain.Constants
 @using Domain.Entities
 @{
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    ViewBag.LayoutTitle = "Dự án";
+    ViewBag.Title = "Dự án";
+
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutItem.cshtml";
     DataResponse<ProjectEntity>? model = Model;
+
+    ViewBag.ModelIsNull = model == null;
+    ViewBag.IncludeSelectImage = true;
+
+    var errorMessage = model != null && model.Message.Type == MessageType.Error ? model.Message.Name : null;
 }
 
 @section AddToHead {
-    <link rel="stylesheet" href="~/admin/css/gallery.css" />
-    <link rel="stylesheet" href="~/admin/css/form.css" />
-    <link rel="stylesheet" href="~/admin/css/item.css" />
-    <link rel="stylesheet" href="~/admin/css/paging.css" />
-    <link rel="stylesheet" href="~/admin/css/image_upload.css" />
     <link rel="stylesheet" href="~/libs/summernote/summernote-bs5.css" />
     <script src="/libs/summernote/summernote-bs5.js"></script>
 }
 
-<p class="layout-title">
-    @(model != null ? "Xem chi tiết tin tức" : "Tạo bài viết")
-</p>
-
-<div class="container-fluid flex-grow-1 lb-body layout-item">
-    @if (model != null && model.Message.Type == MessageType.Error)
-    {
-        <div class="no-data">
-            <img title="Không có dữ liệu" alt="Hình ảnh biểu thị cho danh sách trống" src="/shared/images/no_data.svg" />
-            <p>@(model!.Message.Name)</p>
-        </div>
-    }
-    else
-    {
-        <div class="row">
-            <div class="py-3 d-flex justify-content-end">
-                <button type="button" id="btn-save" onclick="" class="btn btn-save ms-3" title="Lưu baì viết">Lưu</button>
+@if (errorMessage != null)
+{
+    <div class="no-data">
+        <img title="Không có dữ liệu" alt="Hình ảnh biểu thị không có dữ liệu" src="/shared/images/no_data.svg" />
+        <p>@(errorMessage)</p>
+    </div>
+}
+else
+{
+    <div class="flex-grow-1 overflow-scroll">
+        <div class="my-2">
+            <input type="hidden" id="id" value="@(model != null ? model.Data.Id : "")" />
+            <div class="form-title-wrap">
+                <p class="form-title">Phân loại dự án</p>
             </div>
-            <div class="col-12">
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-6 col-xl-3 my-2">
+                    <input type="hidden" id="imageId" name="imageId" value="@(model?.Data.ImageId)" />
+                    <label for="" class="form-label">Chọn ảnh: (<span class='text-danger'>*</span>)</label>
+                    @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
+                                new
+                                {
+                                    Key = "news",
+                                    Src = ViewBag.Src,
+                                }
+                                )
+                </div>
 
-                <div class="my-2">
-                    <input type="hidden" id="id" value="@(model != null ? model.Data.Id : "")" />
-                    <div class="form-title-wrap">
-                        <p class="form-title">Phân loại bài viết</p>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-sm-6 col-md-6 col-xl-3 my-2">
-                            <input type="hidden" id="imageId" name="imageId" value="@(model?.Data.ImageId)" />
-                            <label for="" class="form-label">Chọn ảnh: (<span class='text-danger'>*</span>)</label>
-                            @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
-                                     new
-                                     {
-                                         Key = "news",
-                                         Src = ViewBag.Src,
-                                     }
-                                     )
-                        </div>
+                <div class="col-12 col-sm-6 col-md-6 col-xl-3 my-2">
+                    <label class="form-label">Trạng thái: (<span class="text-danger">*</span>)</label>
+                    <div class="input-group" id="filter-status">
+                        <input type="radio" class="btn-check" name="status" value="Draft" id="Draft" />
+                        <label class="btn btn-outline-warning form-control-left" for="Draft">Nháp</label>
 
-                        <div class="col-12 col-sm-6 col-md-6 col-xl-3 my-2">
-                            <label for="" class="form-label">Trạng thái: (<span class="text-danger">*</span>)</label>
-                            <div class="input-group" id="filter-status">
-                                <input type="radio" class="btn-check" name="status" value="Draft" id="Draft" autocomplete="off" />
-                                <label class="btn btn-outline-warning form-control-left" for="Draft">Nháp</label>
+                        <input type="radio" class="btn-check" name="status" value="Active" id="Active" />
+                        <label class="btn btn-outline-warning form-control-between" for="Active">Hoạt động</label>
 
-                                <input type="radio" class="btn-check" name="status" value="Active" id="Active" autocomplete="off" />
-                                <label class="btn btn-outline-warning form-control-between" for="Active">Hoạt động</label>
-
-                                <input type="radio" class="btn-check" name="status" value="InActive" id="InActive" autocomplete="off" />
-                                <label class="btn btn-outline-warning form-control-right" for="InActive">Ngừng</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-sm-6 col-md-6 col-xl-3 my-2">
-                            <label for="filter-range-date" class="form-label">Nổi bật: (<span class="text-danger">*</span>)</label>
-                            <div class="input-group" id="filter-isHighlight">
-                                <input type="radio" class="btn-check" name="isHighlight" value="true" id="true" autocomplete="off" />
-                                <label class="btn btn-outline-warning form-control-left" for="true">Nổi bật</label>
-
-                                <input type="radio" class="btn-check" name="isHighlight" value="false" id="false" autocomplete="off" />
-                                <label class="btn btn-outline-warning form-control-right" for="false">Bình thường</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-sm-6 col-md-6 col-xl-3 my-2">
-                            <label for="filter-range-date" class="form-label">Tình hình: (<span class="text-danger">*</span>)</label>
-                            <div class="input-group" id="filter-state">
-                                <input type="radio" class="btn-check" name="state" value="implementing" id="implementing" autocomplete="off" />
-                                <label class="btn btn-outline-warning form-control-left" for="implementing">Đang triển khai</label>
-
-                                <input type="radio" class="btn-check" name="state" value="implemented" id="implemented" autocomplete="off" />
-                                <label class="btn btn-outline-warning form-control-right" for="implemented">Đã triển khai</label>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-sm-10 col-md-6 col-xl-6 my-2">
-                            <label for="filter-range-date" class="form-label">Loại dự án: (<span class="text-danger">*</span>)</label>
-                            <div class="input-group" id="filter-isHighlight">
-                                <input type="radio" class="btn-check" name="type" value="apartment" id="apartment" autocomplete="off" />
-                                <label class="btn btn-outline-warning form-control-left" for="apartment">Căn hộ</label>
-
-                                <input type="radio" class="btn-check" name="type" value="ground" id="ground" autocomplete="off" />
-                                <label class="btn btn-outline-warning form-control-between" for="ground">Đất nền</label>
-
-                                <input type="radio" class="btn-check" name="type" value="resort-real-estate" id="resort-real-estate" autocomplete="off" />
-                                <label class="btn btn-outline-warning form-control-between" for="resort-real-estate">BĐS nghỉ dưỡng</label>
-
-                                <input type="radio" class="btn-check" name="type" value="villa" id="villa" autocomplete="off" />
-                                <label class="btn btn-outline-warning form-control-right" for="villa">Biệt thự</label>
-                            </div>
-                        </div>
-
-                        <div class="col-4 col-sm-2 col-md-2 col-lg-2 col-xl-1 my-2">
-                            <label for="order" class="form-label">Thứ tự: </label>
-                            <input type="number" class="form-control" name="order" value="@(model?.Data.Order)" id="order" autocomplete="off" />
-                        </div>
-
-                        <div class="col-12 col-lg-6 my-2">
-                            <label for="name" class="form-label">Tiêu đề (<span class="text-danger">*</span>):</label>
-                            <input type="text" class="form-control" name="name" value="@(model?.Data.Name)" id="name" autocomplete="off" />
-                        </div>
-
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 my-2">
-                            <label for="ud" class="form-label">Liên kết: (<span class="text-danger">*</span>)</label>
-                            <input type="text" class="form-control" name="ud" value="@(model?.Data.Ud)" id="ud" autocomplete="off" />
-                        </div>
-
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 my-2">
-                            <label for="address" class="form-label">Địa chỉ: (<span class="text-danger">*</span>)</label>
-                            <input type="text" class="form-control" name="address" value="@(model?.Data.Address)" id="address" autocomplete="off" />
-                        </div>
+                        <input type="radio" class="btn-check" name="status" value="InActive" id="InActive" />
+                        <label class="btn btn-outline-warning form-control-right" for="InActive">Ngừng</label>
                     </div>
                 </div>
 
-                <div class="my-2">
-                    <div class="form-title-wrap">
-                        <p class="form-title">Soạn nội dung HTML</p>
+                <div class="col-12 col-sm-6 col-md-6 col-xl-3 my-2">
+                    <label class="form-label">Nổi bật: (<span class="text-danger">*</span>)</label>
+                    <div class="input-group" id="filter-isHighlight">
+                        <input type="radio" class="btn-check" name="isHighlight" value="true" id="true" />
+                        <label class="btn btn-outline-warning form-control-left" for="true">Nổi bật</label>
+
+                        <input type="radio" class="btn-check" name="isHighlight" value="false" id="false" />
+                        <label class="btn btn-outline-warning form-control-right" for="false">Bình thường</label>
                     </div>
-                    <div class="row">
-                        <div class="col-12 my-2">
-                            <div class="form-group">
-                                <label class="form-label" for="content">Nội dung bài viết: (<span class="text-danger">*</span>)</label>
-                                <textarea id="content">@(Html.Raw(Uri.UnescapeDataString(model?.Data.Content ?? "")))</textarea>
-                            </div>
-                        </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-6 col-xl-3 my-2">
+                    <label class="form-label">Tình hình: (<span class="text-danger">*</span>)</label>
+                    <div class="input-group" id="filter-state">
+                        <input type="radio" class="btn-check" name="state" value="implementing" id="implementing" />
+                        <label class="btn btn-outline-warning form-control-left" for="implementing">Đang triển khai</label>
+
+                        <input type="radio" class="btn-check" name="state" value="implemented" id="implemented" />
+                        <label class="btn btn-outline-warning form-control-right" for="implemented">Đã triển khai</label>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-10 col-md-6 col-xl-6 my-2">
+                    <label class="form-label">Loại dự án: (<span class="text-danger">*</span>)</label>
+                    <div class="input-group" id="filter-type">
+                        <input type="radio" class="btn-check" name="type" value="apartment" id="apartment" />
+                        <label class="btn btn-outline-warning form-control-left" for="apartment">Căn hộ</label>
+
+                        <input type="radio" class="btn-check" name="type" value="ground" id="ground" />
+                        <label class="btn btn-outline-warning form-control-between" for="ground">Đất nền</label>
+
+                        <input type="radio" class="btn-check" name="type" value="resort-real-estate" id="resort-real-estate" />
+                        <label class="btn btn-outline-warning form-control-between" for="resort-real-estate">BĐS nghỉ dưỡng</label>
+
+                        <input type="radio" class="btn-check" name="type" value="villa" id="villa" />
+                        <label class="btn btn-outline-warning form-control-right" for="villa">Biệt thự</label>
+                    </div>
+                </div>
+
+                <div class="col-4 col-sm-2 col-md-2 col-lg-2 col-xl-1 my-2">
+                    <label for="order" class="form-label">Thứ tự: </label>
+                    <input type="number" class="form-control" name="order" value="@(model?.Data.Order)" id="order" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+
+        <div class="my-2">
+            <div class="form-title-wrap">
+                <p class="form-title">Thông tin dự án</p>
+            </div>
+            <div class="row">
+                <div class="col-12 col-lg-6 my-2">
+                    <label for="name" class="form-label">Tiêu đề (<span class="text-danger">*</span>):</label>
+                    <input type="text" class="form-control" name="name" value="@(model?.Data.Name)" id="name" autocomplete="off" />
+                </div>
+
+                <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 my-2">
+                    <label for="ud" class="form-label">Liên kết: (<span class="text-danger">*</span>)</label>
+                    <input type="text" class="form-control" name="ud" value="@(model?.Data.Ud)" id="ud" autocomplete="off" />
+                </div>
+
+                <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 my-2">
+                    <label for="address" class="form-label">Địa chỉ: (<span class="text-danger">*</span>)</label>
+                    <input type="text" class="form-control" name="address" value="@(model?.Data.Address)" id="address" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+
+        <div class="my-2">
+            <div class="form-title-wrap">
+                <p class="form-title">Soạn nội dung HTML</p>
+            </div>
+            <div class="row">
+                <div class="col-12 my-2">
+                    <div class="form-group">
+                        <label class="form-label" for="content">Nội dung: (<span class="text-danger">*</span>)</label>
+                        <textarea id="content">@(Html.Raw(Uri.UnescapeDataString(model?.Data.Content ?? "")))</textarea>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="" style="height:10rem"></div>
-    }
-</div>
-
-@await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/GalleryModal.cshtml", new { Key = "", Amount = 5 })
+    </div>
+    <hr class="d-none d-lg-block" style="margin: .25rem 0 0 0" />
+    <div class="py-3 d-flex justify-content-end">
+        <button type="button" id="btn-save" onclick="" class="btn btn-save ms-3" title="Lưu">Lưu</button>
+    </div>
+}
 
 @section AddToFooter {
     <script type="text/javascript">
@@ -161,14 +162,14 @@
             $("#imageId").val("");
         }
 
-        $("input[name='status'][value='" + '@(model?.Data.Status ?? StatusConstant.Draft)' + "']").attr("checked", "checked");
-        $("input[name='type'][value='" + '@(model?.Data.Type ?? ProjectTypeConstant.Apartment)' + "']").attr("checked", "checked");
-        $("input[name='state'][value='" + '@(model?.Data.State ?? ProjectStateConstant.Implementing)' + "']").attr("checked", "checked");
-        $("input[name='isHighlight'][value='" + @(model?.Data.IsHighlight == true ? "true" : "false") + "']").attr("checked", "checked");
+        initRadio('status', '@(model?.Data?.Status ?? StatusConstant.Draft)');
+        initRadio('type', '@(model?.Data?.Type ?? ProjectTypeConstant.Apartment)');
+        initRadio('state', '@(model?.Data?.State ?? ProjectStateConstant.Implementing)');
+        initRadio('isHighlight', '@(model?.Data?.IsHighlight.ToString().ToLower())');
 
         $(document).ready(function () {
             $('#content').summernote({
-                placeholder: 'Tạo nội dung cho bài viết',
+                placeholder: 'Tạo nội dung HTML',
                 height: 800,
                 toolbar: [
                     ['style', ['style']],
@@ -182,10 +183,5 @@
             });
         });
     </script>
-    <script src="~/admin/js/paging.js"></script>
-    <script src="~/admin/js/verify.js"></script>
-    <script src="~/admin/js/choose_or_upload_image.js"></script>
-    <script src="~/admin/js/image_upload.js"></script>
     <script src="~/admin/js/Project/item.js"></script>
-    <script src="~/admin/js/api_service.js"></script>
 }

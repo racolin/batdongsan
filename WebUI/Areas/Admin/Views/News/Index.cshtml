@@ -188,7 +188,7 @@
         var perPage = urlParams.get("perPage") ?? '';
         $("#perPage").val(perPage == '' ? @(model.PerPage) : perPage);
         $("#currentPage").val(@(model.Current));
-        $("#order").val(urlParams.get("order") ?? 'desc-date');
+        $("#order").val(urlParams.get("order") ?? 'desc-order');
 
         initCheckboxFromUrl('status');
         initCheckboxFromUrl('type');

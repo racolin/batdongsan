@@ -46,7 +46,7 @@ $("#btn-save").on("click", function () {
     if (type == '2') {
         list.push({ 'value': hasSmallImage, 'name': 'ảnh thu nhỏ' });
     }
-    console.log(list)
+
     var verifies = verify(list);
     if (verifies.length != 0) {
         showMessage('warning', 'Vui lòng nhập ' + verifies.join(', ') + '!');

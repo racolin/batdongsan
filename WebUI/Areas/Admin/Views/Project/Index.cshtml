@@ -218,7 +218,7 @@
     </tbody>
 </table>
 
-@section AddToFooter {>
+@section AddToFooter {
     <script type="text/javascript">
         var urlParams = new URLSearchParams(window.location.search);
         $("#value").val(urlParams.get("value"));
@@ -236,7 +236,7 @@
         initCheckboxFromUrl('highlight');
 
         $('#filter-range-date').datepicker({
-            format: 'dd/mm/yyyy',
+            format: 'dd-mm-yyyy',
             weekStart: 1,
             templates: {
                 leftArrow: '<i class="fa-solid fa-angle-left"></i>',

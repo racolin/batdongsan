@@ -128,25 +128,36 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
 }
 
-.layout-menu-parent button {
+.layout-menu-parent button, 
+.layout-menu-parent a {
+    text-decoration: none!important;
+    display: block;
+    padding: .5rem 0;
+    color: #616161;
     width: 100%;
     text-align: left;
-    padding: .5rem 0;
     background-color: #dde5f4;
     border: none;
     font-weight: 500;
 }
 
-.layout-menu-parent button:hover, .layout-menu-parent.active button {
+.layout-menu-parent button:hover, 
+.layout-menu-parent.active button,
+.layout-menu-parent a:hover, 
+.layout-menu-parent.active a {
     background-color: #10729B;
     color: white;
 }
 
-.layout-menu-parent button i {
+.layout-menu-parent button i,
+.layout-menu-parent a i {
     padding: 0 1rem;
 }
 
-.layout-menu-parent button:hover i, .layout-menu-parent.active button i {
+.layout-menu-parent button:hover i, 
+.layout-menu-parent.active button i,
+.layout-menu-parent a:hover i, 
+.layout-menu-parent.active a i {
     color: white;
 }
 
@@ -162,7 +173,11 @@ h1, h2, h3, h4, h5, h6 {
     width: 100%;
 }
 
-.layout-menu-child button {
+.layout-menu-child a {
+    text-decoration: none!important;
+    display: block;
+    padding: .5rem 0;
+    color: #616161;
     width: 100%;
     text-align: left;
     padding: .5rem 0;
@@ -171,16 +186,18 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 500;
 }
 
-.layout-menu-child button:hover, .layout-menu-child.active button {
+.layout-menu-child a:hover, 
+.layout-menu-child.active a {
     background-color: #68C9F2;
     color: white;
 }
 
-.layout-menu-child button i {
+.layout-menu-child a i {
     padding: 0 1rem;
 }
 
-.layout-menu-child button:hover i, .layout-menu-child.active button i {
+.layout-menu-child a:hover i, 
+.layout-menu-child.active a i {
     color: white;
 }
 
@@ -233,7 +250,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .content-item {
-    background-color: #f1f7fe;
+    background-color: #dde5f4;
     padding: .75rem;
     border-radius: .375rem;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;

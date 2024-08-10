@@ -1,0 +1,126 @@
+﻿@using Application.Common.Responses
+@using Application.Common.Responses.Admin
+@using Application.Common.Supports
+@using Domain.Constants
+@using Domain.Entities
+@using Domain.Enums
+@{
+    ViewBag.LayoutTitle = "Người dùng";
+    ViewBag.Title = "Người dùng";
+
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutItem.cshtml";
+    DataResponse<UserResponse>? model = Model;
+
+    ViewBag.ModelIsNull = model == null;
+    ViewBag.IncludeSelectImage = true;
+
+    var errorMessage = model != null && model.Message.Type == MessageType.Error ? model.Message.Name : null;
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/libs/bootstrap-datepicker/css/bootstrap-datepicker.css" />
+    <script src="~/libs/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+}
+
+@if (model == null || errorMessage != null)
+{
+    <div class="no-data">
+        <img title="Không có dữ liệu" alt="Hình ảnh biểu thị không có dữ liệu" src="/shared/images/no_data.svg" />
+        <p>@(errorMessage)</p>
+    </div>
+}
+else
+{
+    <div class="flex-grow-1 overflow-scroll">
+        <div class="my-2">
+            <form id="form-update-profile">
+                <div class="form-title-wrap">
+                    <p class="form-title">Thông tin người dùng</p>
+                </div>
+                <div class="row">
+
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-3 my-2">
+                        <label for="username" class="form-label">Tên đăng nhập: (<span class="text-danger">*</span>)</label>
+                        <input type="text" class="form-control" value="@(model?.Data.Username)" disabled title="Liên hệ admin để câp nhật tên đăng nhập" />
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-3 my-2">
+                        <label for="name" class="form-label">Tên người dùng: (<span class="text-danger">*</span>)</label>
+                        <input type="text" class="form-control" name="name" value="@(model?.Data.Name)" id="name" autocomplete="off" />
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-4 col-xl-3 my-2">
+                        <label for="email" class="form-label">Email: (<span class="text-danger">*</span>)</label>
+                        <input type="email" class="form-control" value="@(model?.Data.Email)" disabled title="Liên hệ admin để câp nhật email" />
+                    </div>
+
+                    <div class="col-6 col-md-6 col-lg-4 col-xl-3 my-2">
+                        <label for="phone" class="form-label">Số điện thoại: (<span class="text-danger">*</span>)</label>
+                        <input type="tel" class="form-control" value="@(model?.Data.Phone)" disabled title="Liên hệ admin để câp nhật số điện thoại"/>
+                    </div>
+
+                    <div class="col-6 col-sm-6 col-md-3 col-lg-2 col-xl-2 my-2">
+                        <label for="dob" class="form-label">Ngày sinh: </label>
+                        <div class="input-group date" id="dob">
+                            <input type="text" name="dateOfBirth" id="dateOfBirth" class="form-control form-control-left flex-grow-1" autocomplete="off" value="@(model != null && model.Data.DateOfBirth != null ? model.Data.DateOfBirth.Value.ToString("dd-MM-yyyy") : "")">
+                            <button class="btn btn-outline-warning form-control-date" type="button"><i class="fa-solid fa-calendar-days"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="col-8 col-sm-6 col-md-3 col-lg-4 col-xl-2 my-2">
+                        <label for="filter-gender" class="form-label">Giới tính: (<span class="text-danger">*</span>)</label>
+                        <div class="input-group" id="filter-gender">
+                            <input type="radio" class="btn-check" name="gender" value="1" id="gender-1" @(model == null || model.Data.Gender == (int)GenderEnum.Male ? "checked" : "") />
+                            <label class="btn btn-outline-warning form-control-left" for="gender-1">Nam</label>
+
+                            <input type="radio" class="btn-check" name="gender" value="-1" id="gender--1" @(model != null && model.Data.Gender == (int)GenderEnum.Female ? "checked" : "") />
+                            <label class="btn btn-outline-warning form-control-between" for="gender--1">Nữ</label>
+
+                            <input type="radio" class="btn-check" name="gender" value="0" id="gender-0" @(model != null && model.Data.Gender == (int)GenderEnum.Others ? "checked" : "") />
+                            <label class="btn btn-outline-warning form-control-right" for="gender-0">Khác</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="my-2">
+            <div class="form-title-wrap">
+                <p class="form-title">Vai trò của bạn</p>
+            </div>
+            <div class=" my-2">
+                <label class="form-label">Danh sách vai trò: </label>
+                <div>
+                    @foreach (var role in model.Data.Roles)
+                    {
+                        <div class="btn mb-2 me-2 btn-save">
+                                @(NameSupport.GetRoleName(role))
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="d-none d-lg-block" style="margin: .25rem 0 0 0" />
+    <div class="py-3 d-flex justify-content-end">
+        <button type="button" id="btn-save" class="btn btn-save ms-3" title="Lưu">Lưu</button>
+        <button type="button" id="btn-lock" onclick="showUpdateMyPasswordModal()" class="btn btn-edit ms-3" title="Đặt mật khẩu">Đặt mật khẩu</button>
+        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/UpdateMyPasswordModal.cshtml")
+    </div>
+}
+
+@section AddToFooter {
+    <script type="text/javascript">
+        $('#dob').datepicker({
+            format: 'dd-mm-yyyy',
+            weekStart: 1,
+            templates: {
+                leftArrow: '<i class="fa-solid fa-angle-left"></i>',
+                rightArrow: '<i class="fa-solid fa-angle-right"></i>',
+            },
+            todayHighlight: true,
+            endDate: new Date(),
+        });    
+        </script>
+    <script src="~/admin/js/User/profile.js"></script>
+}

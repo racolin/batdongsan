@@ -50,7 +50,7 @@ $("#btn-save").on("click", function () {
         // Save
         postJsonApiExplicit(
             '/api/admin/project/save',
-            JSON.stringify({
+            {
                 id: !id ? null : id,
                 ud: ud,
                 name: name,
@@ -63,7 +63,7 @@ $("#btn-save").on("click", function () {
                 isHighlight: isHighlight == "true" ? true : false,
                 imageId: imageId,
                 isUpdateContent: isUpdateContent,
-            }),
+            },
             // Success: function (data) {}
             function (data) {
                 if (data != null) {
