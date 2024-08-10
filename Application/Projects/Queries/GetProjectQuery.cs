@@ -6,7 +6,7 @@ using Domain.Entities;
 
 namespace Application.Projects.Queries;
 
-public class GetProjectQuery : IRequest<DataResponse<ProjectEntity?>>
+public class GetProjectQuery : IRequest<DataResponse<ProjectEntity>>
 {
     public int Id { get; }
 
@@ -15,7 +15,7 @@ public class GetProjectQuery : IRequest<DataResponse<ProjectEntity?>>
         Id = id;
     }
 
-    public class Handler : IRequestHandler<GetProjectQuery, DataResponse<ProjectEntity?>>
+    public class Handler : IRequestHandler<GetProjectQuery, DataResponse<ProjectEntity>>
     {
         private readonly IApplicationDbContext _context;
 
@@ -24,14 +24,14 @@ public class GetProjectQuery : IRequest<DataResponse<ProjectEntity?>>
             _context = context;
         }
 
-        public async Task<DataResponse<ProjectEntity?>> Handle(GetProjectQuery request, CancellationToken cancellationToken)
+        public async Task<DataResponse<ProjectEntity>> Handle(GetProjectQuery request, CancellationToken cancellationToken)
         {
             var project = await _context.Projects
                 .Include(x => x.Image)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(x => x.Id == request.Id);
 
-            return DataResponse<ProjectEntity?>.Success(project);
+            return project == null ? DataResponse<ProjectEntity>.Error("Không tìm thấy dự án!") : DataResponse<ProjectEntity>.Success(project);
 
         }
     }

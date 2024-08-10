@@ -11,6 +11,7 @@
     <Content Remove="wwwroot\admin\js\choose_or_upload_image.js" />
     <Content Remove="wwwroot\admin\js\User\index.js" />
     <Content Remove="wwwroot\admin\js\User\item.js" />
+    <Content Remove="wwwroot\admin\js\User\profile.js" />
     <Content Remove="wwwroot\shared\js\image_upload.js" />
     <Content Remove="wwwroot\shared\js\loader.js" />
     <Content Remove="wwwroot\shared\js\notify.js" />
@@ -51,6 +52,7 @@
     <None Include="wwwroot\admin\js\api_service.js" />
     <None Include="wwwroot\admin\js\choose_or_upload_image.js" />
     <None Include="wwwroot\admin\js\User\index.js" />
+    <None Include="wwwroot\admin\js\User\profile.js" />
     <None Include="wwwroot\admin\js\User\item.js" />
     <None Include="wwwroot\admin\js\image_upload.js" />
     <None Include="wwwroot\shared\js\notify.js" />

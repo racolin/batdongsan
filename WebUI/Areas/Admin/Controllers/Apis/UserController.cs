@@ -9,18 +9,6 @@ namespace WebUI.Areas.Admin.Controllers.Apis
     [ApiExplorerSettings(GroupName = "User - Admin")]
     public class UserController : ApiAdminControllerBase
     {
-        [HttpPost("admin-update-password")]
-        public async Task<DataResponse<bool>> AdminUpdatePassword(AdminUpdatePasswordRequest request)
-        {
-            var result = await Mediator.Send(new AdminUpdatePasswordCommand(request));
-            return result ?? DataResponse<bool>.Error("Có lỗi khi đặt mật khẩu!");
-        }
-        [HttpPost("admin-save")]
-        public async Task<DataResponse<int>> AdminSave([FromForm] SaveUserRequest request)
-        {
-            var result = await Mediator.Send(new SaveUserCommand(request));
-            return result ?? DataResponse<int>.Error("Có lỗi khi lưu người dùng!");
-        }
         [HttpPost("update-password")]
         public async Task<DataResponse<bool>> UpdatePassword(UpdatePasswordRequest request)
         {
@@ -28,10 +16,22 @@ namespace WebUI.Areas.Admin.Controllers.Apis
             return result ?? DataResponse<bool>.Error("Có lỗi khi đặt mật khẩu!");
         }
         [HttpPost("save")]
-        public async Task<DataResponse<int>> Save(SaveUserRequest request)
+        public async Task<DataResponse<int>> Save([FromForm] SaveUserRequest request)
         {
             var result = await Mediator.Send(new SaveUserCommand(request));
             return result ?? DataResponse<int>.Error("Có lỗi khi lưu người dùng!");
+        }
+        [HttpPost("update-my-password")]
+        public async Task<DataResponse<bool>> UpdateMyPassword(UpdateMyPasswordRequest request)
+        {
+            var result = await Mediator.Send(new UpdateMyPasswordCommand(request));
+            return result ?? DataResponse<bool>.Error("Có lỗi khi đặt mật khẩu!");
+        }
+        [HttpPost("update-profile")]
+        public async Task<DataResponse<bool>> UpdateProfile([FromForm] SaveUserRequest request)
+        {
+            var result = await Mediator.Send(new UpdateProfileCommand(request));
+            return result ?? DataResponse<bool>.Error("Có lỗi khi lưu người dùng!");
         }
         [HttpPost("add-role")]
         public async Task<DataResponse<bool>> AddRole(UpdateRoleRequest request)

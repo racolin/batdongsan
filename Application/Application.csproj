@@ -21,6 +21,9 @@
   <ItemGroup>
     <Folder Include="Common\Helpers\" />
     <Folder Include="Content\Queries\" />
+    <Folder Include="ImagePages\Commands\" />
+    <Folder Include="Sections\Commands\" />
+    <Folder Include="Sliders\Commands\" />
   </ItemGroup>
 
 </Project>

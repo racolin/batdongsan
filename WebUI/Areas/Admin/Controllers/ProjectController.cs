@@ -1,4 +1,5 @@
 ﻿using Application.Common.Requests;
+using Application.Common.Responses;
 using Application.Common.Supports;
 using Application.Projects.Queries;
 using Domain.Constants;
@@ -12,6 +13,7 @@ namespace WebUI.Areas.Admin.Controllers
         {
             request.CurrentPage = request.CurrentPage ?? 1;
             request.PerPage = request.PerPage ?? 8;
+            request.Order = request.Order ?? "desc-order";
 
             var result = await Mediator.Send(new GetProjectsQuery(request));
 
@@ -26,16 +28,17 @@ namespace WebUI.Areas.Admin.Controllers
             }
 
             var result = await Mediator.Send(new GetProjectQuery(id.Value));
-            if (result.Data == null)
+
+            if (result.Message.Type != MessageType.Error)
             {
-                return View(null);
-            } else if (result.Data.Image?.Name == null)
-            {
-                ViewBag.Src = DefaultConstant.NoImage;
-            }
-            else
-            {
-                ViewBag.Src = PathSupport.GetUploadThumbDefaultPath(result.Data.Image.Name, result.Data.Image.Type);
+                if (result.Data.Image?.Name == null)
+                {
+                    ViewBag.Src = DefaultConstant.NoImage;
+                }
+                else
+                {
+                    ViewBag.Src = PathSupport.GetUploadThumbDefaultPath(result.Data.Image.Name, result.Data.Image.Type);
+                }
             }
 
             return View(result);

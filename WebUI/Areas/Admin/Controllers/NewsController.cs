@@ -12,6 +12,7 @@ namespace WebUI.Areas.Admin.Controllers
         {
             request.CurrentPage = request.CurrentPage ?? 1;
             request.PerPage = request.PerPage ?? 12;
+            request.Order = request.Order ?? "desc-order";
 
             var result = await Mediator.Send(new GetNewsListQuery(request));
 

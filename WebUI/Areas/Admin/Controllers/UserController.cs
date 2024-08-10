@@ -27,5 +27,12 @@ namespace WebUI.Areas.Admin.Controllers
 
             return View(result);
         }
+        public async Task<IActionResult> Profile()
+        {
+
+            var result = await Mediator.Send(new GetProfileQuery());
+
+            return View(result);
+        }
     }
 }
