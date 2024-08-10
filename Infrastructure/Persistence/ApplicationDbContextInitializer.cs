@@ -107,15 +107,6 @@ public class ApplicationDbContextInitializer
                 },
                 new ImageEntity
                 {
-                    Name = "background-5.jpg",
-                    Title = "Khu vực lễ tân tại Mikazuki Japanese Resorts & Spa",
-                    Alt = "Khu vực lễ tân sang trọng tại Mikazuki Japanese Resorts & Spa",
-                    Type = (int)ImageTypeEnum.OnlyFull,
-                    CreatedBy = 1,
-                    UpdatedBy = 1
-                },
-                new ImageEntity
-                {
                     Title = "Nhà phố biển thương mại Queen Pearl Marina Complex",
                     Type = (int)ImageTypeEnum.OnlyFull,
                     Alt = "Hình ảnh nhà phố biển thương mại Queen Pearl Marina Complex",
