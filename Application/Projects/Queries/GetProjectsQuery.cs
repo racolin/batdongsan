@@ -53,7 +53,7 @@ public class GetProjectsQuery : IRequest<DataResponse<PagingResponse<ProjectEnti
             // Order
             Expression<Func<ProjectEntity, Object?>> order = null;
             var isAsc = request.Request.IsAsc ?? true;
-            switch (request.Request.Order)
+            switch (request.Request.OrderType)
             {
                 case "date":
                     order = item => item.CreatedDate;

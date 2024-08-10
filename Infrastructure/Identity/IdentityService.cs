@@ -22,6 +22,7 @@ using Application.Common.Requests;
 using System.Linq.Expressions;
 using System.Threading;
 using Application.Common.Responses.Admin;
+using System.Data;
 
 namespace Infrastructure.Identity;
 
@@ -263,6 +264,29 @@ public class IdentityService : IIdentityService
         };
         return DataResponse<UserResponse>.Success(u);
     }
+    public async Task<DataResponse<UserResponse>> GetProfileAsync(int userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+
+        if (user == null)
+        {
+            return DataResponse<UserResponse>.Error("Không tìm thấy người dùng này!");
+        }
+
+        var roles = await _userManager.GetRolesAsync(user);
+        var u = new UserResponse
+        {
+            Id = user.Id,
+            Name = user.Name,
+            Username = user.UserName,
+            Email = user.Email,
+            Phone = user.PhoneNumber,
+            Gender = user.Gender,
+            DateOfBirth = user.DateOfBirth,
+            Roles = roles.ToList(),
+        };
+        return DataResponse<UserResponse>.Success(u);
+    }
     public async Task<DataResponse<bool>> AdminUpdatePasswordAsync(int userId, string password)
     {
         var user = await _userManager.FindByIdAsync(userId.ToString());
@@ -344,6 +368,23 @@ public class IdentityService : IIdentityService
             }
             return DataResponse<int>.Success(user.Id);
         }
+    }
+    public async Task<DataResponse<bool>> UpdateProfileAsync(int userId, string name, int gender, DateTime? dateOfBirth)
+    {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null) {
+                return DataResponse<bool>.Error("Không tìm thấy người dùng này!");
+            }
+            user.Name = name;
+            user.Gender = gender;
+            user.DateOfBirth = dateOfBirth;
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return DataResponse<bool>.Error("Có lỗi xảy ra khi cập nhật thông tin cá nhân này!");
+            }
+            return DataResponse<bool>.Success(true);
     }
     public async Task<DataResponse<bool>> AddRoleAsync(int userId, string roleName)
     {

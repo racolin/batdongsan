@@ -10,6 +10,7 @@ namespace WebUI.Areas.Admin.Controllers
         {
             request.CurrentPage = request.CurrentPage ?? 1;
             request.PerPage = request.PerPage ?? 12;
+            request.Order = request.Order ?? "desc-date";
 
             var result = await Mediator.Send(new GetRegisterMailsQuery(request));
 

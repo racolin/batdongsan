@@ -16,21 +16,15 @@ public class UpdatePasswordCommand : IRequest<DataResponse<bool>>
     public class Handler : IRequestHandler<UpdatePasswordCommand, DataResponse<bool>>
     {
         private readonly IIdentityService _identityService;
-        private readonly ICurrentUserService _currentUserService;
 
-        public Handler(IIdentityService identityService, ICurrentUserService currentUserService)
+        public Handler(IIdentityService identityService)
         {
             _identityService = identityService;
-            _currentUserService = currentUserService;
         }
 
         public async Task<DataResponse<bool>> Handle(UpdatePasswordCommand request, CancellationToken cancellationToken)
         {
-            var currentUsername = _currentUserService.UserName;
-            if (string.IsNullOrEmpty(currentUsername) || currentUsername != request.Request.Username) {
-                return DataResponse<bool>.Error("Bạn không có quyền thực hiện hành động này!");
-            }
-            var result = await _identityService.UpdatePasswordAsync(currentUsername, request.Request.Password, request.Request.NewPassword);
+            var result = await _identityService.AdminUpdatePasswordAsync(request.Request.Id, request.Request.Password);
             return result;
         }
 
