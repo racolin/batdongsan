@@ -183,11 +183,11 @@
                     }
                 </td>
                 <td class="">
-                    <a class="item-link" href="/admin/project/item?id=@(model.List[i].Id)" title="Chuyển sang trang chi tiết tin tức">
+                    <a class="item-td-link" href="/admin/project/item?id=@(model.List[i].Id)" title="Chuyển sang trang chi tiết tin tức">
                         @(model.List[i].Name)
                         @if (model.List[i].IsHighlight)
                         {
-                            <span class="item-Highlight">Nổi bật</span>
+                            <span class="item-td-Highlight">Nổi bật</span>
                         }
                     </a>
                 </td>
@@ -201,12 +201,12 @@
                     <p class="mb-1">
                         Địa chỉ: @(model.List[i].Address)
                     </p>
-                    <p class="item-@(model.List[i].State) mb-1">
+                    <p class="item-td-@(model.List[i].State) mb-1">
                         Tình hình: @(NameSupport.GetProjectStateName(model.List[i].State))
                     </p>
                 </td>
                 <td class="">
-                    <p class="item-@(model.List[i].Status)">
+                    <p class="item-td-@(model.List[i].Status)">
                         @(NameSupport.GetStatusName(model.List[i].Status))
                     </p>
                 </td>

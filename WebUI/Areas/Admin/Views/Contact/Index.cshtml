@@ -74,20 +74,24 @@
             <tr id="item-@i">
                 <td class="">@((model.Current - 1) * model.PerPage + i + 1)</td>
                 <td class="">
-                    <a href="javascript:void(0)" class="mb-0 item-email item-link" onclick="showDetail('@(model.List[i].Address)', '@i')"
+                    <a href="javascript:void(0)" class="mb-0 item-td-email item-td-link" onclick="showDetail('@(model.List[i].Address)', '@i')"
                        title="Mở popup chi tiết">@(model.List[i].Email)</a>
                 </td>
                 <td class="d-none d-md-table-cell">
-                    <p class="mb-0">Tên: <span class="item-name">@(model.List[i].Name)</span></p>
-                    <p class="mb-0">Sđt: <span class="item-phone">@(model.List[i].Phone)</span></p>
+                    <p class="mb-0">Tên: <span class="item-td-name">@(model.List[i].Name)</span></p>
+                    <p class="mb-0">Sđt: <span class="item-td-phone">@(model.List[i].Phone)</span></p>
                 </td>
                 <td class="">
-                    <p class="item-content mb-0">@(model.List[i].Content)</p>
+                    <p class="item-td-content mb-0">@(model.List[i].Content)</p>
                 </td>
                 <td>
-                    <p class="item-@(model.List[i].State) mb-0">@(NameSupport.GetContactStateName(model.List[i].State))</p>
+                    <p class="item-td-@(model.List[i].State) mb-0">@(NameSupport.GetContactStateName(model.List[i].State))</p>
                 </td>
-                <td class="d-none d-md-table-cell item-createdDate">@(model.List[i].CreatedDate?.ToString("dd-MM-yyyy"))</td>
+                <td class="d-none d-md-table-cell item-td-createdDate">
+                    <p class="mb-0 item-td-createdDate">
+                        @(model.List[i].CreatedDate?.ToString("dd-MM-yyyy"))
+                    </p>
+                </td>
             </tr>
         }
     </tbody>
@@ -157,10 +161,10 @@
         function showDetail(address, id) {
             $("#modal-detail").modal('show');
             var item = $("#item-" + id);
-            $("#item-name").text(item.find(".item-name").text())
-            $("#item-email").text(item.find(".item-email").text())
-            $("#item-phone").text(item.find(".item-phone").text())
-            $("#item-content").text(item.find(".item-content").text())
+            $("#item-name").text(item.find(".item-td-name").text())
+            $("#item-email").text(item.find(".item-td-email").text())
+            $("#item-phone").text(item.find(".item-td-phone").text())
+            $("#item-content").text(item.find(".item-td-content").text())
             $("#item-address").text(address)
         }
     </script>

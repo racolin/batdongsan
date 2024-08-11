@@ -16,7 +16,7 @@ namespace WebUI.Controllers
             var model = await Mediator.Send(new GetNewsIndexQuery(p));
             return View(model);
         }
-        public async Task<IActionResult> Projects(int? page)
+        public async Task<IActionResult> Project(int? page)
         {
             ViewBag.MenuParentActive = 3;
             ViewBag.MenuChildActive = 31;

@@ -160,14 +160,14 @@
         <div class="section-wrap my-2">
 
             <div class="form-title-wrap">
-                <p class="form-title">Soạn nội dung giới thiệu</p>
+                <p class="form-title">Soạn nội dung</p>
             </div>
             <div class="row">
                 <div class="col-12 my-2">
                     <div class="form-group">
                         <input id="sectionId" name="contactId" type="hidden" value="@(section?.Id)" />
                         <input id="sectionPosition" name="contactPosition" type="hidden" value="@(section?.Position)" />
-                        <label class="form-label" for="section">Nội dung: (<span class="text-danger">*</span>)</label>
+                        <label class="form-label" for="section">Nội dung giới thiệu: (<span class="text-danger">*</span>)</label>
                         <textarea id="sectionContent">@(Html.Raw(Uri.UnescapeDataString(section?.Content ?? "")))</textarea>
                     </div>
                 </div>

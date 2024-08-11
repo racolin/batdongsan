@@ -54,7 +54,7 @@
     <thead class="table-dark">
         <tr>
             <th scope="col">#</th>
-            <th class="" scope="col">Tên</th>
+            <th class="" scope="col">Tên người dùng</th>
             <th class="" scope="col">Thông tin</th>
             <th scope="col">Trạng thái</th>
         </tr>
@@ -65,16 +65,16 @@
             <tr>
                 <td class="">@((model.Current - 1) * model.PerPage + i + 1)</td>
                 <td class="">
-                    <a class="item-link" href="/admin/user/item?id=@(model.List[i].Id)" title="Chuyển sang trang chi tiết">
+                    <a class="item-td-link" href="/admin/user/item?id=@(model.List[i].Id)" title="Chuyển sang trang chi tiết">
                         @(model.List[i].Name)
                     </a>
                 </td>
                 <td class="">
-                    <p class="mb-0">@(model.List[i].Username)</p>
-                    <p class="mb-0">@(model.List[i].Email)</p>
+                    <p class="mb-0 item-td-username">@(model.List[i].Username)</p>
+                    <p class="mb-0 item-td-email">@(model.List[i].Email)</p>
                 </td>
-                <td class="">
-                    @(model.List[i].LockoutEnd == null ? "Đang hoạt động" : "Bị khóa")
+                <td>
+                    <p class="mb-0 item-td-@(model.List[i].LockoutEnd == null ? "unlock" : "lock")">@(model.List[i].LockoutEnd == null ? "Đang hoạt động" : "Bị khóa")</p>
                     @if (model.List[i].LockoutEnd != null)
                     {
                         <p class="mb-0">

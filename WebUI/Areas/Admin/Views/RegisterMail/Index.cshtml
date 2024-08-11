@@ -17,6 +17,7 @@
 @section AddToHead {
     <link rel="stylesheet" href="~/libs/bootstrap-datepicker/css/bootstrap-datepicker.css" />
     <script src="~/libs/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="~/libs/moment.js/moment.js"></script>
 }
 
 @section FilterForm {
@@ -70,10 +71,10 @@
             <tr>
                 <td class="">@((model.Current - 1) * model.PerPage + i + 1)</td>
                 <td class="">
-                    <p class="item-link mb-0">@(model.List[i].Email)</p>
+                    <p class="item-td-link mb-0">@(model.List[i].Email)</p>
                 </td>
                 <td class="d-none d-md-table-cell">
-                    <p class="item-@(model.List[i].State) mb-0">@(NameSupport.GetRegisterMailStateName(model.List[i].State))</p>
+                    <p class="item-td-@(model.List[i].State) mb-0">@(NameSupport.GetRegisterMailStateName(model.List[i].State))</p>
                 </td>
                 <td class="d-none d-md-table-cell">@(model.List[i].CreatedDate?.ToString("dd-MM-yyyy"))</td>
             </tr>

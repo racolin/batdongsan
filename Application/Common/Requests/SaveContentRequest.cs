@@ -13,13 +13,6 @@ public class SaveContentRequest
     public SectionShortRequest Section { get; set; } = new SectionShortRequest();
 }
 
-//public class SaveContentValidator : AbstractValidator<SaveContentRequest>
-//{
-//    public SaveContentValidator()
-//    { 
-//    }
-//}
-
 public class SectionShortRequest
 {
     public int Id { get; set; }

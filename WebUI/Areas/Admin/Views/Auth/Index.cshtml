@@ -160,7 +160,7 @@
 
                     const urlParams = new URLSearchParams(window.location.search);
                     var redirect = urlParams.get("ReturnUrl");
-                    redirect = !redirect ? '/admin' : redirect;
+                    redirect = !redirect ? '/admin/user/profile' : redirect;
                     window.location.href = redirect
                 },
                 error: function (xhr, textStatus, errorThrown) {
