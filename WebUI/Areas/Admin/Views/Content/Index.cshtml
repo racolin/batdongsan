@@ -10,7 +10,9 @@
     ImagePageEntity? news = ViewBag.News;
     ImagePageEntity? contact = ViewBag.Contact;
     SliderEntity slider = ViewBag.Slider;
-    SectionEntity section = ViewBag.Section;
+    SectionEntity introduce = ViewBag.Introduce;
+    SectionEntity newsMarket = ViewBag.NewsMarket;
+    SectionEntity newsProject = ViewBag.NewsProject;
 
     ViewBag.ModelIsNull = false;
     ViewBag.IncludeSelectImage = true;
@@ -158,17 +160,32 @@
     </div>
     <div class="section">
         <div class="section-wrap my-2">
-
             <div class="form-title-wrap">
                 <p class="form-title">Soạn nội dung</p>
             </div>
             <div class="row">
                 <div class="col-12 my-2">
                     <div class="form-group">
-                        <input id="sectionId" name="contactId" type="hidden" value="@(section?.Id)" />
-                        <input id="sectionPosition" name="contactPosition" type="hidden" value="@(section?.Position)" />
-                        <label class="form-label" for="section">Nội dung giới thiệu: (<span class="text-danger">*</span>)</label>
-                        <textarea id="sectionContent">@(Html.Raw(Uri.UnescapeDataString(section?.Content ?? "")))</textarea>
+                        <input id="introduceId" name="contactId" type="hidden" value="@(introduce?.Id)" />
+                        <input id="introducePosition" name="contactPosition" type="hidden" value="@(introduce?.Position)" />
+                        <label class="form-label" for="introduceContent">Nội dung giới thiệu: (<span class="text-danger">*</span>)</label>
+                        <textarea id="introduceContent">@(Html.Raw(Uri.UnescapeDataString(introduce?.Content ?? "")))</textarea>
+                    </div>
+                </div>
+                <div class="col-12 my-2">
+                    <div class="form-group">
+                        <input id="newsMarketId" name="contactId" type="hidden" value="@(newsMarket?.Id)" />
+                        <input id="newsMarketPosition" name="contactPosition" type="hidden" value="@(newsMarket?.Position)" />
+                        <label class="form-label" for="newsMarketContent">Mô tả tin thị trường: (<span class="text-danger">*</span>)</label>
+                        <textarea class="form-control" id="newsMarketContent">@(newsMarket?.Content ?? "")</textarea>
+                    </div>
+                </div>
+                <div class="col-12 my-2">
+                    <div class="form-group">
+                        <input id="newsProjectId" name="contactId" type="hidden" value="@(newsProject?.Id)" />
+                        <input id="newsProjectPosition" name="contactPosition" type="hidden" value="@(newsProject?.Position)" />
+                        <label class="form-label" for="newsProjectContent">Mô tả tin dự án: (<span class="text-danger">*</span>)</label>
+                        <textarea class="form-control" id="newsProjectContent">@(newsProject?.Content ?? "")</textarea>
                     </div>
                 </div>
             </div>
@@ -192,7 +209,7 @@
             $("#imageId-" + key).val("");
         }
         $(document).ready(function () {
-            $('#sectionContent').summernote({
+            $('#introduceContent').summernote({
                 placeholder: 'Tạo nội dung giới thiệu',
                 height: 400,
                 toolbar: [

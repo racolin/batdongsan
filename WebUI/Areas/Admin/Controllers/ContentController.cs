@@ -16,14 +16,18 @@ namespace WebUI.Areas.Admin.Controllers
             var contact = await Mediator.Send(new GetImagePageByPositionQuery((int)ImagePagePositionEnum.ContactScreen));
             
             var slider = await Mediator.Send(new GetSliderByPositionQuery((int)SliderPositionEnum.ProjectScreen));
-            var section = await Mediator.Send(new GetSectionByPositionQuery((int)SectionPositionEnum.IntroduceInHome));
+            var introduce = await Mediator.Send(new GetSectionByPositionQuery((int)SectionPositionEnum.IntroduceInHome));
+            var newsMarket = await Mediator.Send(new GetSectionByPositionQuery((int)SectionPositionEnum.DescriptionNewsMarket));
+            var newsProject = await Mediator.Send(new GetSectionByPositionQuery((int)SectionPositionEnum.DescriptionNewsProject));
 
             ViewBag.Home = home;
             ViewBag.BgHome = bgHome;
             ViewBag.News = news;
             ViewBag.Contact = contact;
             ViewBag.Slider = slider;
-            ViewBag.Section = section;
+            ViewBag.Introduce = introduce;
+            ViewBag.NewsMarket = newsMarket;
+            ViewBag.NewsProject = newsProject;
 
             return View();
         }

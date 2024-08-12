@@ -1,6 +1,8 @@
-﻿var oldSection = {};
+﻿var oldIntroduce = {};
 var oldImagePages = {}
 var oldSlider = {}
+var oldNewsProject = {}
+var oldNewsMarket = {}
 $(document).ready(function () {
     oldImagePages = getItemsByQueries([
         '#id-home-screen', '#position-home-screen', '#imageId-home-screen',
@@ -8,8 +10,12 @@ $(document).ready(function () {
         '#id-news-screen', '#position-news-screen', '#imageId-news-screen',
         '#id-contact-screen', '#position-contact-screen', '#imageId-contact-screen']);
 
-    oldSection = getItemsByQueries(['#sectionId', '#sectionPosition']);
-    oldSection['sectionContent'] = $("#sectionContent").summernote("code");
+    oldIntroduce = getItemsByQueries(['#introduceId', '#introducePosition']);
+    oldIntroduce['introduceContent'] = $("#introduceContent").summernote("code");
+
+    oldNewsProject = getItemsByQueries(['#newsProjectId', '#newsProjectPosition', '#newsProjectContent']);
+
+    oldNewsMarket = getItemsByQueries(['#newsMarketId', '#newsMarketPosition', '#newsMarketContent']);
 
     oldSlider = getItemsByQueries(['#sliderProjectId', '#sliderProjectPosition']);
     oldSlider['items'] = [];
@@ -28,8 +34,12 @@ $("#btn-save").click(function () {
         '#id-news-screen', '#position-news-screen', '#imageId-news-screen',
         '#id-contact-screen', '#position-contact-screen', '#imageId-contact-screen',]);
 
-    var newSection = getItemsByQueries(['#sectionId', '#sectionPosition']);
-    newSection['sectionContent'] = $("#sectionContent").summernote("code");
+    var newIntroduce = getItemsByQueries(['#introduceId', '#introducePosition']);
+    newIntroduce['introduceContent'] = $("#introduceContent").summernote("code");
+
+    var newNewsProject = getItemsByQueries(['#newsProjectId', '#newsProjectPosition', '#newsProjectContent']);
+
+    var newNewsMarket = getItemsByQueries(['#newsMarketId', '#newsMarketPosition', '#newsMarketContent']);
 
     var newSlider = getItemsByQueries(['#sliderProjectId', '#sliderProjectPosition']);
     newSlider['items'] = [];
@@ -54,10 +64,10 @@ $("#btn-save").click(function () {
     for (var i in imagePageKeys) {
         fillImagePages &&= !checkNull(newImagePages[imagePageKeys[i]], []);
     }
-    var fillSection = true;
-    var sectionsKeys = Object.keys(newSection);
-    for (var i in sectionsKeys) {
-        fillSection &&= !checkNull(newSection[sectionsKeys[i]], []);
+    var fillIntroduce = true;
+    var introducesKeys = Object.keys(newIntroduce);
+    for (var i in introducesKeys) {
+        fillIntroduce &&= !checkNull(newIntroduce[introducesKeys[i]], []);
     }
     var fillSlider = true;
     fillSlider &&= !checkNull(newSlider["#sliderProjectId"], [])
@@ -70,7 +80,15 @@ $("#btn-save").click(function () {
             }
         }
     }
-    if (!fillImagePages || !fillSection || !fillSlider) {
+    var fillNewsProject = true;
+    fillNewsProject &&= !checkNull(newNewsProject["#newsProjectId"], [])
+    fillNewsProject &&= !checkNull(newNewsProject["#newsProjectPosition"], [])
+    fillNewsProject &&= !checkNull(newNewsProject["#newsProjectContent"], [])
+    var fillNewsMarket = true;
+    fillNewsMarket &&= !checkNull(newNewsMarket["#newsMarketId"], [])
+    fillNewsMarket &&= !checkNull(newNewsMarket["#newsMarketPosition"], [])
+    fillNewsMarket &&= !checkNull(newNewsMarket["#newsMarketContent"], [])
+    if (!fillImagePages || !fillIntroduce || !fillSlider || !fillNewsProject || !fillNewsMarket) {
         showMessage('warning', 'Bạn phải điền đầy đủ thông tin trước khi lưu!');
         return;
     }
@@ -81,9 +99,19 @@ $("#btn-save").click(function () {
         isUpdateImagePages = true;
     }
 
-    var isUpdateSection = false;
-    if (!filterDifferences(oldSection, newSection)) {
-        isUpdateSection = true;
+    var isUpdateIntroduce = false;
+    if (!filterDifferences(oldIntroduce, newIntroduce)) {
+        isUpdateIntroduce = true;
+    }
+
+    var isUpdateNewsMarket = false;
+    if (!filterDifferences(oldNewsMarket, newNewsMarket)) {
+        isUpdateNewsMarket = true;
+    }
+
+    var isUpdateNewsProject = false;
+    if (!filterDifferences(oldNewsProject, newNewsProject)) {
+        isUpdateNewsProject = true;
     }
 
     var isUpdateSlider = false;
@@ -101,20 +129,32 @@ $("#btn-save").click(function () {
         }
     }
 
-    if (!isUpdateImagePages && !isUpdateSection && !isUpdateSlider) {
+    if (!isUpdateImagePages && !isUpdateIntroduce && !isUpdateSlider && !isUpdateNewsMarket && !isUpdateNewsProject) {
         showMessage('warning', 'Không phát hiện bất kỳ sự thay đổi dữ liệu nào!');
         return;
     }
 
     var jsonData = {
         isUpdateImagePages: isUpdateImagePages,
-        isUpdateSection: isUpdateSection,
+        isUpdateIntroduce: isUpdateIntroduce,
         isUpdateSlider: isUpdateSlider,
-        section: {
-            id: newSection['#sectionId'],
-            position: newSection['#sectionPosition'],
-            content: newSection['sectionContent'],
+        introduce: {
+            id: newIntroduce['#introduceId'],
+            position: newIntroduce['#introducePosition'],
+            content: newIntroduce['introduceContent'],
         },
+        news: [
+            {
+                id: newNewsProject['#newsProjectId'],
+                position: newNewsProject['#newsProjectPosition'],
+                content: newNewsProject['#newsProjectContent'],
+            },
+            {
+                id: newNewsMarket['#newsMarketId'],
+                position: newNewsMarket['#newsMarketPosition'],
+                content: newNewsMarket['#newsMarketContent'],
+            },
+        ],
         slider: {
             id: newSlider['#sliderProjectId'],
             position: newSlider['#sliderProjectPosition'],

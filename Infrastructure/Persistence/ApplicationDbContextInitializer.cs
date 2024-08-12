@@ -291,7 +291,7 @@ public class ApplicationDbContextInitializer
             {
                 _context.Sections.Add(new SectionEntity
                 {
-                    Position = (int)SliderPositionEnum.HomeScreen,
+                    Position = (int)SectionPositionEnum.IntroduceInHome,
                     Content = "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
                     "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
                     "when an unknown printer took a galley of type and scrambled it to make a type specimen book. " +
@@ -299,6 +299,16 @@ public class ApplicationDbContextInitializer
                     "remaining essentially unchanged.</p>" +
                     "<p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, " +
                     "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>",
+                });
+                _context.Sections.Add(new SectionEntity
+                {
+                    Position = (int)SectionPositionEnum.DescriptionNewsMarket,
+                    Content = "Đăng các bản tin thị trường, các bài viết thống kê, phân tích và dự đoán thị trường.",
+                });
+                _context.Sections.Add(new SectionEntity
+                {
+                    Position = (int)SectionPositionEnum.DescriptionNewsProject,
+                    Content = "Cập nhật tin về các dự án sớm nhất để nhà đầu tư có thêm nhiều thông tin cần thiết.",
                 });
                 await _context.SaveChangesAsync();
             }

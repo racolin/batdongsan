@@ -38,7 +38,7 @@ public class SaveContentCommand : IRequest<DataResponse<bool>>
                 if (imagePages != null) {
                     foreach (var imagePage in imagePages)
                     {
-                        var item = request.Request.ImagePages.FirstOrDefault(x => x.Id == imagePage.Id);
+                        var item = request.Request.ImagePages.FirstOrDefault(x => x.Id == imagePage.Id && x.Position == imagePage.Position);
                         if (item != null)
                         {
                             imagePage.ImageId = item.ImageId;
@@ -79,22 +79,34 @@ public class SaveContentCommand : IRequest<DataResponse<bool>>
                 }
             }
 
-            if (request.Request.IsUpdateSection)
+            if (request.Request.IsUpdateIntroduce)
             {
-                var section = await _context.Sections
-                    .FirstOrDefaultAsync(x => x.Id == request.Request.Section.Id && x.Position == request.Request.Section.Position);
-                if (section != null)
+                var introduce = await _context.Sections
+                    .FirstOrDefaultAsync(x => x.Id == request.Request.Introduce.Id && x.Position == request.Request.Introduce.Position);
+                if (introduce != null)
                 {
-                    section.Content = request.Request.Section.Content;
+                    introduce.Content = request.Request.Introduce.Content;
                 }
             }
 
-            if (request.Request.IsUpdateSection 
-                || request.Request.IsUpdateImagePages
-                || request.Request.IsUpdateSlider)
+            var newsIds = request.Request.News.Select(x => x.Id).ToList();
+            var news = await _context.Sections
+                .Where(x => newsIds.Contains(x.Id))
+                .ToListAsync(cancellationToken);
+
+            if (news != null)
             {
-                await _context.SaveChangesAsync(cancellationToken);
+                foreach (var newsItem in news)
+                {
+                    var item = request.Request.News.FirstOrDefault(x => x.Id == newsItem.Id && x.Position == newsItem.Position);
+                    if (item != null)
+                    {
+                        newsItem.Content = item.Content;
+                    }
+                }
             }
+
+            await _context.SaveChangesAsync(cancellationToken);
 
             return new DataResponse<bool> { Data = true };
         }

@@ -27,10 +27,27 @@ public class GetHomeIndexQuery : IRequest<HomeIndexView>
         {
             var view = new HomeIndexView();
 
-            var section = await _context.Sections.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Position == (int)SectionPositionEnum.IntroduceInHome, cancellationToken);
-            if (section != null) {
-                view.Content = section!.Content;
+            var sections = await _context.Sections.AsNoTracking()
+                .Where(x =>
+                    x.Position == (int)SectionPositionEnum.IntroduceInHome
+                    || x.Position == (int)SectionPositionEnum.DescriptionNewsMarket
+                    || x.Position == (int)SectionPositionEnum.DescriptionNewsProject)
+                .ToListAsync(cancellationToken);
+            if (sections != null) {
+                foreach (var section in sections) { 
+                    if (section.Position == (int)SectionPositionEnum.IntroduceInHome)
+                    {
+                        view.Content = section.Content;
+                    }
+                    if (section.Position == (int)SectionPositionEnum.DescriptionNewsProject)
+                    {
+                        view.DescriptionNewsProject = section.Content;
+                    }
+                    if (section.Position == (int)SectionPositionEnum.DescriptionNewsMarket)
+                    {
+                        view.DescriptionNewsMarket = section.Content;
+                    }
+                }
             }
 
             await _context.SaveChangesAsync(cancellationToken);

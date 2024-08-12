@@ -7,10 +7,11 @@ public class SaveContentRequest
 {
     public bool IsUpdateImagePages { get; set; } = false;
     public bool IsUpdateSlider { get; set; } = false;
-    public bool IsUpdateSection { get; set; } = false;
+    public bool IsUpdateIntroduce { get; set; } = false;
     public List<ImagePageShortRequest> ImagePages { get; set; } = new List<ImagePageShortRequest>();
     public SliderShortRequest Slider { get; set; } = new SliderShortRequest();
-    public SectionShortRequest Section { get; set; } = new SectionShortRequest();
+    public SectionShortRequest Introduce { get; set; } = new SectionShortRequest();
+    public List<SectionShortRequest> News { get; set; } = new List<SectionShortRequest>();
 }
 
 public class SectionShortRequest
