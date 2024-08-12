@@ -14,5 +14,6 @@ namespace Domain.Entities
         public bool IsHighlight { get; set; } = false;
         public int? ImageId { get; set; }
         public virtual ImageEntity? Image { get; set; }
+        public DateTime? PublishDate { get; set; }
     }
 }

@@ -29,6 +29,18 @@ public class SaveNewsCommand : IRequest<DataResponse<int>>
 
         public async Task<DataResponse<int>> Handle(SaveNewsCommand request, CancellationToken cancellationToken)
         {
+            DateTime? publishDate = null;
+            if (request.Request.PubDate != null)
+            {
+                try
+                {
+                    publishDate = DateTime.ParseExact(request.Request.PubDate, "dd-MM-yyyy", null);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            };
             var news = await _context.News.FirstOrDefaultAsync(x => x.Id == request.Request.Id, cancellationToken);
             if (news == null)
             {
@@ -46,6 +58,8 @@ public class SaveNewsCommand : IRequest<DataResponse<int>>
                     news.Content = content;
                 }
             }
+
+            news.PublishDate = publishDate;
 
             await _context.SaveChangesAsync(cancellationToken);
 

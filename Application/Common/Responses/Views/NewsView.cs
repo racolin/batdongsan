@@ -25,7 +25,8 @@ namespace Application.Common.Responses.Views
                 .ForMember(d => d.TypeName, otp => otp.MapFrom(s => NameSupport.GetNewsTypeName(s.Type)))
                 .ForMember(d => d.Image, otp => otp.MapFrom(s => s.Image != null ? PathSupport.GetUploadImagePath(s.Image!.Name) : DefaultConstant.NoImage))
                 .ForMember(d => d.ImageTitle, otp => otp.MapFrom(s => s.Image == null ? string.Empty : s.Image!.Title))
-                .ForMember(d => d.ImageAlt, otp => otp.MapFrom(s => s.Image == null ? string.Empty : s.Image!.Alt));
+                .ForMember(d => d.ImageAlt, otp => otp.MapFrom(s => s.Image == null ? string.Empty : s.Image!.Alt))
+                .ForMember(d => d.CreatedDate, otp => otp.MapFrom(s => s.PublishDate == null ? s.CreatedDate : s.PublishDate));
         }
     }
 }

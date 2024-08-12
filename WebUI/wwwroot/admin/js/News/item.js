@@ -4,12 +4,13 @@ var oldItem = {};
 
 $(document).ready(function () {
     oldContent = $("#content").summernote("code");
-    oldItem = getItemsByQueries(['#ud', '#name', 'input[name="type"]:checked', 'input[name="isHighlight"]:checked', 'input[name="status"]:checked', '#order', '#description', '#imageId']);
+    oldItem = getItemsByQueries(['#ud', '#name', 'input[name="type"]:checked', 'input[name="isHighlight"]:checked', 'input[name="status"]:checked', '#order', '#description', '#imageId', '#pubDate']);
 });
 $("#btn-save").on("click", function () {
     var id = $("#id").val();
     var ud = $("#ud").val();
     var name = $("#name").val();
+    var pubDate = $("#pubDate").val();
     var type = $('input[name="type"]:checked').val();
     var isHighlight = $('input[name="isHighlight"]:checked').val();
     var status = $('input[name="status"]:checked').val();
@@ -24,7 +25,7 @@ $("#btn-save").on("click", function () {
     }
 
     // kiểm tra sự giống nhau giữa oldItem và newItem
-    var newItem = getItemsByQueries(['#ud', '#name', 'input[name="type"]:checked', 'input[name="isHighlight"]:checked', 'input[name="status"]:checked', '#order', '#description', '#imageId']);
+    var newItem = getItemsByQueries(['#ud', '#name', 'input[name="type"]:checked', 'input[name="isHighlight"]:checked', 'input[name="status"]:checked', '#order', '#description', '#imageId', '#pubDate']);
     var same = filterDifferences(oldItem, newItem);
     if (!isUpdateContent && same) {
         showMessage('warning', 'Không phát hiện có sự thay đổi dữ liệu nào!');
@@ -59,6 +60,7 @@ $("#btn-save").on("click", function () {
                 order: !order ? null : order,
                 isHighlight: isHighlight == "true" ? true : false,
                 imageId: imageId,
+                pubDate: pubDate,
                 isUpdateContent: isUpdateContent,
             },
             // Success: function (data) {}

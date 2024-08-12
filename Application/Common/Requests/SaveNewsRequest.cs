@@ -1,4 +1,5 @@
 ﻿using Application.Common.Mappings;
+using AutoMapper;
 using Domain.Constants;
 using Domain.Entities;
 using FluentValidation;
@@ -18,6 +19,7 @@ public class SaveNewsRequest : IMapFrom<NewsEntity>
     public int? Order { get; set; }
     public bool IsHighlight { get; set; } = false;
     public int? ImageId { get; set; }
+    public string? PubDate { get; set; }
 }
 
 public class SaveNewsValidator : AbstractValidator<SaveNewsRequest>

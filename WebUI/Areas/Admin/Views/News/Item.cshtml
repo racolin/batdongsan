@@ -16,6 +16,8 @@
 }
 
 @section AddToHead {
+    <link rel="stylesheet" href="~/libs/bootstrap-datepicker/css/bootstrap-datepicker.css" />
+    <script src="~/libs/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <link rel="stylesheet" href="~/libs/summernote/summernote-bs5.css" />
     <script src="/libs/summernote/summernote-bs5.js"></script>
 }
@@ -89,11 +91,18 @@ else
                 <p class="form-title">Thông tin chi tiết</p>
             </div>
             <div class="row">
-                <div class="col-12 col-sm-10 col-md-10 col-lg-6 col-xl-6 my-2">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 my-2">
                     <label for="ud" class="form-label">Liên kết: (<span class="text-danger">*</span>)</label>
                     <input type="text" class="form-control" name="ud" value="@(model?.Data.Ud)" id="ud" autocomplete="off" />
                 </div>
-                <div class="col-4 col-sm-2 col-md-2 col-lg-2 col-xl-1 my-2">
+                <div class="col-8 col-sm-6 col-md-4 col-lg-3 col-xl-2 my-2">
+                    <label for="publishDate" class="form-label">Ngày đăng hiển thị: </label>
+                    <div class="input-group date" id="publishDate">
+                        <input type="text" name="pubDate" id="pubDate" class="form-control form-control-left flex-grow-1" autocomplete="off" value="@(model != null && model.Data.PublishDate != null ? model.Data.PublishDate.Value.ToString("dd-MM-yyyy") : "")">
+                        <button class="btn btn-outline-warning form-control-date" type="button"><i class="fa-solid fa-calendar-days"></i></button>
+                    </div>
+                </div>
+                <div class="col-4 col-sm-3 col-md-2 col-lg-1 col-xl-1 my-2">
                     <label for="order" class="form-label">Thứ tự: </label>
                     <input type="number" class="form-control" name="order" value="@(model?.Data.Order)" id="order" autocomplete="off" />
                 </div>
@@ -140,7 +149,18 @@ else
 
         initRadio('status', '@(model?.Data?.Status ?? StatusConstant.Draft)');
         initRadio('type', '@(model?.Data?.Type ?? NewsTypeConstant.Market)');
-        initRadio('isHighlight', '@(model?.Data?.IsHighlight.ToString().ToLower())');
+        initRadio('isHighlight', '@((model?.Data?.IsHighlight ?? false).ToString().ToLower())');
+
+        $('#publishDate').datepicker({
+            format: 'dd-mm-yyyy',
+            weekStart: 1,
+            templates: {
+                leftArrow: '<i class="fa-solid fa-angle-left"></i>',
+                rightArrow: '<i class="fa-solid fa-angle-right"></i>',
+            },
+            todayHighlight: true,
+            endDate: new Date(),
+        });
 
         $(document).ready(function () {
             $('#content').summernote({
