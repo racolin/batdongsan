@@ -1,35 +1,31 @@
-﻿using Application.ImagePages.Queries;
-using Application.Sections.Queries;
-using Application.Sliders.Queries;
-using Domain.Enums;
+﻿using Application.Common.Requests;
+using Application.Content.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Areas.Admin.Controllers
 {
     public class ContentController : BaseAdminController
     {
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] SearchRequest request)
         {
-            var home = await Mediator.Send(new GetImagePageByPositionQuery((int)ImagePagePositionEnum.HomeScreen));
-            var bgHome = await Mediator.Send(new GetImagePageByPositionQuery((int)ImagePagePositionEnum.BackgroundHomeScreen));
-            var news = await Mediator.Send(new GetImagePageByPositionQuery((int)ImagePagePositionEnum.NewsScreen));
-            var contact = await Mediator.Send(new GetImagePageByPositionQuery((int)ImagePagePositionEnum.ContactScreen));
-            
-            var slider = await Mediator.Send(new GetSliderByPositionQuery((int)SliderPositionEnum.ProjectScreen));
-            var introduce = await Mediator.Send(new GetSectionByPositionQuery((int)SectionPositionEnum.IntroduceInHome));
-            var newsMarket = await Mediator.Send(new GetSectionByPositionQuery((int)SectionPositionEnum.DescriptionNewsMarket));
-            var newsProject = await Mediator.Send(new GetSectionByPositionQuery((int)SectionPositionEnum.DescriptionNewsProject));
+            request.CurrentPage = request.CurrentPage ?? 1;
+            request.PerPage = request.PerPage ?? 12;
+            request.Order = request.Order ?? "desc-date";
 
-            ViewBag.Home = home;
-            ViewBag.BgHome = bgHome;
-            ViewBag.News = news;
-            ViewBag.Contact = contact;
-            ViewBag.Slider = slider;
-            ViewBag.Introduce = introduce;
-            ViewBag.NewsMarket = newsMarket;
-            ViewBag.NewsProject = newsProject;
+            var home = await Mediator.Send(new GetContentsQuery(request));
 
-            return View();
+            return View(home.Data);
+        }
+        public async Task<IActionResult> Item(int? id)
+        {
+            if (id == null)
+            {
+                return View(null);
+            }
+
+            var result = await Mediator.Send(new GetContentQuery(id.Value));
+
+            return View(result);
         }
     }
 }

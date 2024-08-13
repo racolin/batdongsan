@@ -12,7 +12,7 @@
     DataResponse<UserResponse>? model = Model;
 
     ViewBag.ModelIsNull = false;
-    ViewBag.IncludeSelectImage = true;
+    ViewBag.IncludeSelectImage = false;
 
     var errorMessage = model != null && model.Message.Type == MessageType.Error ? model.Message.Name : null;
 }

@@ -30,12 +30,11 @@ public class ApplicationDbContext : KeyApiAuthorizationDbContext<User, Role, int
 
     #region Tables
     public DbSet<ImageEntity> Images => Set<ImageEntity>();
-    public DbSet<ImagePageEntity> ImagePages => Set<ImagePageEntity>();
     public DbSet<NewsEntity> News => Set<NewsEntity>();
     public DbSet<ProjectEntity> Projects => Set<ProjectEntity>();
-    public DbSet<SectionEntity> Sections => Set<SectionEntity>();
-    public DbSet<SliderEntity> Sliders => Set<SliderEntity>();
+    public DbSet<ContentEntity> Contents => Set<ContentEntity>();
     public DbSet<ContactEntity> Contacts => Set<ContactEntity>();
+    public DbSet<SliderImageEntity> SliderImages => Set<SliderImageEntity>();
     public DbSet<RegisterMailEntity> RegisterMails => Set<RegisterMailEntity>();
     #endregion
 

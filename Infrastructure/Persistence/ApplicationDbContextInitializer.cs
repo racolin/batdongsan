@@ -235,85 +235,39 @@ public class ApplicationDbContextInitializer
             _context.Images.AddRange(images);
             await _context.SaveChangesAsync();
 
-            if (!await _context.ImagePages.AnyAsync())
+            if (!await _context.Contents.AnyAsync())
             {
-                _context.ImagePages.AddRange(new List<ImagePageEntity>()
+                var content = new ContentEntity
                 {
-                    new ImagePageEntity
-                    {
-                        ImageId = images[2].Id,
-                        Position = (int)ImagePagePositionEnum.BackgroundHomeScreen,
-                    },
-                    new ImagePageEntity
-                    {
-                        ImageId = images[0].Id,
-                        Position = (int)ImagePagePositionEnum.HomeScreen,
-                    },
-                    new ImagePageEntity
-                    {
-                        ImageId = images[2].Id,
-                        Position = (int)ImagePagePositionEnum.ProjectScreen,
-                    },
-                    new ImagePageEntity
-                    {
-                        ImageId = images[3].Id,
-                        Position = (int)ImagePagePositionEnum.NewsScreen,
-                    },
-                    new ImagePageEntity
-                    {
-                        ImageId = images[4].Id,
-                        Position = (int)ImagePagePositionEnum.ContactScreen,
-                    },
-                });
-                await _context.SaveChangesAsync();
-            }
-
-            var items = new List<SliderImageEntity>();
-            for (var i = 0; i < 5; i++)
-            {
-                items.Add(new SliderImageEntity { 
-                    Image = images[i],
-                    Order = i,
-                });
-            }
-
-            if (!await _context.Sliders.AnyAsync())
-            {
-                _context.Sliders.Add(new SliderEntity
+                    Name = "Nội dung trang web mặc định",
+                    HomeImage = images[0],
+                    BgHomeImage = images[2],
+                    NewsImage = images[3],
+                    ContactImage = images[4],
+                    Status = StatusConstant.Active,
+                };
+                for (var i = 0; i < 5; i++)
                 {
-                    Position = (int)SliderPositionEnum.ProjectScreen,
-                    Items = items,
-                });
-                await _context.SaveChangesAsync();
-            }
-
-            if (!await _context.Sections.AnyAsync())
-            {
-                _context.Sections.Add(new SectionEntity
-                {
-                    Position = (int)SectionPositionEnum.IntroduceInHome,
-                    Content = "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
+                    content.ProjectSlider.Add(new SliderImageEntity
+                    {
+                        Image = images[i],
+                        Order = i,
+                    });
+                }
+                content.IntroduceSection = "<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. " +
                     "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, " +
                     "when an unknown printer took a galley of type and scrambled it to make a type specimen book. " +
                     "It has survived not only five centuries, but also the leap into electronic typesetting, " +
                     "remaining essentially unchanged.</p>" +
                     "<p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, " +
-                    "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>",
-                });
-                _context.Sections.Add(new SectionEntity
-                {
-                    Position = (int)SectionPositionEnum.DescriptionNewsMarket,
-                    Content = "Đăng các bản tin thị trường, các bài viết thống kê, phân tích và dự đoán thị trường.",
-                });
-                _context.Sections.Add(new SectionEntity
-                {
-                    Position = (int)SectionPositionEnum.DescriptionNewsProject,
-                    Content = "Cập nhật tin về các dự án sớm nhất để nhà đầu tư có thêm nhiều thông tin cần thiết.",
-                });
-                await _context.SaveChangesAsync();
+                    "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>";
+                content.NewsMarketSection = "Đăng các bản tin thị trường, các bài viết thống kê, phân tích và dự đoán thị trường.";
+                content.NewsProjectSection = "Cập nhật tin về các dự án sớm nhất để nhà đầu tư có thêm nhiều thông tin cần thiết.";
+
+                _context.Contents.Add(content);
             }
 
-            var content = "<p>Dự án Nhà ở xã hội Golden Square Lào Cai đã được UBND tỉnh Lào Cai\r\n                chấp thuận liên danh Công ty Cổ phần Đông Á Golden Square và Công ty Cổ phần\r\n                Foodinco Quy Nhơn là nhà đầu tư thực hiện, với tổng mức đầu tư hơn 2.085 tỷ đồng.\r\n                Đây là dự án nhằm từng bước cụ thể hóa Chương trình, Kế hoạch phát triển nhà ở trên\r\n                địa bàn tỉnh, góp phần cung cấp sản phẩm nhà ở cho người dân, đồng thời đảm bảo chỗ\r\n                ở ổn định cho các đối tượng được hưởng chính sách về nhà ở xã hội.</p>\r\n                <img title=\"Phối cảnh tổng thể dự án\" src=\"/upload/images/background-1.jpg\">\r\n                <p class=\"text-center fst-italic\">Phối cảnh tổng thể dự án</p>\r\n                <p>Tọa lạc tại ngã ba giao lộ Mỏ Sinh và Quang Thái, Golden Square Lào Cai sở hữu vị trí đắc địa ngay khu \r\n                trung tâm hành chính mới của thành phố. Dự án thừa hưởng hệ thống giao thông hoàn chỉnh, bài bản giúp kết \r\n                nối nhanh chóng tới những điểm đến quan trọng trong khu vực. Dự kiến khi hoàn thiện, Golden Square Lào Cai \r\n                sẽ cung cấp khoảng 2.192 căn hộ mang phong cách thiết kế hiện đại, thân thiện môi trường, đề cao tính bền \r\n                vững và tối ưu công năng, sẵn sàng cho sức chứa hơn 5.500 người. Bên cạnh đó, cư dân dự án còn được thừa \r\n                hưởng chuỗi tiện ích nội khu đồng bộ, cảnh quan xanh trong lành với bốn mặt thoáng đãng, mang đến cuộc sống \r\n                đa trải nghiệm, hiện đại và hạnh phúc hơn. Đặc biệt, các chủ sở hữu tương lai có thể yên tâm khi Golden Square Lào Cai \r\n                sở hữu pháp lý minh bạch, sổ hồng lâu dài và cam kết hỗ trợ thủ tục hoàn thiện hồ sơ nhanh gọn, thuận tiện từ Chủ đầu tư.</p>\r\n                <img title=\"Đại diện Chủ đầu tư và các đơn vị đối tác thực hiện nghi thức động thổ dự án\" src=\"/upload/images/background-3.jpg\">\r\n                <p class=\"text-center fst-italic\">Đại diện Chủ đầu tư và các đơn vị đối tác thực hiện nghi thức động thổ dự án</p>\r\n                <p>Tham dự buổi lễ có đại diện Chủ đầu tư - Công ty Cổ phần Đông Á Golden Square cùng đại diện đơn vị \r\n                Tư vấn thiết kế - Liên danh Công ty Cổ phần Tư vấn Thiết Kế Salvador Perez Arroyo &amp; cộng sự và Công ty Cổ phần A79, \r\n                đại diện đơn vị Tổng thầu thi công - Tập đoàn Xây dựng Delta Việt Nam và Công Ty Cổ phần Đầu tư Xây dựng và Nền móng Hà Nội, \r\n                các lãnh đạo Ban Quản lý dự án tỉnh Lào Cai và các Tư vấn giám sát.</p>\r\n                <p>Tại chương trình, ông Đỗ Đặng Dũng – Tổng Giám đốc Công ty Cổ phần Đông Á Golden Square chia sẻ:\r\n                <span class=\"fst-italic\"> “Với năng lực, kinh nghiệm về đầu tư – xây dựng các dự án nhà ở, khu đô thị, khách sạn cao cấp, \r\n                Chủ đầu tư Công ty Cổ phần Đông Á Golden Square cũng đã lên kế hoạch kỹ lưỡng đối với Nhà ở xã hội Golden Square Lào Cai. \r\n                Dự án được chuẩn bị bài bản từ khâu lên phương án thiết kế, lựa chọn đơn vị tư vấn, nhà thầu thi công có năng lực… nhằm \r\n                xây dựng nên một dự án hoàn chỉnh, đảm bảo chất lượng, đúng tiến độ và kiểm soát tốt chi phí.”</span></p>\r\n                <img title=\"Phối cảnh tiện ích nội khu dự án\" src=\"/upload/images/the_sholi.jpg\">\r\n                <p class=\"text-center fst-italic\">Phối cảnh tiện ích nội khu dự án</p>\r\n                <p><span class=\"fst-italic\">“Sau khi hoàn thiện, Nhà ở xã hội Golden Square Lào Cai tự tin mang \r\n                đến thị trường những căn hộ hiện đại tiêu chuẩn, chuỗi tiện ích nội khu đồng bộ cùng mức giá \r\n                phù hợp với người mua nhà là những cán bộ nhân viên đang công tác tại thành phố Lào Cai và các \r\n                khu vực phụ cận”</span> – ông Dũng cho biết.</p>";
+            var html = "<p>Dự án Nhà ở xã hội Golden Square Lào Cai đã được UBND tỉnh Lào Cai\r\n                chấp thuận liên danh Công ty Cổ phần Đông Á Golden Square và Công ty Cổ phần\r\n                Foodinco Quy Nhơn là nhà đầu tư thực hiện, với tổng mức đầu tư hơn 2.085 tỷ đồng.\r\n                Đây là dự án nhằm từng bước cụ thể hóa Chương trình, Kế hoạch phát triển nhà ở trên\r\n                địa bàn tỉnh, góp phần cung cấp sản phẩm nhà ở cho người dân, đồng thời đảm bảo chỗ\r\n                ở ổn định cho các đối tượng được hưởng chính sách về nhà ở xã hội.</p>\r\n                <img title=\"Phối cảnh tổng thể dự án\" src=\"/upload/images/background-1.jpg\">\r\n                <p class=\"text-center fst-italic\">Phối cảnh tổng thể dự án</p>\r\n                <p>Tọa lạc tại ngã ba giao lộ Mỏ Sinh và Quang Thái, Golden Square Lào Cai sở hữu vị trí đắc địa ngay khu \r\n                trung tâm hành chính mới của thành phố. Dự án thừa hưởng hệ thống giao thông hoàn chỉnh, bài bản giúp kết \r\n                nối nhanh chóng tới những điểm đến quan trọng trong khu vực. Dự kiến khi hoàn thiện, Golden Square Lào Cai \r\n                sẽ cung cấp khoảng 2.192 căn hộ mang phong cách thiết kế hiện đại, thân thiện môi trường, đề cao tính bền \r\n                vững và tối ưu công năng, sẵn sàng cho sức chứa hơn 5.500 người. Bên cạnh đó, cư dân dự án còn được thừa \r\n                hưởng chuỗi tiện ích nội khu đồng bộ, cảnh quan xanh trong lành với bốn mặt thoáng đãng, mang đến cuộc sống \r\n                đa trải nghiệm, hiện đại và hạnh phúc hơn. Đặc biệt, các chủ sở hữu tương lai có thể yên tâm khi Golden Square Lào Cai \r\n                sở hữu pháp lý minh bạch, sổ hồng lâu dài và cam kết hỗ trợ thủ tục hoàn thiện hồ sơ nhanh gọn, thuận tiện từ Chủ đầu tư.</p>\r\n                <img title=\"Đại diện Chủ đầu tư và các đơn vị đối tác thực hiện nghi thức động thổ dự án\" src=\"/upload/images/background-3.jpg\">\r\n                <p class=\"text-center fst-italic\">Đại diện Chủ đầu tư và các đơn vị đối tác thực hiện nghi thức động thổ dự án</p>\r\n                <p>Tham dự buổi lễ có đại diện Chủ đầu tư - Công ty Cổ phần Đông Á Golden Square cùng đại diện đơn vị \r\n                Tư vấn thiết kế - Liên danh Công ty Cổ phần Tư vấn Thiết Kế Salvador Perez Arroyo &amp; cộng sự và Công ty Cổ phần A79, \r\n                đại diện đơn vị Tổng thầu thi công - Tập đoàn Xây dựng Delta Việt Nam và Công Ty Cổ phần Đầu tư Xây dựng và Nền móng Hà Nội, \r\n                các lãnh đạo Ban Quản lý dự án tỉnh Lào Cai và các Tư vấn giám sát.</p>\r\n                <p>Tại chương trình, ông Đỗ Đặng Dũng – Tổng Giám đốc Công ty Cổ phần Đông Á Golden Square chia sẻ:\r\n                <span class=\"fst-italic\"> “Với năng lực, kinh nghiệm về đầu tư – xây dựng các dự án nhà ở, khu đô thị, khách sạn cao cấp, \r\n                Chủ đầu tư Công ty Cổ phần Đông Á Golden Square cũng đã lên kế hoạch kỹ lưỡng đối với Nhà ở xã hội Golden Square Lào Cai. \r\n                Dự án được chuẩn bị bài bản từ khâu lên phương án thiết kế, lựa chọn đơn vị tư vấn, nhà thầu thi công có năng lực… nhằm \r\n                xây dựng nên một dự án hoàn chỉnh, đảm bảo chất lượng, đúng tiến độ và kiểm soát tốt chi phí.”</span></p>\r\n                <img title=\"Phối cảnh tiện ích nội khu dự án\" src=\"/upload/images/the_sholi.jpg\">\r\n                <p class=\"text-center fst-italic\">Phối cảnh tiện ích nội khu dự án</p>\r\n                <p><span class=\"fst-italic\">“Sau khi hoàn thiện, Nhà ở xã hội Golden Square Lào Cai tự tin mang \r\n                đến thị trường những căn hộ hiện đại tiêu chuẩn, chuỗi tiện ích nội khu đồng bộ cùng mức giá \r\n                phù hợp với người mua nhà là những cán bộ nhân viên đang công tác tại thành phố Lào Cai và các \r\n                khu vực phụ cận”</span> – ông Dũng cho biết.</p>";
 
             // Default roles
             var administratorRole = new Role(RoleConstant.Admin);
@@ -359,7 +313,7 @@ public class ApplicationDbContextInitializer
                         Name = "Dự án Terra Rosa Bình Chánh",
                         Type = NewsTypeConstant.Project,
                         Description = "Dự án Terra Rosa thuộc lô 13E, khu dân cư Phong Phú, mặt tiền Nguyễn Văn Linh. Vị trí thuận lợi, gắn kết phát triển hạ tầng kỹ thuật - xã hội, dễ dàng di chuyển về các quận trung tâm.",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 19,
@@ -372,7 +326,7 @@ public class ApplicationDbContextInitializer
                         Name = "Phức Hợp Thương Mại & Căn Hộ Cao Cấp Astral City",
                         Type = NewsTypeConstant.Project,
                         Description = "Astral City tọa lạc tại mặt tiền Quốc lộ 13, phường Bình Hòa, thành phố Thuận An, tỉnh Bình Dương. Đây là vị trí trung tâm của khu vực Bình Dương, kết nối thuận tiện với các khu vực xung quanh như TP.HCM, Đồng Nai, Bà Rịa - Vũng Tàu.",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = true,
                         ImageId = 18,
@@ -385,7 +339,7 @@ public class ApplicationDbContextInitializer
                         Name = "Tổ hợp thương mại, dịch vụ, khách sạn và nhà ở cao cấp Eco Green Saigon",
                         Type = NewsTypeConstant.Project,
                         Description = "Dự án căn hộ Eco Green Quận 7 là Khu Phức Hợp đẳng cấp 5 sao quy mô cực lớn 14,36 hecta bao gồm 7 Block căn hộ, 1 tòa Văn phòng – Khách sạn cao cấp Park Hyatt - Tòa tháp cao nhất Quận 7 với chiều cao 68 Tầng.",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 17,
@@ -398,7 +352,7 @@ public class ApplicationDbContextInitializer
                         Name = "Dự án căn hộ chất lượng cao cấp Citigrand",
                         Type = NewsTypeConstant.Project,
                         Description = "CITIGRAND là dự án căn hộ chất lượng cao cấp với vườn trên mái thời thượng, 6 lõi không gian xanh xuyên suốt, hồ bơi vô cực, vườn kết nối hạnh phúc, khu vui chơi trẻ em, khu BBQ, thẻ từ an ninh, sảnh đón sang trọng...",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = true,
                         ImageId = 16,
@@ -411,7 +365,7 @@ public class ApplicationDbContextInitializer
                         Name = "Phức hợp Đô thị Thương mại Dịch vụ & Du lịch biển Lagi New City",
                         Type = NewsTypeConstant.Project,
                         Description = "Lagi New City Là dự án Khu đô thi phức hợp nghĩ dưỡng tại Tâm điểm nghỉ dưỡng và du lịch biển Bình Thuận –  Lagi New City toả sáng như một viên ngọc giữa hòn biển đông xanh ngát, nơi núi rường và biển hoà vào nhau.",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = true,
                         ImageId = 15,
@@ -424,7 +378,7 @@ public class ApplicationDbContextInitializer
                         Name = "Dự án Hiệp Phước Harbour View",
                         Type = NewsTypeConstant.Project,
                         Description = "Hiệp Phước Harbour View sở hữu vị trí “Độc Nhất Vô Nhi” tọa lạc trên 2 mặt tiền “View Hướng Sông – Mặt Hướng Lộ”. Hiệp Phước Harour View nằm ngay tại mặt tiền Đường Nguyễn Văn Tạo, xã Phước Vĩnh Đông, huyện Cần Giuộc, tỉnh Long An.",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 14,
@@ -437,7 +391,7 @@ public class ApplicationDbContextInitializer
                         Name = "Dự án Waterpoint - Riverside Community",
                         Type = NewsTypeConstant.Project,
                         Description = "“Thành phố bên sông” Waterpoint 355ha được biết đến là khu đô thị tích hợp hàng đầu tại cửa ngõ Tây Nam TP.HCM sở hữu địa thế phong thủy thịnh vượng trên bãi bồi được bao bọc bởi 5,8km sông Vàm Cỏ Đông.",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 13,
@@ -450,7 +404,7 @@ public class ApplicationDbContextInitializer
                         Name = "Dự án căn hộ - du lịch biển Cadia Quy Nhơn",
                         Type = NewsTypeConstant.Project,
                         Description = "Cadia Quy Nhơn là tổ hợp căn hộ hạng sang theo mô hình smart compound tại Quy Nhơn. Dự án sở hữu thiết kế sang trọng, tiện ích 5 sao và ứng dụng công nghệ 4.0 có một không hai vào thiết kế căn hộ.",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = true,
                         ImageId = 12,
@@ -463,7 +417,7 @@ public class ApplicationDbContextInitializer
                         Name = "Dự án biệt thự cap cấp Zenna Villas",
                         Type = NewsTypeConstant.Project,
                         Description = "Zenna Villas là dự án biệt thự nghỉ dưỡng tuyệt vời, chỉ cách TP.HCM 1h30 phút đi xe. Dự án Zenna Villas mang đến cho khách hàng một không gian bình yên, giá trị của đẳng cấp thành đạt.",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = true,
                         ImageId = 11,
@@ -476,7 +430,7 @@ public class ApplicationDbContextInitializer
                         Name = "Tổ hợp du lịch - nghỉ dưỡng - giải trí - thể thao biển Thanh Long Bay",
                         Type = NewsTypeConstant.Project,
                         Description = "",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 10,
@@ -489,7 +443,7 @@ public class ApplicationDbContextInitializer
                         Name = "Khu biệt thự compound cao cấp Sol Villas",
                         Type = NewsTypeConstant.Project,
                         Description = "Thanh Long Bay là tổ hợp đô thị Du lịch, Nghỉ dưỡng và Thể thao biển tọa lạc tại Mũi Kê Gà - Hàm Thuận Nam, Bình Thuận. Với quy mô 90,3 hecta nằm trên cung đường biển Quốc Gia, sở hữu hơn 2km bờ biển riêng.",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 9,
@@ -502,7 +456,7 @@ public class ApplicationDbContextInitializer
                         Name = "Tổ hợp phố thương mại cao cấp The SHOLI",
                         Type = NewsTypeConstant.Project,
                         Description = "The Sholi là dự án nhà phố thương mại với quy mô 1.45ha tại 311 An Dương Vương, P.An Lạc, Q.Bình Tân, Tp.HCM. Nhà phố The Sholi Bình Tân với diện tích đất từ 61-80m2 xây dựng 1 trệt, 1 lửng, 3 lầu & 1 sân thượng.",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 8,
@@ -515,7 +469,7 @@ public class ApplicationDbContextInitializer
                         Name = "Khu đô thị thương mại dịch vụ E.City Tân Đức",
                         Type = NewsTypeConstant.Project,
                         Description = "Khu đô thị E-City Tân Đức thuộc Quần thể Công nghiệp – Dịch vụ – Đô thị Tân Đức được thiết kế và quản lý theo mô hình kiến trúc hiện đại của Hoa Kỳ được thực hiện bởi nhà thiết kế xây dựng Morris Architecture.",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 7,
@@ -528,7 +482,7 @@ public class ApplicationDbContextInitializer
                         Name = "Nhà phố biển thương mại Queen Pearl Marina Complex",
                         Type = NewsTypeConstant.Project,
                         Description = "Queen Pearl Marina Complex sở hữu vị trí đắc địa, kết nối giao thông thuận lợi cùng thiết kế cảnh quan cây xanh đẹp mắt đem tới không gia sống lý tưởng giá trị nghỉ dưỡng cao cấp.",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = true,
                         ImageId = 6,
@@ -552,7 +506,7 @@ public class ApplicationDbContextInitializer
                         Type = ProjectTypeConstant.Apartment,
                         Address = "TP. Hồ Chí Minh",
                         State = "implemented",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 19,
@@ -566,7 +520,7 @@ public class ApplicationDbContextInitializer
                         Type = ProjectTypeConstant.Apartment,
                         Address = "Bình Dương",
                         State = "implementing",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = true,
                         ImageId = 18,
@@ -580,7 +534,7 @@ public class ApplicationDbContextInitializer
                         Type = ProjectTypeConstant.Apartment,
                         Address = "TP. Hồ Chí Minh",
                         State = "implemented",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 17,
@@ -594,7 +548,7 @@ public class ApplicationDbContextInitializer
                         Type = ProjectTypeConstant.Apartment,
                         Address = "TP. Hồ Chí Minh",
                         State = "implemented",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = true,
                         ImageId = 16,
@@ -608,7 +562,7 @@ public class ApplicationDbContextInitializer
                         Type = ProjectTypeConstant.Ground,
                         Address = "Bình Thuận",
                         State = "implementing",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = true,
                         ImageId = 15,
@@ -622,7 +576,7 @@ public class ApplicationDbContextInitializer
                         Type = ProjectTypeConstant.Ground,
                         Address = "Long An",
                         State = "implementing",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 14,
@@ -636,7 +590,7 @@ public class ApplicationDbContextInitializer
                         Type = ProjectTypeConstant.Ground,
                         Address = "TP. Hồ Chí Minh",
                         State = "implemented",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 13,
@@ -650,7 +604,7 @@ public class ApplicationDbContextInitializer
                         Type = ProjectTypeConstant.ResortRealEstate,
                         Address = "Quy Nhơn",
                         State = "implementing",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = true,
                         ImageId = 12,
@@ -664,7 +618,7 @@ public class ApplicationDbContextInitializer
                         Type = ProjectTypeConstant.ResortRealEstate,
                         Address = "Vũng Tàu",
                         State = "implemented",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = true,
                         ImageId = 11,
@@ -678,7 +632,7 @@ public class ApplicationDbContextInitializer
                         Type = ProjectTypeConstant.ResortRealEstate,
                         Address = "Bình Thuận",
                         State = "implemented",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 10,
@@ -692,7 +646,7 @@ public class ApplicationDbContextInitializer
                         Type = ProjectTypeConstant.Villa,
                         Address = "TP. Hồ Chí Minh",
                         State = "implementing",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 9,
@@ -706,7 +660,7 @@ public class ApplicationDbContextInitializer
                         Type = ProjectTypeConstant.Villa,
                         Address = "TP. Hồ Chí Minh",
                         State = "implementing",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 8,
@@ -720,7 +674,7 @@ public class ApplicationDbContextInitializer
                         Type = ProjectTypeConstant.Villa,
                         Address = "implemented",
                         State = "implemented",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = false,
                         ImageId = 7,
@@ -734,7 +688,7 @@ public class ApplicationDbContextInitializer
                         Type = ProjectTypeConstant.Villa,
                         Address = "Bình Thuận",
                         State = "implemented",
-                        Content = content,
+                        Content = html,
                         Status = StatusConstant.Active,
                         IsHighlight = true,
                         ImageId = 6,

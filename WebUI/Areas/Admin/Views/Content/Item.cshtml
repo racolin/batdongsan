@@ -1,0 +1,276 @@
+﻿@using Application.Common.Responses
+@using Domain.Constants
+@using Domain.Entities
+@using Application.Common.Supports
+@{
+    ViewBag.LayoutTitle = "Nội dung trang web";
+    ViewBag.Title = "Chỉnh sửa nội dung trang web";
+
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutItem.cshtml";
+    DataResponse<ContentEntity>? model = Model;
+
+    ViewBag.ModelIsNull = false;
+    ViewBag.IncludeSelectImage = true;
+
+    var errorMessage = model != null && model.Message.Type == MessageType.Error ? model.Message.Name : null;
+    var sliderCount = 1;
+}
+
+@section AddToHead {
+    <link rel="stylesheet" href="~/libs/summernote/summernote-bs5.css" />
+    <script src="/libs/summernote/summernote-bs5.js"></script>
+}
+
+@if (errorMessage != null)
+{
+    <div class="no-data">
+        <img title="Không có dữ liệu" alt="Hình ảnh biểu thị không có dữ liệu" src="/shared/images/no_data.svg" />
+        <p>@(errorMessage)</p>
+    </div>
+}
+else
+{
+    <div class="flex-grow-1 overflow-scroll">
+        <div class="">
+            <div class="form-title-wrap">
+                <input type="hidden" id="id" value="@(model?.Data.Id)" />
+                <p class="form-title">Tên của nội dung này</p>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-6 my-2">
+                    <label for="name" class="form-label">Tên của nội dung: (<span class="text-danger">*</span>)</label>
+                    <input type="text" class="form-control" name="name" value="@(model?.Data.Name)" id="name" autocomplete="off" />
+                </div>
+                <div class="col-12 col-md-6 col-xl-3 my-2">
+                    <label class="form-label">Trạng thái: (<span class="text-danger">*</span>)</label>
+                    <div class="input-group" id="filter-status">
+                        <input type="radio" class="btn-check" name="status" value="Draft" id="Draft" autocomplete="off" />
+                        <label class="btn btn-outline-warning form-control-left" for="Draft">Nháp</label>
+
+                        <input type="radio" class="btn-check" name="status" value="Active" id="Active" autocomplete="off" />
+                        <label class="btn btn-outline-warning form-control-between" for="Active">Hoạt động</label>
+
+                        <input type="radio" class="btn-check" name="status" value="InActive" id="InActive" autocomplete="off" />
+                        <label class="btn btn-outline-warning form-control-right" for="InActive">Ngừng</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="image-pages">
+            <div class="row image-pages-wrap my-2">
+                <div class="form-title-wrap">
+                    <p class="form-title">Ảnh ở các trang</p>
+                </div>
+                <div class="image-page col-12 col-md-6 col-lg-3 my-2">
+                    <input id="imageId-homeImageId" name="homeImageId" type="hidden" value="@(model?.Data.HomeImageId)" />
+                    <div class="content-item">
+                        <label class="form-label">Ảnh trên cùng trang chủ: (<span class='text-danger'>*</span>)</label>
+                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
+                                    new
+                                    {
+                                        Key = "homeImageId",
+                                        Src = model == null ? "" : PathSupport.GetUploadImagePath(model!.Data.HomeImage.Name),
+                                    }
+                                    )
+                    </div>
+                </div>
+                <div class="image-page col-12 col-md-6 col-lg-3 my-2">
+                    <input id="imageId-bgHomeImageId" name="bgHomeImageId" type="hidden" value="@(model?.Data.BgHomeImageId)" />
+                    <div class="content-item">
+                        <label class="form-label">Ảnh nền trang chủ: (<span class='text-danger'>*</span>)</label>
+                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
+                                    new
+                                    {
+                                        Key = "bgHomeImageId",
+                                        Src = model == null ? "" : PathSupport.GetUploadImagePath(model!.Data.BgHomeImage.Name),
+                                    }
+                                    )
+                    </div>
+                </div>
+                <div class="image-page col-12 col-md-6 col-lg-3 my-2">
+                    <input id="imageId-newsImageId" name="newsImageId" type="hidden" value="@(model?.Data.NewsImageId)" />
+                    <div class="content-item">
+                        <label class="form-label">Ảnh trên cùng tin tức: (<span class='text-danger'>*</span>)</label>
+                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
+                                    new
+                                    {
+                                        Key = "newsImageId",
+                                        Src = model == null ? "" : PathSupport.GetUploadImagePath(model!.Data.NewsImage.Name),
+                                    }
+                                    )
+                    </div>
+                </div>
+                <div class="image-page col-12 col-md-6 col-lg-3 my-2">
+                    <input id="imageId-contactImageId" name="contactImageId" type="hidden" value="@(model?.Data.ContactImageId)" />
+                    <div class="content-item">
+                        <label class="form-label">Ảnh trên cùng liên hệ: (<span class='text-danger'>*</span>)</label>
+                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
+                                    new
+                                    {
+                                        Key = "contactImageId",
+                                        Src = model == null ? "" : PathSupport.GetUploadImagePath(model!.Data.ContactImage.Name),
+                                    }
+                                    )
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sliders">
+            <div class="row sliders-wrap my-2" id="slider-project">
+                <div class="form-title-wrap">
+                    <p class="form-title">Slider trên cùng trang dự án</p>
+                </div>
+                <div class="slider col-12">
+                    <div class="row slider">
+                        @if (model != null)
+                        {
+                            foreach (var item in model!.Data.ProjectSlider)
+                            {
+                                <div class="col-12 col-md-6 col-lg-4 slider-image my-2" id="item-slider-project-@(sliderCount)">
+                                    <div class="content-item">
+                                        <div class="d-flex justify-content-between align-items-end input-group mt-2 mb-3">
+                                            <input type="hidden" name="id-@("slider-project-" + sliderCount)" value="@(item.Id)" id="id-@("slider-project-" + sliderCount)" />
+                                            <input type="hidden" name="imageId-@("slider-project-" + sliderCount)" value="@(item.Image.Id)" id="imageId-@("slider-project-" + sliderCount)" />
+                                            <div class="flex-grow-1">
+                                                <label for="link-@("slider-project-" + sliderCount)" class="form-label">Liên kết: </label>
+                                                <input type="text" class="form-control form-control-left" name="link-@("slider-project-" + sliderCount)" value="@(item.Link)" id="link-@("slider-project-" + sliderCount)" autocomplete="off" />
+                                            </div>
+                                            <div class="" style="width: 5rem">
+                                                <label for="order-@("slider-project-" + sliderCount)" class="form-label">Thứ tự: (<span class="text-danger">*</span>)</label>
+                                                <input type="number" class="form-control form-control-between" name="order-@("slider-project-" + sliderCount)" value="@(item.Order)" id="order-@("slider-project-" + sliderCount)" autocomplete="off" />
+                                            </div>
+                                            <button type="button" onclick="deleteSlider('#item-slider-project-@(sliderCount)')" class="btn btn-danger btn-right" title="Xóa ảnh khỏi slider">Xóa</button>
+                                        </div>
+                                        <div class="my-2">
+                                            @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
+                                                     new
+                                                     {
+                                                         Key = "slider-project-" + sliderCount.ToString(),
+                                                         Src = PathSupport.GetUploadImagePath(item.Image.Name),
+                                                     }
+                                                     )
+                                        </div>
+                                    </div>
+                                </div>
+                                sliderCount++;
+                            }
+                        }
+                        <div class="col-12 col-md-6 col-lg-4 slider-image my-2 d-none" id="item-slider-project-0">
+                            <div class="content-item">
+                                <div class="d-flex justify-content-between align-items-end input-group mt-2 mb-3">
+                                    <input type="hidden" name="id-slider-project-0" value="" id="id-slider-project-0" />
+                                    <input type="hidden" name="imageId-slider-project-0" value="" id="imageId-slider-project-0" />
+                                    <div class="flex-grow-1">
+                                        <label for="link-slider-project-0" class="form-label">Liên kết: </label>
+                                        <input type="text" class="form-control form-control-left" name="link-slider-project-0" value="" id="link-slider-project-0" autocomplete="off" />
+                                    </div>
+                                    <div class="" style="width: 5rem">
+                                        <label for="order-slider-project-0" class="form-label">Thứ tự: (<span class="text-danger">*</span>)</label>
+                                        <input type="number" class="form-control form-control-between" name="order-slider-project-0" value="" id="order-slider-project-0" autocomplete="off" />
+                                    </div>
+                                    <button type="button" onclick="deleteSlider('#item-slider-project-0')" class="btn btn-danger btn-right" title="Xóa ảnh khỏi slider">Xóa</button>
+                                </div>
+                                <div class="my-2">
+                                    @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
+                                             new
+                                             {
+                                                 Key = "slider-project-0",
+                                                 Src = "",
+                                             }
+                                             )
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2 add-slider my-3" id="add-slider-project">
+                            <div class="content-item dash add-slider-wrap">
+                                <button title="Thêm ảnh slider" type="button" onclick="addSlider('project')">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-wrap my-2">
+                <div class="form-title-wrap">
+                    <p class="form-title">Soạn nội dung</p>
+                </div>
+                <div class="row">
+                    <div class="col-12 my-2">
+                        <div class="form-group">
+                            <label class="form-label" for="introduceSection">Nội dung giới thiệu: (<span class="text-danger">*</span>)</label>
+                            <textarea id="introduceSection">@(Html.Raw(Uri.UnescapeDataString(model?.Data.IntroduceSection ?? "")))</textarea>
+                        </div>
+                    </div>
+                    <div class="col-12 my-2">
+                        <div class="form-group">
+                            <label class="form-label" for="newsMarketSection">Mô tả tin thị trường: (<span class="text-danger">*</span>)</label>
+                            <textarea class="form-control" id="newsMarketSection">@(model?.Data.NewsMarketSection ?? "")</textarea>
+                        </div>
+                    </div>
+                    <div class="col-12 my-2">
+                        <div class="form-group">
+                            <label class="form-label" for="newsProjectSection">Mô tả tin dự án: (<span class="text-danger">*</span>)</label>
+                            <textarea class="form-control" id="newsProjectSection">@(model?.Data.NewsProjectSection ?? "")</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="" style="height:10rem"></div>
+    </div>
+    <hr class="d-none d-lg-block" style="margin: .25rem 0 0 0" />
+    <div class="py-3 d-flex justify-content-end">
+        <button type="button" id="btn-save" onclick="" class="btn btn-save ms-3" title="Lưu">Lưu</button>
+    </div>
+}
+
+@section AddToFooter {
+    <script type="text/javascript">
+
+        initRadio('status', '@(model?.Data?.Status ?? StatusConstant.Draft)');
+
+        var sliderCount = @sliderCount;
+        var imageKey = '';
+        function selectedImageId(key, id) {
+            console.log(key, id);
+            $("#imageId-" + key).val(id);
+        }
+        function removedImageId(key) {
+            console.log(key);
+            $("#imageId-" + key).val("");
+        }
+        $(document).ready(function () {
+            $('#introduceContent').summernote({
+                placeholder: 'Tạo nội dung giới thiệu',
+                height: 400,
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video']],
+                    ['view', ['fullscreen', 'codeview', 'help']]
+                ]
+            });
+        });
+        function deleteSlider(query) {
+            $(query).remove();
+        }
+        function addSlider(key) {
+            var item = $("#slider-" + key).find(".slider-image")[0].outerHTML.replaceAll(new RegExp('slider-' + key + '-' + '\\d+', 'g'), 'slider-' + key + '-' + sliderCount);
+            var i = $(item);
+            i.removeClass("d-none");
+            $("#add-slider-" + key).before(i)
+            clearDisplayImage('slider-' + key + '-' + sliderCount)
+            $('#link-slider-' + key + '-' + sliderCount).val("")
+            $('#order-slider-' + key + '-' + sliderCount).val("")
+            $('#id-slider-' + key + '-' + sliderCount).val("")
+            sliderCount++;
+        }
+    </script>
+    <script src="~/admin/js/Content/item.js"></script>
+}

@@ -11,10 +11,10 @@ namespace WebUI.Areas.Admin.Controllers.Apis
     {
         [AllowAnonymous]
         [HttpPost("save")]
-        public async Task<DataResponse<bool>> Save(SaveContentRequest request)
+        public async Task<DataResponse<int>> Save(SaveContentRequest request)
         {
             var result = await Mediator.Send(new SaveContentCommand(request));
-            return result ?? DataResponse<bool>.Error("Có lỗi khi lưu dữ liệu!");
+            return result ?? DataResponse<int>.Error("Có lỗi khi lưu dữ liệu!");
         }
     }
 }

@@ -7,6 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ImagePages\**" />
+    <Compile Remove="Sections\**" />
+    <Compile Remove="Sliders\**" />
+    <EmbeddedResource Remove="ImagePages\**" />
+    <EmbeddedResource Remove="Sections\**" />
+    <EmbeddedResource Remove="Sliders\**" />
+    <None Remove="ImagePages\**" />
+    <None Remove="Sections\**" />
+    <None Remove="Sliders\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.2" />
@@ -21,9 +33,6 @@
   <ItemGroup>
     <Folder Include="Common\Helpers\" />
     <Folder Include="Content\Queries\" />
-    <Folder Include="ImagePages\Commands\" />
-    <Folder Include="Sections\Commands\" />
-    <Folder Include="Sliders\Commands\" />
   </ItemGroup>
 
 </Project>

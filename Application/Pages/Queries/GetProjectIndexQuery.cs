@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using MediatR;
 using Application.Common.Responses.Views;
-using Domain.Enums;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Constants;
@@ -29,14 +28,16 @@ public class GetProjectIndexQuery : IRequest<ProjectIndexView>
         {
             var view = new ProjectIndexView();
 
-            var sliders = await _context.Sliders.AsNoTracking()
-                .Include(x => x.Items).ThenInclude(x => x.Image)
-                .FirstOrDefaultAsync(x => x.Position == (int)SliderPositionEnum.ProjectScreen);
-            if (sliders != null)
+            var result = await _context.Contents.AsNoTracking()
+                .Include(x => x.ProjectSlider).ThenInclude(x => x.Image)
+                .Select(x => new { x.ProjectSlider, x.Status })
+                .Where(x => x.Status == StatusConstant.Active)
+                .FirstOrDefaultAsync(cancellationToken);
+            if (result != null)
             {
-                var items = sliders.Items.OrderBy(x => x.Order);
+                var slider = result.ProjectSlider.OrderBy(x => x.Order);
 
-                foreach (var item in items)
+                foreach (var item in slider)
                 {
                     var img = _mapper.Map<ImageEntity, ImageView>(item.Image);
                     if (img != null)

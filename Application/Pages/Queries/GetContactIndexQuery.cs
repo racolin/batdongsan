@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using MediatR;
 using Application.Common.Responses.Views;
-using Domain.Enums;
 using AutoMapper;
+using Domain.Constants;
 
 namespace Application.Pages.Queries;
 
@@ -26,11 +26,14 @@ public class GetContactIndexQuery : IRequest<ContactIndexView>
         {
             var view = new ContactIndexView();
 
-            var image = await _context.ImagePages.AsNoTracking()
-                .Include(x => x.Image)
-                .FirstOrDefaultAsync(x => x.Position == (int)ImagePagePositionEnum.ContactScreen, cancellationToken);
-            if (image != null) {
-                _mapper.Map(image!.Image, view.TopImage);
+            var result = await _context.Contents.AsNoTracking()
+                .Include(x => x.ContactImage)
+                .Select(x => new { x.ContactImage, x.Status })
+                .Where(x => x.Status == StatusConstant.Active)
+                .FirstOrDefaultAsync(cancellationToken);
+            if (result != null)
+            {
+                _mapper.Map(result!.ContactImage, view.TopImage);
             }
 
             return view;

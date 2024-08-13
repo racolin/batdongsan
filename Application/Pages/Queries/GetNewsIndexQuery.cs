@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using MediatR;
 using Application.Common.Responses.Views;
-using Domain.Enums;
 using AutoMapper;
 using Domain.Constants;
 using Domain.Entities;
@@ -38,12 +37,14 @@ public class GetNewsIndexQuery : IRequest<NewsIndexView>
         {
             var view = new NewsIndexView();
 
-            var image = await _context.ImagePages.AsNoTracking()
-                .Include(x => x.Image)
-                .FirstOrDefaultAsync(x => x.Position == (int)ImagePagePositionEnum.NewsScreen, cancellationToken);
-            if (image != null)
+            var result = await _context.Contents.AsNoTracking()
+                .Include(x => x.NewsImage)
+                .Select(x => new { x.NewsImage, x.Status })
+                .Where(x => x.Status == StatusConstant.Active)
+                .FirstOrDefaultAsync(cancellationToken);
+            if (result != null)
             {
-                _mapper.Map(image!.Image, view.TopImage);
+                _mapper.Map(result!.NewsImage, view.TopImage);
             }
 
             var count = await _context.News

@@ -5,9 +5,10 @@ using Application.Common.Interfaces;
 using Application.Common.Requests;
 using Application.Common.Responses;
 using Domain.Entities;
+using Domain.Constants;
 
 namespace Application.Images.Commands;
-public class SaveContentCommand : IRequest<DataResponse<bool>>
+public class SaveContentCommand : IRequest<DataResponse<int>>
 {
     public SaveContentRequest Request { get; }
 
@@ -16,7 +17,7 @@ public class SaveContentCommand : IRequest<DataResponse<bool>>
         Request = request;
     }
 
-    public class Handler : IRequestHandler<SaveContentCommand, DataResponse<bool>>
+    public class Handler : IRequestHandler<SaveContentCommand, DataResponse<int>>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -27,88 +28,88 @@ public class SaveContentCommand : IRequest<DataResponse<bool>>
             _mapper = mapper;
         }
 
-        public async Task<DataResponse<bool>> Handle(SaveContentCommand request, CancellationToken cancellationToken)
+        public async Task<DataResponse<int>> Handle(SaveContentCommand request, CancellationToken cancellationToken)
         {
-            if (request.Request.IsUpdateImagePages) 
+            var newStatus = request.Request.Status;
+            var oldStatus = request.Request.Status;
+            ContentEntity? content;
+            if (request.Request.Id == null)
             {
-                var imagePageIds = request.Request.ImagePages.Select(x => x.Id).ToList();
-                var imagePages = await _context.ImagePages
-                    .Where(x => imagePageIds.Contains(x.Id))
-                    .ToListAsync(cancellationToken);
-                if (imagePages != null) {
-                    foreach (var imagePage in imagePages)
+
+                content = _mapper.Map<ContentEntity>(request.Request);
+                _context.Contents.Add(content);
+            }
+            else
+            {
+                content = await _context.Contents
+                    .Include(x => x.ProjectSlider)
+                    .FirstOrDefaultAsync(x => x.Id == request.Request.Id, cancellationToken);
+                if (content == null)
+                {
+                    return DataResponse<int>.Error("Không thể cập nhật nội dung!");
+                }
+                oldStatus = content.Status;
+
+                content.NewsMarketSection = request.Request.NewsMarketSection;
+                content.NewsProjectSection = request.Request.NewsProjectSection;
+                content.Status = request.Request.Status;
+                content.HomeImageId = request.Request.HomeImageId;
+                content.BgHomeImageId = request.Request.BgHomeImageId;
+                content.NewsImageId = request.Request.NewsImageId;
+                content.ContactImageId = request.Request.ContactImageId;
+
+                if (request.Request.IsUpdateProjectSlider)
+                {
+                    foreach (var item in content.ProjectSlider) 
                     {
-                        var item = request.Request.ImagePages.FirstOrDefault(x => x.Id == imagePage.Id && x.Position == imagePage.Position);
-                        if (item != null)
+                        var i = request.Request.ProjectSlider.FirstOrDefault(x => x.Id == item.Id);
+                        if (i == null)
                         {
-                            imagePage.ImageId = item.ImageId;
+                            _context.SliderImages.Remove(item); 
+                        } else
+                        {
+                            item.Order = i.Order;
+                            item.Link =i.Link;
+                            item.ImageId = i.ImageId;
                         }
                     }
+
+                    var items = _mapper.Map<List<SliderImageEntity>>(request.Request.ProjectSlider.Where(x => x.Id == null)).ToList();
+                    content.ProjectSlider = content.ProjectSlider.Concat(items).ToList();
                 }
-            }
 
-            if (request.Request.IsUpdateSlider) {
-
-                var slider = await _context.Sliders
-                    .Include(x => x.Items)
-                    .FirstOrDefaultAsync(x => x.Id == request.Request.Slider.Id);
-                if (slider != null)
+                if (request.Request.IsUpdateIntroduceSection)
                 {
-                    var sliderRequestIds = request.Request.Slider.Items.Select(x => x.Id).ToList();
-                    var items = slider.Items.Where(x => !sliderRequestIds.Contains(x.Id)).ToList();
-                    foreach (var item in items)
-                    {
-                        slider.Items.Remove(item);
-                    }
-                    foreach (var item in request.Request.Slider.Items)
-                    {
-                        if (item.Id == null)
-                        {
-                            var s = _mapper.Map<SliderImageEntity>(item);
-                            slider.Items.Add(s);
-                        }
-                        else
-                        {
-                            var s = slider.Items.FirstOrDefault(x => x.Id == item.Id);
-                            if (s != null)
-                            {
-                                _mapper.Map(item, s);
-                            }
-                        }
-                    }
+                    content.IntroduceSection = request.Request.IntroduceSection;
                 }
+
             }
 
-            if (request.Request.IsUpdateIntroduce)
+            var isActive =  request.Request.Status == StatusConstant.Active;
+            if (oldStatus != newStatus)
             {
-                var introduce = await _context.Sections
-                    .FirstOrDefaultAsync(x => x.Id == request.Request.Introduce.Id && x.Position == request.Request.Introduce.Position);
-                if (introduce != null)
+                if (oldStatus == StatusConstant.Active)
                 {
-                    introduce.Content = request.Request.Introduce.Content;
+                    content.Status = StatusConstant.Active;
                 }
-            }
-
-            var newsIds = request.Request.News.Select(x => x.Id).ToList();
-            var news = await _context.Sections
-                .Where(x => newsIds.Contains(x.Id))
-                .ToListAsync(cancellationToken);
-
-            if (news != null)
-            {
-                foreach (var newsItem in news)
+                
+                if (newStatus == StatusConstant.Active)
                 {
-                    var item = request.Request.News.FirstOrDefault(x => x.Id == newsItem.Id && x.Position == newsItem.Position);
-                    if (item != null)
-                    {
-                        newsItem.Content = item.Content;
+                    var items = await _context.Contents.Where(x => x.Status == StatusConstant.Active).ToListAsync();
+                    foreach (var item in items) { 
+                        item.Status = StatusConstant.Draft;
                     }
                 }
             }
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new DataResponse<bool> { Data = true };
+            if (content == null)
+            {
+                return DataResponse<int>.Error("Không lưu được nội dung trang web này!");
+            }
+
+            return new DataResponse<int> { Data = content!.Id };
         }
     }
 }

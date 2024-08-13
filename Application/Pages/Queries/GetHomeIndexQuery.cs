@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using MediatR;
 using Application.Common.Responses.Views;
-using Domain.Enums;
 using AutoMapper;
 using Domain.Constants;
 
@@ -27,43 +26,21 @@ public class GetHomeIndexQuery : IRequest<HomeIndexView>
         {
             var view = new HomeIndexView();
 
-            var sections = await _context.Sections.AsNoTracking()
-                .Where(x =>
-                    x.Position == (int)SectionPositionEnum.IntroduceInHome
-                    || x.Position == (int)SectionPositionEnum.DescriptionNewsMarket
-                    || x.Position == (int)SectionPositionEnum.DescriptionNewsProject)
-                .ToListAsync(cancellationToken);
-            if (sections != null) {
-                foreach (var section in sections) { 
-                    if (section.Position == (int)SectionPositionEnum.IntroduceInHome)
-                    {
-                        view.Content = section.Content;
-                    }
-                    if (section.Position == (int)SectionPositionEnum.DescriptionNewsProject)
-                    {
-                        view.DescriptionNewsProject = section.Content;
-                    }
-                    if (section.Position == (int)SectionPositionEnum.DescriptionNewsMarket)
-                    {
-                        view.DescriptionNewsMarket = section.Content;
-                    }
-                }
-            }
-
             await _context.SaveChangesAsync(cancellationToken);
 
-            var background = await _context.ImagePages.AsNoTracking()
-                .Include(x => x.Image)
-                .FirstOrDefaultAsync(x => x.Position == (int)ImagePagePositionEnum.BackgroundHomeScreen, cancellationToken);
-            if (background != null) {
-                _mapper.Map(background!.Image, view.BackgroundImage);
-            }
-
-            var image = await _context.ImagePages.AsNoTracking()
-                .Include(x => x.Image)
-                .FirstOrDefaultAsync(x => x.Position == (int)ImagePagePositionEnum.HomeScreen, cancellationToken);
-            if (image != null) {
-                _mapper.Map(image!.Image, view.TopImage);
+            var result = await _context.Contents.AsNoTracking()
+                .Include(x => x.HomeImage)
+                .Include(x => x.BgHomeImage)
+                .Select(x => new { x.HomeImage, x.BgHomeImage, x.IntroduceSection, x.NewsMarketSection, x.NewsProjectSection, x.Status })
+                .Where(x => x.Status == StatusConstant.Active)
+                .FirstOrDefaultAsync(cancellationToken);
+            if (result != null)
+            {
+                _mapper.Map(result!.HomeImage, view.TopImage);
+                _mapper.Map(result!.BgHomeImage, view.BackgroundImage);
+                view.Introduce = result!.IntroduceSection;
+                view.DescriptionNewsProject = result!.NewsMarketSection;
+                view.DescriptionNewsMarket = result!.NewsProjectSection;
             }
 
             var news = await _context.News.AsNoTracking()

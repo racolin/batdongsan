@@ -1,240 +1,144 @@
-﻿@using Domain.Entities
+﻿@using Application.Common.Responses
 @using Application.Common.Supports
+@using Domain.Entities
 @{
-    ViewBag.LayoutTitle = "Nội dung trang web";
-    ViewBag.Title = "Chỉnh sửa nội dung trang web";
+    ViewBag.LayoutTitle = "Danh sách nội dung";
+    ViewBag.Title = "Danh sách nội dung";
 
-    Layout = "~/Areas/Admin/Views/Shared/_LayoutItem.cshtml";
-    ImagePageEntity? home = ViewBag.Home;
-    ImagePageEntity? bgHome = ViewBag.BgHome;
-    ImagePageEntity? news = ViewBag.News;
-    ImagePageEntity? contact = ViewBag.Contact;
-    SliderEntity slider = ViewBag.Slider;
-    SectionEntity introduce = ViewBag.Introduce;
-    SectionEntity newsMarket = ViewBag.NewsMarket;
-    SectionEntity newsProject = ViewBag.NewsProject;
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutIndex.cshtml";
 
-    ViewBag.ModelIsNull = false;
-    ViewBag.IncludeSelectImage = true;
-    
-    var sliderCount = 0;
+    PagingResponse<ContentEntity> model = Model ?? new PagingResponse<ContentEntity>();
+
+    ViewBag.Max = model.Max;
+    ViewBag.Current = model.Current;
+    ViewBag.Count = model.List.Count;
 }
 
 @section AddToHead {
-    <link rel="stylesheet" href="~/libs/summernote/summernote-bs5.css" />
-    <script src="/libs/summernote/summernote-bs5.js"></script>
+    <link rel="stylesheet" href="~/libs/bootstrap-datepicker/css/bootstrap-datepicker.css" />
+    <script src="~/libs/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="~/libs/moment.js/moment.js"></script>
 }
 
-<div class="flex-grow-1 overflow-scroll">
-    <div class="image-pages">
-        <div class="row image-pages-wrap my-2">
-            <div class="form-title-wrap">
-                <p class="form-title">Ảnh ở các trang</p>
+@section FilterForm {
+    <div class="filter-control my-2">
+        <div class="form-title-wrap">
+            <p class="form-title">Lọc danh sách</p>
+        </div>
+        <div class="row">
+            <div class="col-12 my-2">
+                <label for="value" class="form-label">Lọc theo tên:</label>
+                <input type="text" class="form-control" name="value" id="value" autocomplete="off" placeholder="Nhập nội dung tìm kiếm">
             </div>
-            @if (home != null)
-            {
-                <input id="id-home-screen" name="id-home-screen" type="hidden" value="@(home.Id)" />
-                <input id="position-home-screen" name="position-home-screen" type="hidden" value="@(home.Position)" />
-                <input id="imageId-home-screen" name="imageId-home-screen" type="hidden" value="@(home.Image.Id)" />
-                <div class="image-page col-12 col-md-6 col-lg-3 my-2">
-                    <div class="content-item">
-                        <label for="filter-name" class="form-label">Ảnh trên cùng trang chủ: (<span class='text-danger'>*</span>)</label>
-                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
-                                 new
-                                 {
-                                     Key = "home-screen",
-                                     Src = PathSupport.GetUploadImagePath(home!.Image.Name),
-                                 }
-                                 )
-                    </div>
+            <div class="col-12 col-md-6 col-lg-12 my-2">
+                <label for="filter-range-date" class="form-label">Lọc theo ngày đăng: </label>
+                <div class="input-group input-daterange" id="filter-range-date">
+                    <input type="text" class="form-control form-control-left" name="startDate" id="startDate">
+                    <div class="input-group-text"><i class="fa-solid fa-caret-right"></i></div>
+                    <input type="text" class="form-control form-control-right" name="endDate" id="endDate">
                 </div>
-            }
-            @if (bgHome != null)
-            {
-                <input id="id-bg-home" name="id-bg-home" type="hidden" value="@(bgHome.Id)" />
-                <input id="position-bg-home" name="position-bg-home" type="hidden" value="@(bgHome.Position)" />
-                <input id="imageId-bg-home" name="imageId-bg-home" type="hidden" value="@(bgHome.Image.Id)" />
-                <div class="image-page col-12 col-md-6 col-lg-3 my-2">
-                    <div class="content-item">
-                        <label for="filter-name" class="form-label">Ảnh nền trang chủ: (<span class='text-danger'>*</span>)</label>
-                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
-                                 new
-                                 {
-                                     Key = "bg-home",
-                                     Src = PathSupport.GetUploadImagePath(bgHome!.Image.Name),
-                                 }
-                                 )
-                    </div>
-                </div>
-            }
-            @if (news != null)
-            {
-                <input id="id-news-screen" name="id-news-screen" type="hidden" value="@(news.Id)" />
-                <input id="position-news-screen" name="position-news-screen" type="hidden" value="@(news.Position)" />
-                <input id="imageId-news-screen" name="imageId-news-screen" type="hidden" value="@(news.Image.Id)" />
-                <div class="image-page col-12 col-md-6 col-lg-3 my-2">
-                    <div class="content-item">
-                        <label for="filter-name" class="form-label">Ảnh trên cùng tin tức: (<span class='text-danger'>*</span>)</label>
-                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
-                                 new
-                                 {
-                                     Key = "news-screen",
-                                     Src = PathSupport.GetUploadImagePath(news!.Image.Name),
-                                 }
-                                 )
-                    </div>
-                </div>
-            }
-            @if (contact != null)
-            {
-                <input id="id-contact-screen" name="id-contact-screen" type="hidden" value="@(contact.Id)" />
-                <input id="position-contact-screen" name="position-contact-screen" type="hidden" value="@(contact.Position)" />
-                <input id="imageId-contact-screen" name="imageId-contact-screen" type="hidden" value="@(contact.Image.Id)" />
-                <div class="image-page col-12 col-md-6 col-lg-3 my-2">
-                    <div class="content-item">
-                        <label for="filter-name" class="form-label">Ảnh trên cùng liên hệ: (<span class='text-danger'>*</span>)</label>
-                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
-                                 new
-                                 {
-                                     Key = "contact-screen",
-                                     Src = PathSupport.GetUploadImagePath(contact!.Image.Name),
-                                 }
-                                 )
-                    </div>
-                </div>
-            }
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-12 my-2">
+                <label for="order" class="form-label">Sắp xếp:</label>
+                <select class="form-select form-control" id="order" name="order" aria-label="Chọn chế độ sắp xếp">
+                    <option value="asc-date">Tăng dần theo ngày</option>
+                    <option value="desc-date">Giảm dần theo ngày</option>
+                </select>
+            </div>
         </div>
     </div>
-    <div class="sliders">
-        @if (slider != null)
+}
+
+@section FilterAdvanced {
+    <div class="input-group" id="filter-advanced">
+
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('status', 'Draft', true)" name="status" value="Draft" id="Draft" />
+        <label class="btn btn-danger" title='Bỏ lọc trạng thái "Nháp"' for="Draft">Bỏ "Nháp"</label>
+
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('status', 'Active', true)" name="status" value="Active" id="Active" />
+        <label class="btn btn-danger" title='Bỏ lọc trạng thái "Hoạt động"' for="Active">Bỏ "Hoạt động"</label>
+
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('status', 'InActive', true)" name="status" value="InActive" id="InActive" />
+        <label class="btn btn-danger" title='Bỏ lọc trạng thái "Ngừng"' for="InActive">Bỏ "Ngừng"</label>
+    </div>
+}
+
+@section FilterAdvancedModal {
+    <div class="col-12 my-2">
+        <label class="form-label">Lọc trạng thái: </label>
+        <div class="input-group" id="filter-status-modal">
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('status', 'Draft', false)" name="status" value="Draft" id="DraftModal" />
+            <label class="btn btn-outline-warning form-control-left" for="DraftModal">Nháp</label>
+
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('status', 'Active', false)" name="status" value="Active" id="ActiveModal" />
+            <label class="btn btn-outline-warning form-control-between" for="ActiveModal">Hoạt động</label>
+
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('status', 'InActive', false)" name="status" value="InActive" id="InActiveModal" />
+            <label class="btn btn-outline-warning form-control-right" for="InActiveModal">Ngừng</label>
+        </div>
+    </div>
+}
+
+@section ControlTools {
+    <div class="py-3 d-flex justify-content-end">
+        <button type="button" onclick="window.location.href = '/admin/content/item'" class="btn btn-create" title="Tạo mới">Tạo mới</button>
+    </div>
+}
+
+<table class="table table-striped table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Tên nội dung</th>
+            <th class="d-md-table-cell" scope="col">Trạng thái</th>
+            <th class="d-none d-md-table-cell" scope="col">Ngày tạo</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (var i = 0; i < model.List.Count; i++)
         {
-            <div class="row sliders-wrap my-2" id="slider-project">
-                <div class="form-title-wrap">
-                    <p class="form-title">Slider trên cùng trang dự án</p>
-                </div>
-                <div class="slider col-12">
-                    <div class="row slider">
-                        <input id="sliderProjectId" name="sliderProjectId" type="hidden" value="@(slider.Id)" />
-                        <input id="sliderProjectPosition" name="sliderProjectPosition" type="hidden" value="@(slider.Position)" />
-                        @foreach (var item in slider!.Items)
-                        {
-                            <div class="col-12 col-md-6 col-lg-4 slider-image my-2" id="item-slider-project-@(sliderCount)">
-                                <div class="content-item">
-                                    <div class="d-flex justify-content-between align-items-end input-group mt-2 mb-3">
-                                        <input type="hidden" name="id-@("slider-project-" + sliderCount)" value="@(item.Id)" id="id-@("slider-project-" + sliderCount)" />
-                                        <input type="hidden" name="imageId-@("slider-project-" + sliderCount)" value="@(item.Image.Id)" id="imageId-@("slider-project-" + sliderCount)" />
-                                        <div class="flex-grow-1">
-                                            <label for="link-@("slider-project-" + sliderCount)" class="form-label">Liên kết: </label>
-                                            <input type="text" class="form-control form-control-left" name="link-@("slider-project-" + sliderCount)" value="@(item.Link)" id="link-@("slider-project-" + sliderCount)" autocomplete="off" />
-                                        </div>
-                                        <div class="" style="width: 5rem">
-                                            <label for="order-@("slider-project-" + sliderCount)" class="form-label">Thứ tự: (<span class="text-danger">*</span>)</label>
-                                            <input type="number" class="form-control form-control-between" name="order-@("slider-project-" + sliderCount)" value="@(item.Order)" id="order-@("slider-project-" + sliderCount)" autocomplete="off" />
-                                        </div>
-                                        <button type="button" onclick="deleteSlider('#item-slider-project-@(sliderCount)')" class="btn btn-danger btn-right" title="Xóa ảnh khỏi slider">Xóa</button>
-                                    </div>
-                                    <div class="my-2">
-                                        @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/ChooseOrUploadImage.cshtml",
-                                                 new
-                                                 {
-                                                     Key = "slider-project-" + sliderCount.ToString(),
-                                                     Src = PathSupport.GetUploadImagePath(item.Image.Name),
-                                                 }
-                                                 )
-                                    </div>  
-                                </div>
-                            </div>
-                            sliderCount++;
-                        }
-                        <div class="col-6 col-md-4 col-lg-2 add-slider my-3" id="add-slider-project">
-                            <div class="content-item dash add-slider-wrap">
-                                <button title="Thêm ảnh slider" type="button" onclick="addSlider('project')">
-                                    <i class="fa-solid fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <tr>
+                <td class="">@((model.Current - 1) * model.PerPage + i + 1)</td>
+                <td class="">
+                    <a class="item-td-link" href="/admin/content/item?id=@(model.List[i].Id)" title="Chuyển sang trang chi tiết">
+                        @(model.List[i].Name)
+                    </a>
+                </td>
+                <td class="">
+                    <span class="item-td-@(model.List[i].Status)">
+                        @(NameSupport.GetStatusName(model.List[i].Status))
+                    </span>
+                </td>
+                <td class="d-none d-md-table-cell">
+                    @(model.List[i].CreatedDate?.ToString("dd-MM-yyyy"))
+                </td>
+            </tr>
         }
-    </div>
-    <div class="section">
-        <div class="section-wrap my-2">
-            <div class="form-title-wrap">
-                <p class="form-title">Soạn nội dung</p>
-            </div>
-            <div class="row">
-                <div class="col-12 my-2">
-                    <div class="form-group">
-                        <input id="introduceId" name="contactId" type="hidden" value="@(introduce?.Id)" />
-                        <input id="introducePosition" name="contactPosition" type="hidden" value="@(introduce?.Position)" />
-                        <label class="form-label" for="introduceContent">Nội dung giới thiệu: (<span class="text-danger">*</span>)</label>
-                        <textarea id="introduceContent">@(Html.Raw(Uri.UnescapeDataString(introduce?.Content ?? "")))</textarea>
-                    </div>
-                </div>
-                <div class="col-12 my-2">
-                    <div class="form-group">
-                        <input id="newsMarketId" name="contactId" type="hidden" value="@(newsMarket?.Id)" />
-                        <input id="newsMarketPosition" name="contactPosition" type="hidden" value="@(newsMarket?.Position)" />
-                        <label class="form-label" for="newsMarketContent">Mô tả tin thị trường: (<span class="text-danger">*</span>)</label>
-                        <textarea class="form-control" id="newsMarketContent">@(newsMarket?.Content ?? "")</textarea>
-                    </div>
-                </div>
-                <div class="col-12 my-2">
-                    <div class="form-group">
-                        <input id="newsProjectId" name="contactId" type="hidden" value="@(newsProject?.Id)" />
-                        <input id="newsProjectPosition" name="contactPosition" type="hidden" value="@(newsProject?.Position)" />
-                        <label class="form-label" for="newsProjectContent">Mô tả tin dự án: (<span class="text-danger">*</span>)</label>
-                        <textarea class="form-control" id="newsProjectContent">@(newsProject?.Content ?? "")</textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="" style="height:10rem"></div>
-</div>
-<hr class="d-none d-lg-block" style="margin: .25rem 0 0 0" />
-<div class="py-3 d-flex justify-content-end">
-    <button type="button" id="btn-save" class="btn btn-save ms-3" title="Lưu ảnh">Lưu</button>
-</div>
+    </tbody>
+</table>
 
 @section AddToFooter {
     <script type="text/javascript">
-        var sliderCount = @sliderCount;
-        var imageKey = '';
-        function selectedImageId(key, id) {
-            $("#imageId-" + key).val(id);
-        }
-        function removedImageId(key) {
-            $("#imageId-" + key).val("");
-        }
-        $(document).ready(function () {
-            $('#introduceContent').summernote({
-                placeholder: 'Tạo nội dung giới thiệu',
-                height: 400,
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'underline', 'clear']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen', 'codeview', 'help']]
-                ]
-            });
+        var urlParams = new URLSearchParams(window.location.search);
+        $("#value").val(urlParams.get("value"));
+        $("#startDate").val(urlParams.get("startDate") ?? '01-01-2024');
+        $("#endDate").val(urlParams.get("endDate") ?? moment(new Date()).format("DD-MM-YYYY"))
+        var perPage = urlParams.get("perPage") ?? '';
+        $("#perPage").val(perPage == '' ? @(model.PerPage) : perPage);
+        $("#currentPage").val(@(model.Current));
+
+        initCheckboxFromUrl('status');
+
+        $('#filter-range-date').datepicker({
+            format: 'dd-mm-yyyy',
+            weekStart: 1,
+            templates: {
+                leftArrow: '<i class="fa-solid fa-angle-left"></i>',
+                rightArrow: '<i class="fa-solid fa-angle-right"></i>',
+            },
+            todayHighlight: true,
+            endDate: new Date(),
         });
-        function deleteSlider(query) {
-            $(query).remove();
-        }
-        function addSlider(key) {
-            var item = $("#slider-" + key).find(".slider-image")[0].outerHTML.replaceAll(new RegExp('slider-' + key + '-' + '\\d+', 'g'), 'slider-' + key + '-' + sliderCount);
-            $("#add-slider-" + key).before(item)
-            clearDisplayImage('slider-' + key + '-' + sliderCount)
-            $('#link-slider-' + key + '-' + sliderCount).val("")
-            $('#order-slider-' + key + '-' + sliderCount).val("")
-            $('#id-slider-' + key + '-' + sliderCount).val("")
-            sliderCount++;
-        }
     </script>
-    <script src="~/admin/js/Content/index.js"></script>
 }
