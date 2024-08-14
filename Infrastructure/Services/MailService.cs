@@ -8,6 +8,7 @@ using System.Net;
 using Domain.Constants;
 using System.Web;
 using Infrastructure.Identity;
+using Azure;
 
 namespace Infrastructure.Services;
 
@@ -42,38 +43,24 @@ public class MailService : IMailService
         }
     }
 
-    public async Task<string?> SendRegister(string email, string image, string name, string description, string redirect)
+    public async Task<string?> SendAdminContact(string receiveEmail, int id, string name, string email, string phone, string? address, string content)
     {
-        redirect = $"{AppUrl}/{redirect}";
-        image = $"{AppUrl}/{image}";
+        var redirect_url = $"{AppUrl}/admin/contact/index?id=" + id;
 
-        var path = Path.Combine(_webHostEnvironment.WebRootPath, "MailTemplate", "SendRegister.html");
+        var path = Path.Combine(_webHostEnvironment.WebRootPath, "MailTemplate", "SendAdminContact.html");
         var message = await File.ReadAllTextAsync(path);
 
-        message = message.Replace("[[image]]", image);
-        message = message.Replace("[[name]]", name);
-        message = message.Replace("[[description]]", description);
-        message = message.Replace("[[redirect]]", redirect);
+        message = message
+            .Replace("{{redirect_url}}", redirect_url)
+            .Replace("{{contact_name}}", name)
+            .Replace("{{contact_phone}}", phone)
+            .Replace("{{contact_email}}", email)
+            .Replace("{{contact_address}}", address)
+            .Replace("{{contact_content}}", content)
+            .Replace("{{system_name}}", DefaultConstant.WebName)
+            .Replace("{{system_logo}}", $"{AppUrl}{DefaultConstant.LogoLight}");
 
-        var result = await SendMail(email, DefaultConstant.WebName, message);
-        return result;
-    }
-
-    public async Task<string?> SendAdminNewGuest(string email, string name, string? address, string phone, string content, DateTime time, string redirect)
-    {
-        redirect = $"{AppUrl}/{redirect}";
-
-        var path = Path.Combine(_webHostEnvironment.WebRootPath, "MailTemplate", "SendAdminNewGuest.html");
-        var message = await File.ReadAllTextAsync(path);
-
-        message = message.Replace("[[name]]", name);
-        message = message.Replace("[[address]]", address);
-        message = message.Replace("[[phone]]", phone);
-        message = message.Replace("[[content]]", content);
-        message = message.Replace("[[time]]", time.ToString("HH:mm, dd/MM/yyyy"));
-        message = message.Replace("[[redirect]]", redirect);
-
-        var result = await SendMail(email, DefaultConstant.WebName, message);
+        var result = await SendMail(receiveEmail, DefaultConstant.WebName, message);
         return result;
     }
 

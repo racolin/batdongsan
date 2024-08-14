@@ -2,7 +2,6 @@
 
 public interface IMailService
 {
-    Task<string?> SendRegister(string email, string image, string name, string description, string redirect);
-    Task<string?> SendAdminNewGuest(string email, string name, string? address, string phone, string content, DateTime time, string redirect);
+    Task<string?> SendAdminContact(string receiveEmail, int id, string name, string email, string phone, string? address, string content);
     Task<string?> SendAdminResetPassword(string email, string username, string token, string fullname, string operation, string browser);
 }

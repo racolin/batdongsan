@@ -21,11 +21,13 @@ public class SaveContactCommand : IRequest<DataResponse<int>>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IMailService _mailService;
 
-        public Handler(IApplicationDbContext context, IMapper mapper)
+        public Handler(IApplicationDbContext context, IMapper mapper, IMailService mailService)
         {
             _context = context;
             _mapper = mapper;
+            _mailService = mailService;
         }
 
         public async Task<DataResponse<int>> Handle(SaveContactCommand request, CancellationToken cancellationToken)
@@ -69,6 +71,11 @@ public class SaveContactCommand : IRequest<DataResponse<int>>
             await _context.SaveChangesAsync(cancellationToken);
             if (ct != null) {
                 id = ct.Id;
+                var config = await _context.Configurations.FirstOrDefaultAsync(cancellationToken);
+                if (config != null)
+                {
+                    await _mailService.SendAdminContact(config.ReceiveEmail, id.Value, ct.Name, ct.Email, ct.Phone, ct.Address, ct.Content);
+                }
             }
             return DataResponse<int>.Success(id ?? 0);
         }
