@@ -4,7 +4,7 @@ using MediatR;
 using Application.Common.Responses;
 using Domain.Entities;
 
-namespace Application.Content.Queries;
+namespace Application.Contents.Queries;
 
 public class GetContentQuery : IRequest<DataResponse<ContentEntity>>
 {

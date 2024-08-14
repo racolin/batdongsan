@@ -1,6 +1,6 @@
 ﻿using Application.Common.Requests;
 using Application.Common.Responses;
-using Application.Images.Commands;
+using Application.Contents.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

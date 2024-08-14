@@ -32,7 +32,6 @@
 
   <ItemGroup>
     <Folder Include="Common\Helpers\" />
-    <Folder Include="Content\Queries\" />
   </ItemGroup>
 
 </Project>

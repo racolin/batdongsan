@@ -7,7 +7,7 @@ using Application.Common.Requests;
 using Domain.Constants;
 using System.Linq.Expressions;
 
-namespace Application.Content.Queries;
+namespace Application.Contents.Queries;
 
 public class GetContentsQuery : IRequest<DataResponse<PagingResponse<ContentEntity>>>
 {

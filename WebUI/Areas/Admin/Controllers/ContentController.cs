@@ -1,5 +1,5 @@
 ﻿using Application.Common.Requests;
-using Application.Content.Queries;
+using Application.Contents.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Areas.Admin.Controllers

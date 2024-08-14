@@ -9,6 +9,7 @@
   <ItemGroup>
     <Content Remove="wwwroot\admin\js\api_service.js" />
     <Content Remove="wwwroot\admin\js\choose_or_upload_image.js" />
+    <Content Remove="wwwroot\admin\js\Configuration\index.js" />
     <Content Remove="wwwroot\admin\js\User\index.js" />
     <Content Remove="wwwroot\admin\js\User\item.js" />
     <Content Remove="wwwroot\admin\js\User\profile.js" />
@@ -51,6 +52,7 @@
   <ItemGroup>
     <None Include="wwwroot\admin\js\api_service.js" />
     <None Include="wwwroot\admin\js\choose_or_upload_image.js" />
+    <None Include="wwwroot\admin\js\Configuration\index.js" />
     <None Include="wwwroot\admin\js\User\index.js" />
     <None Include="wwwroot\admin\js\User\profile.js" />
     <None Include="wwwroot\admin\js\User\item.js" />

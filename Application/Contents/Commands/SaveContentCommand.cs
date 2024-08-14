@@ -7,7 +7,7 @@ using Application.Common.Responses;
 using Domain.Entities;
 using Domain.Constants;
 
-namespace Application.Images.Commands;
+namespace Application.Contents.Commands;
 public class SaveContentCommand : IRequest<DataResponse<int>>
 {
     public SaveContentRequest Request { get; }
