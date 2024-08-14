@@ -96,10 +96,17 @@
     <script src="~/shared/js/notify.js"></script>
     <script src="~/shared/js/loader.js"></script>
     <script type="text/javascript">
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
         function setCookie(key, name) {
-            console.log(document.cookie);
+            var date = new Date();
+            date.setTime(date.getTime() - (24 * 60 * 60 * 1000));
+            var expires = "; expires=" + date.toGMTString();
+            document.cookie = key + "=" + expires + "; path=/";
             document.cookie = key + "=" + name + ";";
-            console.log(document.cookie);
         }
 
         var hidePassword = true; 
@@ -138,7 +145,7 @@
 
         function login() {
             $.ajax({
-                url: 'api/admin/auth/login',
+                url: '/api/admin/auth/login',
                 type: 'POST',
                 data: $("#form-login").serialize(),//dataJson,
                 datatype: 'json',
@@ -156,7 +163,9 @@
                     }
                     // success response
                     // do something if success
-                    setCookie("name", data.data);
+                    console.log(data.data);
+                    setCookie("name", data.data.name);
+                    setCookie("visibleModule", data.data.visibleModule);
 
                     const urlParams = new URLSearchParams(window.location.search);
                     var redirect = urlParams.get("ReturnUrl");

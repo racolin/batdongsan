@@ -271,17 +271,39 @@ public class ApplicationDbContextInitializer
 
             // Default roles
             var administratorRole = new Role(RoleConstant.Admin);
+            administratorRole.VisibleModule = "profile.user:item,index.dashboard.news:index,item.project:index,item.contact.image:index,item.content.configuration";
 
             if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
             {
                 await _roleManager.CreateAsync(administratorRole);
-                await _roleManager.CreateAsync(new Role(RoleConstant.NewsPoster));
-                await _roleManager.CreateAsync(new Role(RoleConstant.ProjectPoster));
-                await _roleManager.CreateAsync(new Role(RoleConstant.Caller));
-                await _roleManager.CreateAsync(new Role(RoleConstant.RegisteredEmailChecker));
-                await _roleManager.CreateAsync(new Role(RoleConstant.ImagePoster));
-                await _roleManager.CreateAsync(new Role(RoleConstant.ContentEditor));
-                await _roleManager.CreateAsync(new Role(RoleConstant.Newbie));
+
+                var newsPoster = new Role(RoleConstant.NewsPoster);
+                newsPoster.VisibleModule = "profile.news:index,item";
+                await _roleManager.CreateAsync(newsPoster);
+
+                var projectPoster = new Role(RoleConstant.ProjectPoster);
+                projectPoster.VisibleModule = "profile.project:index,item";
+                await _roleManager.CreateAsync(projectPoster);
+
+                var caller = new Role(RoleConstant.Caller);
+                caller.VisibleModule = "profile.contact";
+                await _roleManager.CreateAsync(caller);
+
+                var registeredEmailChecker = new Role(RoleConstant.RegisteredEmailChecker);
+                registeredEmailChecker.VisibleModule = "profile.registeremail";
+                await _roleManager.CreateAsync(registeredEmailChecker);
+
+                var imagePoster = new Role(RoleConstant.ImagePoster);
+                imagePoster.VisibleModule = "profile.image:index,item";
+                await _roleManager.CreateAsync(imagePoster);
+
+                var contentEditor = new Role(RoleConstant.ContentEditor);
+                contentEditor.VisibleModule = "profile.content";
+                await _roleManager.CreateAsync(contentEditor);
+
+                var newbie = new Role(RoleConstant.Newbie);
+                newbie.VisibleModule = "profile";
+                await _roleManager.CreateAsync(newbie);
             }
 
             // Default users

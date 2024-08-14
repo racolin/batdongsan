@@ -2,10 +2,11 @@
 using MediatR;
 using Application.Common.Responses;
 using Application.Common.Requests;
+using Application.Common.Responses.Admin;
 
 namespace Application.Users.Commands;
 
-public class LoginCommand : IRequest<DataResponse<string>>
+public class LoginCommand : IRequest<DataResponse<LoginResponse>>
 {
     public LoginRequest Request { get; }
 
@@ -14,7 +15,7 @@ public class LoginCommand : IRequest<DataResponse<string>>
         Request = request;
     }
 
-    public class Handler : IRequestHandler<LoginCommand, DataResponse<string>>
+    public class Handler : IRequestHandler<LoginCommand, DataResponse<LoginResponse>>
     {
         private readonly IIdentityService _identityService;
 
@@ -23,7 +24,7 @@ public class LoginCommand : IRequest<DataResponse<string>>
             _identityService = identityService;
         }
 
-        public async Task<DataResponse<string>> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<DataResponse<LoginResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             var result = await _identityService.LoginAsync(request.Request.Username, request.Request.Password);
 

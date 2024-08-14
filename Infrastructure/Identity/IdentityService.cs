@@ -33,6 +33,7 @@ public class IdentityService : IIdentityService
     private readonly ApplicationDbContext _context;
     private readonly ILogger<IdentityService> _logger;
     private readonly UserManager<User> _userManager;
+    private readonly RoleManager<Role> _roleManager;
     private readonly IAuthorizationService _authorizationService;
     private readonly IMailService _mailService;
     private readonly SignInManager<User> _signInManager;
@@ -45,6 +46,7 @@ public class IdentityService : IIdentityService
             ILogger<IdentityService> logger,
             IOptions<JwtConfigOptions> jwtOptions,
             UserManager<User> userManager,
+            RoleManager<Role> roleManager,
             IAuthorizationService authorizationService,
             SignInManager<User> signInManager,
             IUserClaimsPrincipalFactory<User> userClaimsPrincipalFactory,
@@ -53,6 +55,7 @@ public class IdentityService : IIdentityService
     {
         _mailService = mailService;
         _userManager = userManager;
+        _roleManager = roleManager;
         _signInManager = signInManager;
         _context = context;
         _fileService = fileService;
@@ -101,21 +104,28 @@ public class IdentityService : IIdentityService
 
         return result.Succeeded; 
     }
-    public async Task<DataResponse<string>> LoginAsync(string username, string password)
+    public async Task<DataResponse<LoginResponse>> LoginAsync(string username, string password)
     {
         var user = await _userManager.FindByNameAsync(username);
         if (user == null)
-            return DataResponse<string>.Error("Thông tin đăng nhập không hợp lệ.");
+            return DataResponse<LoginResponse>.Error("Thông tin đăng nhập không hợp lệ.");
 
         var isLockout = await _userManager.IsLockedOutAsync(user);
         if (isLockout)
-            return DataResponse<string>.Error("Tài khoản của bạn đã bị khoá. Vui lòng liên hệ tư vấn viên để được hỗ trợ.");
+            return DataResponse<LoginResponse>.Error("Tài khoản của bạn đã bị khoá. Vui lòng liên hệ tư vấn viên để được hỗ trợ.");
 
         var result = await _signInManager.PasswordSignInAsync(user, password, false, true);
         if (!result.Succeeded)
-            return DataResponse<string>.Error($"Thông tin đăng nhập không hợp lệ. Bạn còn {RoleConstant.MaxLoginFail - user.AccessFailedCount} lần thử!");
+            return DataResponse<LoginResponse>.Error($"Thông tin đăng nhập không hợp lệ. Bạn còn {RoleConstant.MaxLoginFail - user.AccessFailedCount} lần thử!");
+        List<string> roleNames = (await _userManager.GetRolesAsync(user)).ToList();
+        var visibles = await _roleManager.Roles
+                        .Select(role => new { role.Name, role.VisibleModule })
+                        .Where(x => roleNames.Contains(x.Name))
+                        .Select(x => x.VisibleModule)
+                        .ToListAsync();
+        var visibleModule = string.Join(".", visibles);
 
-        return DataResponse<string>.Success(user.Name);
+        return DataResponse<LoginResponse>.Success(new LoginResponse { Name = user.Name, VisibleModule = visibleModule });
     }
     public async Task<DataResponse<bool>> LogoutAsync(int userId)
     {
@@ -401,6 +411,8 @@ public class IdentityService : IIdentityService
             return DataResponse<bool>.Error("Không thể thêm vai trò này!");
         }
 
+        await _userManager.UpdateSecurityStampAsync(user);
+
         return DataResponse<bool>.Success(true);
     }
     public async Task<DataResponse<bool>> RemoveRoleAsync(int userId, string roleName)
@@ -417,6 +429,9 @@ public class IdentityService : IIdentityService
         {
             return DataResponse<bool>.Error("Không thể xóa vai trò này!");
         }
+
+        user.SecurityStamp = null;
+        await _userManager.UpdateSecurityStampAsync(user);
 
         return DataResponse<bool>.Success(true);
     }

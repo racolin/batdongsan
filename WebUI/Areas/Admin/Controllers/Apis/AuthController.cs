@@ -1,24 +1,24 @@
 ﻿using Application.Common.Requests;
 using Application.Common.Responses;
+using Application.Common.Responses.Admin;
 using Application.Users.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Areas.Admin.Controllers.Apis
 {
-    [AllowAnonymous]
     [ApiExplorerSettings(IgnoreApi = true)]
     public class AuthController : ApiAdminControllerBase
     {
+        [AllowAnonymous]
         [HttpPost("login")]
         [ValidateAntiForgeryToken]
-        public async Task<DataResponse<string>> Login([FromForm] LoginRequest request)
+        public async Task<DataResponse<LoginResponse>> Login([FromForm] LoginRequest request)
         {
             var response = await Mediator.Send(new LoginCommand(request));
             return response;
         }
 
-        [Authorize]
         [HttpGet("logout")]
         public async Task<DataResponse<bool>> Logout()
         {
@@ -26,6 +26,7 @@ namespace WebUI.Areas.Admin.Controllers.Apis
             return response;
         }
 
+        [AllowAnonymous]
         [HttpPost("forgot-password")]
         [ValidateAntiForgeryToken]
         public async Task<DataResponse<bool>> ForgotPassword([FromForm] string username)
@@ -45,6 +46,7 @@ namespace WebUI.Areas.Admin.Controllers.Apis
             return response;
         }
 
+        [AllowAnonymous]
         [HttpPost("reset-password")]
         [ValidateAntiForgeryToken]
         public async Task<DataResponse<bool>> ResetPassword([FromForm] ResetPasswordRequest request)

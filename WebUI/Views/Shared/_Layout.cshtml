@@ -199,7 +199,7 @@
 
         function sendContact(id) {
             $.ajax({
-                url: 'api/contact/send-contact',
+                url: '/api/contact/send-contact',
                 type: 'POST',
                 data: $("#" + id).serialize(),//dataJson,
                 datatype: 'json',

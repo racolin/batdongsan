@@ -9,7 +9,7 @@ public interface IIdentityService
     Task<List<string>?> GetUserRolesAsync(int userId);
     Task<bool?> IsInRolesAsync(int userId, string roleName);
     Task<bool?> AuthorizeAsync(int userId, string policyName);
-    Task<DataResponse<string>> LoginAsync(string username, string password);
+    Task<DataResponse<LoginResponse>> LoginAsync(string username, string password);
     Task<DataResponse<bool>> LogoutAsync(int userId);
     Task<DataResponse<bool>> GeneratePasswordResetTokenAsync(string username, string operation, string browser);
     Task<DataResponse<bool>> ResetPasswordWithTokenAsync(string username, string token, string password);

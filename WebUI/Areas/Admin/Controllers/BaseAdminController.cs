@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Areas.Admin.Controllers
 {
-    [Authorize(Roles = $"{RoleConstant.Admin}")]
+    //[Authorize(Roles = $"{RoleConstant.Admin}")]
     [Area("Admin")]
     public class BaseAdminController : Controller
     {

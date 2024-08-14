@@ -102,7 +102,7 @@
     function registerMail(onSuccess) {
         console.log($("#register-mail").serialize());
         $.ajax({
-            url: 'api/contact/register-mail',
+            url: '/api/contact/register-mail',
             type: 'POST',
             data: $("#register-mail").serialize(),//dataJson,
             datatype: 'json',

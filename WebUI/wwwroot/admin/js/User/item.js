@@ -19,7 +19,7 @@ $("#btn-save").click(function () {
         { 'value': newItem['#email'], 'name': 'email' },
         { 'value': newItem['#username'], 'name': 'tên' },
         { 'value': newItem['#phone'], 'name': 'số điện thoại' },
-        { 'value': newItem['#input[name="gender"]:checked'], 'name': 'giới tính' },
+        { 'value': newItem['input[name="gender"]:checked'], 'name': 'giới tính' },
     ];
 
     var verifies = verify(list);
