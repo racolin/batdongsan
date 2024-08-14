@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Configurations.Queries;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Areas.Admin.Controllers
 {
     public class ConfigurationController : BaseAdminController
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var result = await Mediator.Send(new GetConfigurationQuery(1));
+            return View(result);
         }
     }
 }

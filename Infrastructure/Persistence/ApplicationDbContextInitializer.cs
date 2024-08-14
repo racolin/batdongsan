@@ -302,6 +302,24 @@ public class ApplicationDbContextInitializer
                     await _userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
                 }
             }
+            
+            // Default cofiguration
+            if (!await _context.Configurations.AnyAsync())
+            {
+                await _context.Configurations.AddAsync(new ConfigurationEntity
+                {
+                    SendEmail = "pptin105011@gmail.com",
+                    SendEmailPassword = "pqrlnapsxvlwdhyd",
+                    ReceiveEmail = "phantrungtin01@gmail.com",
+                    ContactPhone = "0868754872",
+                    ContactZaloPhone = "0868754872",
+                    SystemPhone = "0868754872",
+                    SystemEmail = "phantrungtin01@gmail.com",
+                    SystemZaloLink = "https://zalo.me/0868754872",
+                    SystemYoutubeLink = "https://www.youtube.com/@tinphantrung8394",
+                    SystemFacebookLink = "https://www.facebook.com/tin.phan.1105",
+                });
+            }
 
             // Default news
             if (!await _context.News.AnyAsync())
@@ -672,7 +690,7 @@ public class ApplicationDbContextInitializer
                         Ud = "e-city-tan-duc-long-an",
                         Name = "Khu đô thị thương mại dịch vụ E.City Tân Đức",
                         Type = ProjectTypeConstant.Villa,
-                        Address = "implemented",
+                        Address = "Long An",
                         State = "implemented",
                         Content = html,
                         Status = StatusConstant.Active,
@@ -699,6 +717,7 @@ public class ApplicationDbContextInitializer
 
                 await _context.Projects.AddRangeAsync(projects);
             }
+            
             await _context.SaveChangesAsync();
         }
     }

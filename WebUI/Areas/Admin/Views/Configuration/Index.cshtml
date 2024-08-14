@@ -1,34 +1,103 @@
-﻿@{
-    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+﻿@using Application.Common.Responses
+@using Domain.Entities
+@{
+    ViewBag.LayoutTitle = "Cấu hình";
+    ViewBag.Title = "Cấu hình";
+
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutItem.cshtml";
+    DataResponse<ConfigurationEntity>? model = Model;
+
+    ViewBag.ModelIsNull = model == null;
+    ViewBag.IncludeSelectImage = false;
+
+    var errorMessage = model != null && model.Message.Type == MessageType.Error ? model.Message.Name : null;
 }
 
 @section AddToHead {
-    <link rel="stylesheet" href="~/admin/css/gallery.css" />
-    <link rel="stylesheet" href="~/admin/css/form.css" />
-    <link rel="stylesheet" href="~/admin/css/image_upload.css" />
+
 }
 
-<p class="layout-title">
-    Cấu hình
-</p>
-
-<div class="container-fluid flex-grow-1 lb-body">
-
-</div>
-
-@await Html.PartialAsync("~/Areas/Admin/Views/Shared/Components/GalleryModal.cshtml", new { Key = "", Amount = 5 })
+@if (errorMessage != null)
+{
+    <div class="no-data">
+        <img title="Không có dữ liệu" alt="Hình ảnh biểu thị không có dữ liệu" src="/shared/images/no_data.svg" />
+        <p>@(errorMessage)</p>
+    </div>
+}
+else
+{
+    <div class="flex-grow-1 overflow-scroll">
+        <input type="hidden" id="id" value="@(model != null ? model.Data.Id : "")" />
+        <div class="">
+            <div class="form-title-wrap">
+                <p class="form-title">Cấu hình email gửi tin</p>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-2">
+                    <label for="sendEmail" class="form-label">Email gửi tin tức (<span class="text-danger">*</span>):</label>
+                    <input type="text" class="form-control" name="sendEmail" id="sendEmail" autocomplete="off" value="@(model != null ? model.Data.SendEmail : "")" placeholder="Nhập email">
+                </div>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-2">
+                    <label for="sendEmailPassword" class="form-label">Mật khẩu ứng dụng email (<span class="text-danger">*</span>):</label>
+                    <input type="text" class="form-control" name="sendEmailPassword" id="sendEmailPassword" autocomplete="off" value="@(model != null ? model.Data.SendEmailPassword : "")" placeholder="Nhập mật khẩu ứng dụng">
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="form-title-wrap">
+                <p class="form-title">Cấu hình thông tin liên hệ</p>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-2">
+                    <label for="receiveEmail" class="form-label">Email nhận thông báo (<span class="text-danger">*</span>):</label>
+                    <input type="text" class="form-control" name="receiveEmail" id="receiveEmail" autocomplete="off" value="@(model != null ? model.Data.ReceiveEmail : "")" placeholder="Nhập email">
+                </div>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-2">
+                    <label for="contactPhone" class="form-label">Sđt liên hệ (<span class="text-danger">*</span>):</label>
+                    <input type="text" class="form-control" name="contactPhone" id="contactPhone" autocomplete="off" value="@(model != null ? model.Data.ContactPhone : "")" placeholder="Nhập số điện thoại">
+                </div>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-2">
+                    <label for="contactZaloPhone" class="form-label">Số Zalo liên hệ (<span class="text-danger">*</span>):</label>
+                    <input type="text" class="form-control" name="contactZaloPhone" id="contactZaloPhone" autocomplete="off" value="@(model != null ? model.Data.ContactZaloPhone : "")" placeholder="Nhập số Zalo">
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="form-title-wrap">
+                <p class="form-title">Cấu hình hê thống</p>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-2">
+                    <label for="systemPhone" class="form-label">Sđt hệ thống (<span class="text-danger">*</span>):</label>
+                    <input type="text" class="form-control" name="systemPhone" id="systemPhone" autocomplete="off" value="@(model != null ? model.Data.SystemPhone : "")" placeholder="Nhập số điện thoại">
+                </div>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-2">
+                    <label for="systemEmail" class="form-label">Email hệ thống (<span class="text-danger">*</span>):</label>
+                    <input type="text" class="form-control" name="systemEmail" id="systemEmail" autocomplete="off" value="@(model != null ? model.Data.SystemEmail : "")" placeholder="Nhập email">
+                </div>
+                <div class="col-12 col-md-6 my-2">
+                    <label for="systemZaloLink" class="form-label">Zalo link hệ thống (<span class="text-danger">*</span>):</label>
+                    <input type="text" class="form-control" name="systemZaloLink" id="systemZaloLink" autocomplete="off" value="@(model != null ? model.Data.SystemZaloLink : "")" placeholder="Nhập link">
+                </div>
+                <div class="col-12 col-md-6 my-2">
+                    <label for="systemYoutubeLink" class="form-label">Youtube hệ thống (<span class="text-danger">*</span>):</label>
+                    <input type="text" class="form-control" name="systemYoutubeLink" id="systemYoutubeLink" autocomplete="off" value="@(model != null ? model.Data.SystemYoutubeLink : "")" placeholder="Nhập link">
+                </div>
+                <div class="col-12 col-md-6 my-2">
+                    <label for="systemFacebookLink" class="form-label">FacebookLink hệ thống (<span class="text-danger">*</span>):</label>
+                    <input type="text" class="form-control" name="systemFacebookLink" id="systemFacebookLink" autocomplete="off" value="@(model != null ? model.Data.SystemFacebookLink : "")" placeholder="Nhập link">
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="d-none d-lg-block" style="margin: .25rem 0 0 0" />
+    <div class="py-3 d-flex justify-content-end">
+        <button type="button" id="btn-save" onclick="" class="btn btn-save ms-3" title="Lưu">Lưu</button>
+    </div>
+}
 
 @section AddToFooter {
     <script type="text/javascript">
-        var imageKey = '';
-        function selectedImageId(key, id) {
-            $("#imageId").val(id);
-        }
-        function removedImageId(key) {
-            $("#imageId").val("");
-        }
     </script>
-    <script src="~/admin/js/image_upload.js"></script>
-    <script src="~/admin/js/verify.js"></script>
-    <script src="~/admin/js/api_service.js"></script>
+    <script src="~/admin/js/Configuration/index.js"></script>
 }

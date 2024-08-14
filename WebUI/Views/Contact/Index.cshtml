@@ -1,7 +1,9 @@
 ﻿@using Application.Common.Responses.Views
+@using Domain.Entities
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ContactIndexView model = Model ?? new ContactIndexView();
+    ConfigurationEntity? configuration = ViewBag.Configuration;
 }
 
 @section AddToHead {
@@ -14,34 +16,34 @@
             <div class="contact-info col-12 col-lg-5 col-xl-4">
                 <p class="contact-info-title">Liên hệ chúng tôi</p>
                 <p class="contact-info-name">Số điện thoại&nbsp;&nbsp;&nbsp;</p>
-                <p class="contact-info-data me-2">0868754872</p>
+                <p class="contact-info-data me-2">@(configuration?.SystemPhone ?? "0868754872")</p>
                 <div class="d-flex mb-2">
                     <div class="d-flex contact-info-copy me-2">
-                        <button type="button" title="Copy số điện thoại" onclick="addToClipBoard('0868754872')"><i class="fa-regular fa-copy"></i> Copy</button>
+                        <button type="button" title="Copy số điện thoại" onclick="addToClipBoard('@(configuration?.SystemPhone ?? "0868754872")')"><i class="fa-regular fa-copy"></i> Copy</button>
                     </div>
                     <div class="d-flex contact-info-open">
-                        <button type="button" onclick="window.open('tel:0868754872', '_blank')" title="Gọi ngay">Gọi ngay</button>
+                        <button type="button" onclick="window.open('tel:@(configuration?.SystemPhone ?? "0868754872")', '_blank')" title="Gọi ngay">Gọi ngay</button>
                     </div>
                 </div>
                 <p class="contact-info-name">Email&nbsp;&nbsp;&nbsp;</p>
-                <p class="contact-info-data me-2">phantrungtin01@gmail.com</p>
+                <p class="contact-info-data me-2">@(configuration?.SystemEmail ?? "phantrungtin01@gmail.com")</p>
                 <div class="d-flex mb-2">
                     <div class="d-flex contact-info-copy me-2">
-                        <button type="button" title="Copy địa chỉ email" onclick="addToClipBoard('phantrungtin01@gmail.com')"><i class="fa-regular fa-copy"></i> Copy</button>
+                        <button type="button" title="Copy địa chỉ email" onclick="addToClipBoard('@(configuration?.SystemEmail ?? "phantrungtin01@gmail.com")')"><i class="fa-regular fa-copy"></i> Copy</button>
                     </div>
                 </div>
                 <p class="contact-info-name">Kết nối với chúng tôi&nbsp;&nbsp;&nbsp;</p>
                 <div class="d-flex mt-3">
                     <a class="footer-xh-item" style="background-color: white;"
-                       href="https://zalo.me/0868754872" target="_blank">
+                       href="@(configuration?.SystemZaloLink ?? "https://zalo.me/0868754872")" target="_blank">
                         <img src="~/client/images/icon/zalo.svg" title="Zalo Icon" />
                     </a>
                     <a class="footer-xh-item d-flex align-items-center justify-content-center" style="background-color: #3b5998;"
-                       href="https://www.facebook.com/" target="_blank">
+                       href="@(configuration?.SystemFacebookLink ?? "https://www.facebook.com/")" target="_blank">
                         <i class="fa-brands fa-facebook-f"></i>
                     </a>
                     <a class="footer-xh-item d-flex align-items-center justify-content-center" style="background-color: #FF0000;"
-                       href="https://www.youtube.com/" target="_blank">
+                       href="@(configuration?.SystemYoutubeLink ?? "https://www.youtube.com/")" target="_blank">
                         <i class="fa-brands fa-youtube"></i>
                     </a>
                 </div>

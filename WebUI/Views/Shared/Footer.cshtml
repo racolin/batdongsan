@@ -1,4 +1,9 @@
-﻿<footer class="footer container-fluid">
+﻿@using Domain.Entities
+@{
+    ConfigurationEntity? configuration = Model;
+}
+
+<footer class="footer container-fluid">
     <div class="container">
         <div class="row pt-5 pb-4">
             <div class="col-12 col-lg-6 mb-3">
@@ -27,15 +32,15 @@
                 <p class="footer-xh-title">Kết nối với chúng tôi</p>
                 <div class="d-flex">
                     <a class="footer-xh-item" style="background-color: white;"
-                       href="https://zalo.me/0868754872" target="_blank">
+                       href="@(configuration?.SystemZaloLink ?? "https://zalo.me/0868754872")" target="_blank">
                         <img src="~/client/images/icon/zalo.svg" title="Zalo Icon" />
                     </a>
                     <a class="footer-xh-item d-flex align-items-center justify-content-center" style="background-color: #3b5998;"
-                       href="https://www.facebook.com/" target="_blank">
+                       href="@(configuration?.SystemFacebookLink ?? "https://www.facebook.com/")" target="_blank">
                         <i class="fa-brands fa-facebook-f"></i>
                     </a>
                     <a class="footer-xh-item d-flex align-items-center justify-content-center" style="background-color: #FF0000;"
-                       href="https://www.youtube.com/" target="_blank">
+                       href="@(configuration?.SystemYoutubeLink ?? "https://www.youtube.com/")" target="_blank">
                         <i class="fa-brands fa-youtube"></i>
                     </a>
                 </div>

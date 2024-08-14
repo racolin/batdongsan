@@ -6,9 +6,6 @@ using Domain;
 using System.Net.Mail;
 using System.Net;
 using Domain.Constants;
-using System.Web;
-using Infrastructure.Identity;
-using Azure;
 
 namespace Infrastructure.Services;
 

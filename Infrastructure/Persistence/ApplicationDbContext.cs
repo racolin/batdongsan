@@ -34,6 +34,7 @@ public class ApplicationDbContext : KeyApiAuthorizationDbContext<User, Role, int
     public DbSet<ProjectEntity> Projects => Set<ProjectEntity>();
     public DbSet<ContentEntity> Contents => Set<ContentEntity>();
     public DbSet<ContactEntity> Contacts => Set<ContactEntity>();
+    public DbSet<ConfigurationEntity> Configurations => Set<ConfigurationEntity>();
     public DbSet<SliderImageEntity> SliderImages => Set<SliderImageEntity>();
     public DbSet<RegisterMailEntity> RegisterMails => Set<RegisterMailEntity>();
     #endregion
