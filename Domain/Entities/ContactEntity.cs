@@ -9,6 +9,7 @@ namespace Domain.Entities
         public string? Address { get; set; }
         public string Phone { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
+        public string Note { get; set; } = string.Empty;
         public string State { get; set; } = ContactStateConstant.Sent;
     }
 }
