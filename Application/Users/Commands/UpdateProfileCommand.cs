@@ -7,9 +7,9 @@ namespace Application.Users.Commands;
 
 public class UpdateProfileCommand : IRequest<DataResponse<bool>>
 {
-    public SaveUserRequest Request { get; }
+    public SaveProfileRequest Request { get; }
 
-    public UpdateProfileCommand(SaveUserRequest request)
+    public UpdateProfileCommand(SaveProfileRequest request)
     {
         Request = request;
     }
