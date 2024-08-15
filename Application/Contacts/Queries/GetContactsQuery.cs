@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Requests;
 using Application.Common.Responses;
+using Domain.Constants;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,13 @@ public class GetContactsQuery : IRequest<DataResponse<PagingResponse<ContactEnti
 
         public async Task<DataResponse<PagingResponse<ContactEntity>>> Handle(GetContactsQuery request, CancellationToken cancellationToken)
         {
+            var state = request.Request.State.Count > 0 ? 
+                request.Request.State : 
+                new List<string> { 
+                    ContactStateConstant.Sent, 
+                    ContactStateConstant.Processed, 
+                    ContactStateConstant.Refused, 
+                };
             var value = request.Request.Value;
             // Lấy số lượng ảnh được lọc theo yêu cầu
             var count = await _context.Contacts.AsNoTracking()
@@ -36,6 +44,7 @@ public class GetContactsQuery : IRequest<DataResponse<PagingResponse<ContactEnti
                     && (!x.CreatedDate.HasValue
                         || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
                             && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
+                    && state.Contains(x.State)
                 ).CountAsync(cancellationToken);
 
             // Order
@@ -63,6 +72,7 @@ public class GetContactsQuery : IRequest<DataResponse<PagingResponse<ContactEnti
                         && (!x.CreatedDate.HasValue
                             || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
                                 && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
+                        && state.Contains(x.State)
                     )
                     .OrderBy(x => x.CreatedDate)
                     .Skip(request.Request.Start)
@@ -77,6 +87,7 @@ public class GetContactsQuery : IRequest<DataResponse<PagingResponse<ContactEnti
                     && (!x.CreatedDate.HasValue
                         || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
                             && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
+                    && state.Contains(x.State)
                 )
                 .OrderByDescending(order)
                 .Skip(request.Request.Start)

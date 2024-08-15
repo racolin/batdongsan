@@ -50,6 +50,36 @@
     </div>
 }
 
+@section FilterAdvanced {
+    <div class="input-group" id="filter-advanced">
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('state', 'sent', true)" name="state" value="sent" id="sent" />
+        <label class="btn btn-danger" title='Bỏ lọc tình trạng "Đợi"' for="sent">Bỏ "Đợi"</label>
+
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('state', 'added', true)" name="state" value="added" id="added" />
+        <label class="btn btn-danger" title='Bỏ lọc tình trạng "Đã đăng ký"' for="added">Bỏ "Đã đăng ký"</label>
+
+        <input type="checkbox" class="check-item" onchange="updateFilterAdvanced('state', 'expired', true)" name="state" value="expired" id="expired" />
+        <label class="btn btn-danger" title='Bỏ lọc tình trạng "Hết hạn"' for="expired">Bỏ "Hết hạn"</label>
+    </div>
+}
+
+@section FilterAdvancedModal {
+
+    <div class="col-12 my-2">
+        <label class="form-label">Lọc tình trạng: </label>
+        <div class="input-group" id="filter-state-modal">
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('state', 'sent', false)" name="state" value="sent" id="sentModal" />
+            <label class="btn btn-outline-warning form-control-left" for="sentModal">Đợi</label>
+
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('state', 'added', false)" name="state" value="added" id="addedModal" />
+            <label class="btn btn-outline-warning form-control-between" for="addedModal">Đã đăng ký</label>
+
+            <input type="checkbox" class="btn-check" onchange="updateFilterAdvanced('state', 'expired', false)" name="state" value="expired" id="expiredModal" />
+            <label class="btn btn-outline-warning form-control-right" for="expiredModal">Hết hạn</label>
+        </div>
+    </div>
+}
+
 @section ControlTools {
     <div class="py-3 d-flex justify-content-end">
         <button type="button" onclick="window.location.href = '/admin/registeremail/item'" class="btn btn-create" title="Tạo mới">Tạo mới</button>
@@ -61,26 +91,84 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Email</th>
-            <th class="" scope="col">Tình trạng</th>
-            <th class="" scope="col">Ngày tạo</th>
+            <th class="d-none d-sm-table-cell" scope="col">Tình trạng</th>
+            <th class="d-none d-md-table-cell" scope="col">Ngày tạo</th>
         </tr>
     </thead>
     <tbody>
         @for (var i = 0; i < model.List.Count; i++)
         {
-            <tr>
-                <td class="">@((model.Current - 1) * model.PerPage + i + 1)</td>
-                <td class="">
-                    <p class="item-td-link mb-0">@(model.List[i].Email)</p>
+            <tr id="item-@(model.List[i].Id)">
+                <td class="text-center">
+                    @((model.Current - 1) * model.PerPage + i + 1)
+                    <br />
+                    <button class="btn btn-danger my-2" onclick="removeItem(@(model.List[i].Id))">Xóa</button>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" class="item-td-link mb-0 item-td-email" onclick="showDetail('@(model.List[i].Id)')"
+                       title="Mở popup chi tiết">@(model.List[i].Email)</a>
+                </td>
+                <td class="d-none d-sm-table-cell text-center">
+                    <p class="item-td-state item-td-@(model.List[i].State) mb-0" data-state="@(model.List[i].State)">@(NameSupport.GetRegisterMailStateName(model.List[i].State))</p><br />
+                    <button class="btn btn-primary dropdown-toggle my-2" type="button" id="dropdown-state-@(model.List[i].Id)" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-rotate text-white"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown-state-@(model.List[i].Id)">
+                        <li><button class="dropdown-item" onclick="updateState(@(model.List[i].Id), 'sent', 'Đợi')">Đợi</button></li>
+                        <li><button class="dropdown-item" onclick="updateState(@(model.List[i].Id), 'added', 'Đã đăng ký')">Đã đăng ký</button></li>
+                        <li><button class="dropdown-item" onclick="updateState(@(model.List[i].Id), 'expired', 'Hết hạn')">Hết hạn</button></li>
+                    </ul>
                 </td>
                 <td class="d-none d-md-table-cell">
-                    <p class="item-td-@(model.List[i].State) mb-0">@(NameSupport.GetRegisterMailStateName(model.List[i].State))</p>
+                    <p class="item-td-createdDate mb-0">@(model.List[i].CreatedDate?.ToString("dd-MM-yyyy"))</p>
                 </td>
-                <td class="d-none d-md-table-cell">@(model.List[i].CreatedDate?.ToString("dd-MM-yyyy"))</td>
             </tr>
         }
     </tbody>
 </table>
+
+<!-- Modal Detail -->
+<div class="modal fade" id="modal-detail" tabindex="-1" aria-labelledby="modal-detailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content contact-form">
+            <div class="modal-header">
+                <h5 class="modal-title contact-form-title" id="modal-detailLabel">Email đăng ký nhận tin</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <label for="item-email" class="form-label mb-0">Email:</label>
+                        <p id="item-email"></p>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="item-createdDate" class="form-label mb-0">Ngày đăng ký:</label>
+                        <p id="item-createdDate"></p>
+                    </div>
+                    <input type="hidden" name="id" />
+                    <div class="col-12 mb-2">
+                        <label class="form-label">Tình trạng: </label>
+                        <div class="input-group" id="filter-state">
+                            <input type="radio" class="btn-check" name="item-state" value="sent" id="item-sent" />
+                            <label class="btn btn-outline-warning form-control-left" for="item-sent">Đợi</label>
+
+                            <input type="radio" class="btn-check" name="item-state" value="added" id="item-added" />
+                            <label class="btn btn-outline-warning form-control-between" for="item-added">Đã đăng ký</label>
+
+                            <input type="radio" class="btn-check" name="item-state" value="expired" id="item-expired" />
+                            <label class="btn btn-outline-warning form-control-right" for="item-expired">Hết hạn</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-danger" id="btn-remove">Xóa</button>
+                <button type="button" class="btn btn-create" id="btn-save">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section AddToFooter {
     <script type="text/javascript">
@@ -104,4 +192,7 @@
             endDate: new Date(),
         });
     </script>
+    <script src="~/admin/js/api_service.js"></script>
+    <script src="~/admin/js/verify.js"></script>
+    <script src="~/admin/js/RegisterMail/index.js"></script>
 }

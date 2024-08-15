@@ -46,6 +46,7 @@ namespace Application.Common.Supports
                 case RegisterMailStateConstant.Sent: return "Đợi";
                 case RegisterMailStateConstant.Added: return "Đã đăng ký";
                 case RegisterMailStateConstant.Expired: return "Hết hạn";
+                case RegisterMailStateConstant.Removed: return "Đã xóa";
                 default: return null;
             }
         }

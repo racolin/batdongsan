@@ -271,7 +271,7 @@ public class ApplicationDbContextInitializer
 
             // Default roles
             var administratorRole = new Role(RoleConstant.Admin);
-            administratorRole.VisibleModule = "profile.user:item,index.news:index,item.project:index,item.contact.image:index,item.content.configuration";
+            administratorRole.VisibleModule = "profile.user:item,index.news:index,item.project:index,item.contact.image:index,item.content.configuration.registermail";
 
             if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
             {

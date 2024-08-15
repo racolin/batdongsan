@@ -105,8 +105,7 @@ input.check-item[type=checkbox]:checked + label {
     display: block;
 }
 
-.item-td-Highlight {
-    background-color: #CB2474;
+[class^="item-td-"]:not(.item-td-createdDate) {
     border-radius: 0.375rem;
     color: white;
     font-weight: 500;
@@ -114,50 +113,37 @@ input.check-item[type=checkbox]:checked + label {
     display: inline-block;
 }
 
-.item-td-Draft, .item-td-sent {
-    background-color: gray;
-    border-radius: 0.375rem;
-    color: white;
-    font-weight: 500;
-    padding: .3rem .5rem;
+[class^="item-td-"]:not(.item-td-link,.item-td-createdDate) {
     white-space: nowrap;
-    display: inline-block;
 }
 
-.item-td-Active, .item-td-added, .item-td-processed {
-    background-color: #18A2DD;
-    border-radius: 0.375rem;
-    color: white;
-    font-weight: 500;
+.item-td-createdDate {
     padding: .3rem .5rem;
-    white-space: nowrap;
-    display: inline-block;
-}
-
-.item-td-InActive, .item-td-expired, .item-td-refused {
-    background-color: #FF8F28;
-    border-radius: 0.375rem;
-    color: white;
+    color: black;
     font-weight: 500;
-    padding: .3rem .5rem;
-    white-space: nowrap;
-    display: inline-block;
-}
-
-.item-td-Removed, .item-td-removed {
-    background-color: #000000;
-    border-radius: 0.375rem;
-    color: white;
-    font-weight: 500;
-    padding: .3rem .5rem;
-    white-space: nowrap;
-    display: inline-block;
 }
 
 .item-td-link {
     text-decoration: none;
-    color: black;
-    font-weight: 500;
-    font-style: italic;
-    padding: .3rem .5rem;
+    color: black!important;
+}
+
+.item-td-Highlight {
+    background-color: #CB2474;
+}
+
+.item-td-Draft, .item-td-sent {
+    background-color: gray;
+}
+
+.item-td-Active, .item-td-added, .item-td-processed {
+    background-color: #18A2DD;
+}
+
+.item-td-InActive, .item-td-expired, .item-td-refused {
+    background-color: #FF8F28;
+}
+
+.item-td-Removed, .item-td-removed {
+    background-color: #000000;
 }

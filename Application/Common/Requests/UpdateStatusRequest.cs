@@ -8,9 +8,9 @@ namespace Application.Common.Requests
         public int Id { get; set; }
         public string Status { get; set; } = StatusConstant.Draft;
     }
-    public class ChangeStatusValidator : AbstractValidator<UpdateStatusRequest>
+    public class UpdateStatusValidator : AbstractValidator<UpdateStatusRequest>
     {
-        public ChangeStatusValidator()
+        public UpdateStatusValidator()
         {
             RuleFor(x => x.Id).GreaterThan(0).WithMessage("Id của đối tượng không chính xác!");
 

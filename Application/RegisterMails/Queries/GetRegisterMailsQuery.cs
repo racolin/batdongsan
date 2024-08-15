@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Requests;
 using Application.Common.Responses;
+using Domain.Constants;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,13 @@ public class GetRegisterMailsQuery : IRequest<DataResponse<PagingResponse<Regist
 
         public async Task<DataResponse<PagingResponse<RegisterMailEntity>>> Handle(GetRegisterMailsQuery request, CancellationToken cancellationToken)
         {
+            var state = request.Request.State.Count > 0 ? 
+                request.Request.State : 
+                [
+                    RegisterMailStateConstant.Sent, 
+                    RegisterMailStateConstant.Added, 
+                    RegisterMailStateConstant.Expired
+                ];
             var value = request.Request.Value;
             // Lấy số lượng ảnh được lọc theo yêu cầu
             var count = await _context.RegisterMails.AsNoTracking()
@@ -36,6 +44,7 @@ public class GetRegisterMailsQuery : IRequest<DataResponse<PagingResponse<Regist
                     && (!x.CreatedDate.HasValue
                         || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
                             && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
+                    && state.Contains(x.State)
                 ).CountAsync(cancellationToken);
 
             // Order
@@ -62,6 +71,7 @@ public class GetRegisterMailsQuery : IRequest<DataResponse<PagingResponse<Regist
                         && (!x.CreatedDate.HasValue
                             || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
                                 && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
+                        && state.Contains(x.State)
                     )
                     .OrderBy(x => x.CreatedDate)
                     .Skip(request.Request.Start)
@@ -76,6 +86,7 @@ public class GetRegisterMailsQuery : IRequest<DataResponse<PagingResponse<Regist
                     && (!x.CreatedDate.HasValue
                         || ((!request.Request.StartDateTime.HasValue || request.Request.StartDateTime.Value <= x.CreatedDate.Value)
                             && (!request.Request.EndDateTime.HasValue || request.Request.EndDateTime.Value >= x.CreatedDate.Value)))
+                    && state.Contains(x.State)
                 )
                 .OrderByDescending(order)
                 .Skip(request.Request.Start)
