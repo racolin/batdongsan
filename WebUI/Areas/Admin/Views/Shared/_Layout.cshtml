@@ -10,6 +10,7 @@
     {
         action = list[3];
     }
+    var isLoggedIn = Context.Request.Cookies.ContainsKey(".AspNetCore.Identity.Application");
 }
 <!DOCTYPE html>
 <html lang="vi">
@@ -52,7 +53,7 @@
                     <button type="button" title="Đăng xuất" onclick="logout()">Đăng xuất</button>
                 </div>
                 <div class="layout-menu flex-grow-1">
-                    <div id="profile" class="layout-menu-wrap layout-menu-item">
+                    <div id="nav-profile" class="layout-menu-wrap layout-menu-item">
                         <div class="layout-menu-item">
                             <div class="layout-menu-parent@(controller.Equals("user") && action.Equals("profile") ? " active" : "")">
                                 <a href="/admin/user/profile" title="Tới trang thông tin cá nhân">
@@ -61,7 +62,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="user" class="layout-menu-wrap layout-menu-item">
+                    <div id="nav-user" class="layout-menu-wrap layout-menu-item">
                         <div class="layout-menu-parent@(controller.Equals("user") && (!action.Equals("profile")) ? " active" : "")">
                             <button type="button" title="Người dùng" data-bs-toggle="collapse" 
                                 data-bs-target="#menu-user" aria-expanded="false" aria-controls="menu-user">
@@ -70,12 +71,12 @@
                         </div>
                         <div class="collapse layout-menu-children@(controller.Equals("user") && (!action.Equals("profile")) ? " show" : "")" id="menu-user">
                             <div class="">
-                                <div id="user-index" class="layout-menu-wrap layout-menu-child@(controller.Equals("user") && action.Equals("index") ? " active" : "")">
+                                <div id="nav-user-index" class="layout-menu-wrap layout-menu-child@(controller.Equals("user") && action.Equals("index") ? " active" : "")">
                                     <a href="/admin/user" title="Tới trang sanh sách người dùng">
                                         <i class="fa-solid fa-list"></i> Danh sách
                                     </a>
                                 </div>
-                                <div id="user-item" class="layout-menu-wrap layout-menu-child@(controller.Equals("user") && action.Equals("item") ? " active" : "")">
+                                <div id="nav-user-item" class="layout-menu-wrap layout-menu-child@(controller.Equals("user") && action.Equals("item") ? " active" : "")">
                                     <a href="/admin/user/item" title="Tới trang tạo mới người dùng">
                                         <i class="fa-regular fa-square-plus"></i> Tạo mới/Xem
                                     </a>
@@ -83,14 +84,14 @@
                             </div>
                         </div>
                     </div>
-                    <div id="dashboard" class="layout-menu-wrap layout-menu-item">
+                    <div id="nav-dashboard" class="layout-menu-wrap layout-menu-item">
                         <div class="layout-menu-parent@(controller.Equals("dashboard") ? " active" : "")">
                             <a href="/admin/dashboard" title="Tới trang dashboard">
                                 <i class="fa-solid fa-chart-line"></i> Dashboard 
                             </a>
                         </div>
                     </div>
-                    <div id="news" class="layout-menu-wrap layout-menu-item">
+                    <div id="nav-news" class="layout-menu-wrap layout-menu-item">
                         <div class="layout-menu-parent@(controller.Equals("news") ? " active" : "")">
                             <button type="button" title="Tin tức" data-bs-toggle="collapse" 
                                 data-bs-target="#menu-news" aria-expanded="false" aria-controls="menu-news">
@@ -99,12 +100,12 @@
                         </div>
                         <div class="collapse layout-menu-children@(controller.Equals("news") ? " show" : "")" id="menu-news">
                             <div class="">
-                                <div id="news-index" class="layout-menu-wrap layout-menu-child@(controller.Equals("news") && action.Equals("index") ? " active" : "")">
+                                <div id="nav-news-index" class="layout-menu-wrap layout-menu-child@(controller.Equals("news") && action.Equals("index") ? " active" : "")">
                                     <a href="/admin/news" title="Tới trang danh sách tin tức">
                                         <i class="fa-solid fa-list"></i> Danh sách
                                     </a>
                                 </div>
-                                <div id="news-item" class="layout-menu-wrap layout-menu-child@(controller.Equals("news") && action.Equals("item") ? " active" : "")">
+                                <div id="nav-news-item" class="layout-menu-wrap layout-menu-child@(controller.Equals("news") && action.Equals("item") ? " active" : "")">
                                     <a href="/admin/news/item" title="Tới trang tạo mới tin tức">
                                         <i class="fa-regular fa-square-plus"></i> Tạo mới/Xem
                                     </a>
@@ -112,7 +113,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="project" class="layout-menu-wrap layout-menu-item">
+                    <div id="nav-project" class="layout-menu-wrap layout-menu-item">
                         <div class="layout-menu-parent@(controller.Equals("project") ? " active" : "")">
                             <button type="button" title="Dự án" data-bs-toggle="collapse" 
                                 data-bs-target="#menu-project" aria-expanded="false" aria-controls="menu-project">
@@ -121,12 +122,12 @@
                         </div>
                         <div class="collapse layout-menu-children@(controller.Equals("project") ? " show" : "")" id="menu-project">
                             <div class="">
-                                <div id="project-index" class="layout-menu-wrap layout-menu-child@(controller.Equals("project") && action.Equals("index") ? " active" : "")">
+                                <div id="nav-project-index" class="layout-menu-wrap layout-menu-child@(controller.Equals("project") && action.Equals("index") ? " active" : "")">
                                     <a href="/admin/project" title="Tới trang danh sách dự án">
                                         <i class="fa-solid fa-list"></i> Danh sách
                                     </a>
                                 </div>
-                                <div id="project-item" class="layout-menu-wrap layout-menu-child@(controller.Equals("project") && action.Equals("item") ? " active" : "")">
+                                <div id="nav-project-item" class="layout-menu-wrap layout-menu-child@(controller.Equals("project") && action.Equals("item") ? " active" : "")">
                                     <a href="/admin/project/item" title="tới trang tạo mới dự án">
                                         <i class="fa-regular fa-square-plus"></i> Tạo mới/Xem
                                     </a>
@@ -134,14 +135,14 @@
                             </div>
                         </div>
                     </div>
-                    <div id="contact" class="layout-menu-wrap layout-menu-item">
+                    <div id="nav-contact" class="layout-menu-wrap layout-menu-item">
                         <div class="layout-menu-parent@(controller.Equals("contact") ? " active" : "")">
                             <a href="/admin/contact" title="Tới trang thông tin liên lạc người dùng">
                                 <i class="fa-solid fa-gear"></i> Thông tin liên lạc
                             </a>
                         </div>
                     </div>
-                    <div id="image" class="layout-menu-wrap layout-menu-item">
+                    <div id="nav-image" class="layout-menu-wrap layout-menu-item">
                         <div class="layout-menu-parent@(controller.Equals("image") ? " active" : "")">
                             <button type="button" title="Thư viện ảnh" data-bs-toggle="collapse"
                                     data-bs-target="#menu-image" aria-expanded="false" aria-controls="menu-image">
@@ -150,12 +151,12 @@
                         </div>
                         <div class="collapse layout-menu-children@(controller.Equals("image") ? " show" : "")" id="menu-image">
                             <div class="">
-                                <div id="image-index" class="layout-menu-wrap layout-menu-child@(controller.Equals("image") && action.Equals("index") ? " active" : "")">
+                                <div id="nav-image-index" class="layout-menu-wrap layout-menu-child@(controller.Equals("image") && action.Equals("index") ? " active" : "")">
                                     <a href="/admin/image" title="Tới trang danh sách ảnh">
                                         <i class="fa-solid fa-list"></i> Danh sách
                                     </a>
                                 </div>
-                                <div id="image-item" class="layout-menu-wrap layout-menu-child@(controller.Equals("image") && action.Equals("item") ? " active" : "")">
+                                <div id="nav-image-item" class="layout-menu-wrap layout-menu-child@(controller.Equals("image") && action.Equals("item") ? " active" : "")">
                                     <a href="/admin/image/item" title="Tới trang tạo mới ảnh">
                                         <i class="fa-regular fa-square-plus"></i> Tạo mới/Xem
                                     </a>
@@ -163,21 +164,21 @@
                             </div>
                         </div>
                     </div>
-                    <div id="registermail" class="layout-menu-wrap layout-menu-item">
+                    <div id="nav-registermail" class="layout-menu-wrap layout-menu-item">
                         <div class="layout-menu-parent@(controller.Equals("registermail") ? " active" : "")">
                             <a href="/admin/registermail" title="Tới trang danh sách email đăng ký nhận tin">
                                 <i class="fa-regular fa-envelope"></i> Email nhận tin 
                             </a>
                         </div>
                     </div>
-                    <div id="content" class="layout-menu-wrap layout-menu-item">
+                    <div id="nav-content" class="layout-menu-wrap layout-menu-item">
                         <div class="layout-menu-parent@(controller.Equals("content") ? " active" : "")">
                             <a href="/admin/content" title="Tới trang chỉnh sửa nội dung trang web">
                                 <i class="fa-solid fa-wand-magic-sparkles"></i> Nội dung
                             </a>
                         </div>
                     </div>
-                    <div id="configuration" class="layout-menu-wrap layout-menu-item">
+                    <div id="nav-configuration" class="layout-menu-wrap layout-menu-item">
                         <div class="layout-menu-parent@(controller.Equals("configuration") ? " active" : "")">
                             <a href="/admin/configuration" title="Tới trang cấu hình">
                                 <i class="fa-solid fa-gear"></i> Cấu hình
@@ -262,24 +263,25 @@
             const parts = value.split(`; ${name}=`);
             if (parts.length === 2) return parts.pop().split(';').shift();
         }
+        if(!@(isLoggedIn.ToString().ToLower()))
+        {
+            window.location.replace("/admin?ReturnUrl=" + window.location.pathname + window.location.search);
+        }
         var visibleModule = getCookie("visibleModule");
         var modules = visibleModule.split(".");
-        console.log(visibleModule);
         var not = [];
         for (var i in modules) {
             var q = modules[i].split(":");
-            console.log(q);
             if (q.length > 0) {
-                not.push("#" + q[0]); 
+                not.push("#nav-" + q[0]); 
                 if (q.length == 2) {
                     v = q[1].split(",");
                     for (var j in v) {
-                        not.push("#" + q[0] + '-' + v[j])
+                        not.push("#nav-" + q[0] + '-' + v[j])
                     }
                 }
             }
         }
-        console.log(not);
         $(".layout-menu-wrap:not(" + not.join(",") + ")").addClass("d-none");
 
         $("#layout-user-name").text(decodeURI(getCookie("name")))

@@ -19,6 +19,7 @@ namespace WebUI.Areas.Admin.Controllers.Apis
             return response;
         }
 
+        [Authorize]
         [HttpGet("logout")]
         public async Task<DataResponse<bool>> Logout()
         {

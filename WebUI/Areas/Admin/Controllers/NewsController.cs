@@ -2,10 +2,12 @@
 using Application.Common.Supports;
 using Application.News.Queries;
 using Domain.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = $"{RoleConstant.Admin},{RoleConstant.NewsPoster}")]
     public class NewsController : BaseAdminController
     {
         public async Task<IActionResult> Index([FromQuery] SearchRequest request)

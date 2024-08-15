@@ -1,6 +1,7 @@
 ﻿using Application.Common.Requests;
 using Application.Common.Responses;
 using Application.Contacts.Commands;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Areas.Admin.Controllers.Apis
@@ -8,6 +9,7 @@ namespace WebUI.Areas.Admin.Controllers.Apis
     [ApiExplorerSettings(GroupName = "Contact - Admin")]
     public class ContactController : ApiAdminControllerBase
     {
+        [AllowAnonymous]
         [HttpPost("save")]
         public async Task<DataResponse<int>> Save(SaveContactRequest request)
         {

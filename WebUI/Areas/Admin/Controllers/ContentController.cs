@@ -1,9 +1,12 @@
 ﻿using Application.Common.Requests;
 using Application.Contents.Queries;
+using Domain.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Areas.Admin.Controllers
 {
+    [Authorize(Roles = $"{RoleConstant.Admin}")]
     public class ContentController : BaseAdminController
     {
         public async Task<IActionResult> Index([FromQuery] SearchRequest request)

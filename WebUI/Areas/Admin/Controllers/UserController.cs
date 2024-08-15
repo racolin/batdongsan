@@ -1,11 +1,14 @@
 ﻿using Application.Common.Requests;
 using Application.Users.Queries;
+using Domain.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebUI.Areas.Admin.Controllers
 {
     public class UserController : BaseAdminController
     {
+        [Authorize(Roles = $"{RoleConstant.Admin}")]
         public async Task<IActionResult> Index([FromQuery] SearchRequest request)
         {
             request.CurrentPage = request.CurrentPage ?? 1;
@@ -15,6 +18,8 @@ namespace WebUI.Areas.Admin.Controllers
 
             return View(result.Data);
         }
+
+        [Authorize(Roles = $"{RoleConstant.Admin}")]
         public async Task<IActionResult> Item(int? id)
         {
 
@@ -27,6 +32,8 @@ namespace WebUI.Areas.Admin.Controllers
 
             return View(result);
         }
+
+        [Authorize(Roles = $"{RoleConstant.Admin},{RoleConstant.NewsPoster},{RoleConstant.ProjectPoster},{RoleConstant.ImagePoster},{RoleConstant.Caller},{RoleConstant.ContentEditor},{RoleConstant.Newbie},{RoleConstant.RegisteredEmailChecker}")]
         public async Task<IActionResult> Profile()
         {
 

@@ -5,7 +5,6 @@ using WebUI.Filters;
 
 namespace WebUI.Areas.Admin.Controllers.Apis;
 
-[Authorize]
 [ApiController]
 [ApiExceptionFilter]
 [Route("api/admin/[controller]")]

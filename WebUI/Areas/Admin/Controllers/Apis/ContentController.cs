@@ -1,6 +1,7 @@
 ﻿using Application.Common.Requests;
 using Application.Common.Responses;
 using Application.Contents.Commands;
+using Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ namespace WebUI.Areas.Admin.Controllers.Apis
     [ApiExplorerSettings(GroupName = "Content - Admin")]
     public class ContentController : ApiAdminControllerBase
     {
-        [AllowAnonymous]
+        [Authorize(Roles = $"{RoleConstant.Admin}")]
         [HttpPost("save")]
         public async Task<DataResponse<int>> Save(SaveContentRequest request)
         {
