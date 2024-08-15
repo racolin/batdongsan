@@ -108,7 +108,7 @@ public static class ConfigureServices
         );
 
         services.AddAuthorization(options => options.AddPolicy("CanPurge", policy => policy.RequireRole("Admin")));
-        services.AddAuthorization();
+        //services.AddAuthorization();
        
         return services;
     }
@@ -120,7 +120,7 @@ public static class ConfigureServices
         services.Configure<SecurityStampValidatorOptions>(options =>
         {
             //enables immediate logout, after updating the user's stat.
-            options.ValidationInterval = TimeSpan.Zero;
+            //options.ValidationInterval = TimeSpan.Zero;
         });
 
         return services;
