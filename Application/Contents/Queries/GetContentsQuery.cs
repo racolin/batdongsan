@@ -29,7 +29,7 @@ public class GetContentsQuery : IRequest<DataResponse<PagingResponse<ContentEnti
 
         public async Task<DataResponse<PagingResponse<ContentEntity>>> Handle(GetContentsQuery request, CancellationToken cancellationToken)
         {
-            var status = request.Request.Status.Count > 0 ? request.Request.Status : StatusConstant.GetAllProperties();
+            var status = request.Request.Status.Count > 0 ? request.Request.Status : [StatusConstant.Draft, StatusConstant.Active, StatusConstant.InActive];
 
             var value = request.Request.Value;
             // Lấy số lượng tin được lọc theo yêu cầu

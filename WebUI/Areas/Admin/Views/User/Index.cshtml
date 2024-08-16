@@ -55,32 +55,38 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Tên người dùng</th>
-            <th class="" scope="col">Thông tin</th>
+            <th class="d-none d-md-table-cell" scope="col">Thông tin</th>
             <th scope="col">Trạng thái</th>
         </tr>
     </thead>
     <tbody>
         @for (var i = 0; i < model.List.Count; i++)
         {
-            <tr>
-                <td class="">@((model.Current - 1) * model.PerPage + i + 1)</td>
-                <td class="">
+            <tr id="item-@(model.List[i].Id)">
+                <td class="text-center">
+                    @((model.Current - 1) * model.PerPage + i + 1)
+                </td>
+                <td>
                     <a class="item-td-link" href="/admin/user/item?id=@(model.List[i].Id)" title="Chuyển sang trang chi tiết">
                         @(model.List[i].Name)
                     </a>
                 </td>
-                <td class="">
-                    <p class="mb-0 item-td-username">@(model.List[i].Username)</p>
-                    <p class="mb-0 item-td-email">@(model.List[i].Email)</p>
+                <td class="d-none d-md-table-cell">
+                    <p class="mb-0">Username: <span class="item-td-link item-td-username">@(model.List[i].Username)</span></p>
+                    <p class="mb-0">Email: <span class="item-td-link item-td-email">@(model.List[i].Email)</span></p>
                 </td>
-                <td>
-                    <p class="mb-0 item-td-@(model.List[i].LockoutEnd == null ? "unlock" : "lock")">@(model.List[i].LockoutEnd == null ? "Đang hoạt động" : "Bị khóa")</p>
-                    @if (model.List[i].LockoutEnd != null)
-                    {
-                        <p class="mb-0">
-                            Thời hạn @(model.List[i].LockoutEnd!.Value.ToString("HH:mm dd/MM/yyyy"))
-                        </p>
-                    }
+                <td class="text-center">
+                    <p class="item-td-is-lock mb-0 item-td-@((model.List[i].LockoutEnd != null).ToString().ToLower())" data-is-lock="@((model.List[i].LockoutEnd != null).ToString().ToLower())">
+                        @(model.List[i].LockoutEnd == null ? "Đang hoạt động" : "Bị khóa")
+                    </p>
+                    <br />
+                    <button class="btn btn-primary dropdown-toggle my-2" type="button" id="dropdown-lock-@(model.List[i].Id)" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-rotate text-white"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown-lock-@(model.List[i].Id)">
+                        <li><button class="dropdown-item" onclick="updateIsLock(@(model.List[i].Id), 'true', 'Bị khóa')">Khóa</button></li>
+                        <li><button class="dropdown-item" onclick="updateIsLock(@(model.List[i].Id), 'false', 'Đang hoạt động')">Mở khóa</button></li>
+                    </ul>
                 </td>
             </tr>
         }
@@ -97,4 +103,6 @@
         $("#currentPage").val(@(model.Current));
         initCheckboxFromUrl('isLock', [true, false]);
     </script>
+    <script src="~/admin/js/api_service.js"></script>
+    <script src="~/admin/js/User/index.js"></script>
 }

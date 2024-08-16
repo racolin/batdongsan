@@ -33,7 +33,7 @@ public class UpdateStateRegisterMailCommand : IRequest<DataResponse<bool>>
 
             if (!RegisterMailStateConstant.GetAllProperties().Contains(request.Request.State))
             {
-                return DataResponse<bool>.Error("Trạng thái gửi lên không chính xác!");
+                return DataResponse<bool>.Error("Tình trạng gửi lên không chính xác!");
             }
 
             contact.State = request.Request.State;

@@ -33,7 +33,7 @@ public class UpdateStateContactCommand : IRequest<DataResponse<bool>>
 
             if (!ContactStateConstant.GetAllProperties().Contains(request.Request.State))
             {
-                return DataResponse<bool>.Error("Trạng thái gửi lên không chính xác!");
+                return DataResponse<bool>.Error("Tình trạng gửi lên không chính xác!");
             }
 
             contact.State = request.Request.State;

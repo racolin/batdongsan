@@ -29,7 +29,7 @@ public class GetNewsListQuery : IRequest<DataResponse<PagingResponse<NewsEntity>
 
         public async Task<DataResponse<PagingResponse<NewsEntity>>> Handle(GetNewsListQuery request, CancellationToken cancellationToken)
         {
-            var status = request.Request.Status.Count > 0 ? request.Request.Status : StatusConstant.GetAllProperties();
+            var status = request.Request.Status.Count > 0 ? request.Request.Status : [StatusConstant.Draft, StatusConstant.Active, StatusConstant.InActive];
             var highLight = request.Request.HighLight.Count > 0 ? request.Request.HighLight : new List<bool> { true, false };
             var type = request.Request.Type.Count > 0 ? request.Request.Type : NewsTypeConstant.GetAllProperties();
 

@@ -109,7 +109,10 @@
                        title="Mở popup chi tiết">@(model.List[i].Email)</a>
                 </td>
                 <td class="d-none d-sm-table-cell text-center">
-                    <p class="item-td-state item-td-@(model.List[i].State) mb-0" data-state="@(model.List[i].State)">@(NameSupport.GetRegisterMailStateName(model.List[i].State))</p><br />
+                    <p class="item-td-state item-td-@(model.List[i].State) mb-0" data-state="@(model.List[i].State)">
+                        @(NameSupport.GetRegisterMailStateName(model.List[i].State))
+                    </p>
+                    <br />
                     <button class="btn btn-primary dropdown-toggle my-2" type="button" id="dropdown-state-@(model.List[i].Id)" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa-solid fa-rotate text-white"></i>
                     </button>

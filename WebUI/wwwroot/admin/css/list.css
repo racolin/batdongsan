@@ -136,14 +136,59 @@ input.check-item[type=checkbox]:checked + label {
     background-color: gray;
 }
 
-.item-td-Active, .item-td-added, .item-td-processed {
+.item-td-Active, .item-td-added, .item-td-processed, .item-td-false, .item-td-False {
     background-color: #18A2DD;
 }
 
-.item-td-InActive, .item-td-expired, .item-td-refused {
+.item-td-InActive, .item-td-expired, .item-td-refused, .item-td-true, .item-td-True {
     background-color: #FF8F28;
 }
 
 .item-td-Removed, .item-td-removed {
     background-color: #000000;
+}
+
+
+.item-td-type {
+    background-color: #18A2DD;
+}
+
+.item-td-project {
+    background-color: #FF8F28;
+}
+
+.item-td-market {
+    background-color: #18A2DD;
+}
+
+.item-td-apartment {
+    background-color: #18A2DD;
+}
+
+.item-td-ground {
+    background-color: #FF8F28;
+}
+
+.item-td-resort-real-estate {
+    background-color: #275E29DD;
+}
+
+.item-td-villa {
+    background-color: #0d6efd;
+}
+
+.item-td-implemented {
+    background-color: #275E29DD;
+}
+
+.item-td-implementing {
+    background-color: #0d6efd;
+}
+
+.item-td-address {
+    background-color: #CB2474;
+}
+
+.item-td-order {
+    background-color: gray;
 }

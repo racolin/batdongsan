@@ -1,5 +1,6 @@
 ﻿@using Application.Common.Responses
 @using Application.Common.Supports
+@using Domain.Constants
 @using Domain.Entities
 @{
     ViewBag.LayoutTitle = "Danh sách nội dung";
@@ -91,27 +92,41 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Tên nội dung</th>
-            <th class="d-md-table-cell" scope="col">Trạng thái</th>
+            <th scope="col">Trạng thái</th>
             <th class="d-none d-md-table-cell" scope="col">Ngày tạo</th>
         </tr>
     </thead>
     <tbody>
         @for (var i = 0; i < model.List.Count; i++)
         {
-            <tr>
-                <td class="">@((model.Current - 1) * model.PerPage + i + 1)</td>
-                <td class="">
-                    <a class="item-td-link" href="/admin/content/item?id=@(model.List[i].Id)" title="Chuyển sang trang chi tiết">
+            <tr id="item-@(model.List[i].Id)">
+                <td class="text-center">
+                    @((model.Current - 1) * model.PerPage + i + 1)
+                    <div class="btn-remove-wrap@(model.List[i].Status == StatusConstant.Active ? " d-none" : "")">
+                        <button class="btn btn-danger my-2" onclick="removeItem(@(model.List[i].Id))">Xóa</button>
+                    </div>
+                </td>
+                <td>
+                    <a class="item-td-link mb-0" href="/admin/content/item?id=@(model.List[i].Id)" title="Chuyển sang trang chi tiết">
                         @(model.List[i].Name)
                     </a>
                 </td>
-                <td class="">
-                    <span class="item-td-@(model.List[i].Status)">
+                <td class="text-center">
+                    <p class="item-td-status item-td-@(model.List[i].Status) mb-0" data-status="@(model.List[i].Status)">
                         @(NameSupport.GetStatusName(model.List[i].Status))
-                    </span>
+                    </p>
+                    <br />
+                    <button class="btn btn-primary dropdown-toggle my-2" type="button" id="dropdown-status-@(model.List[i].Id)" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-rotate text-white"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown-status-@(model.List[i].Id)">
+                        <li><button class="dropdown-item" onclick="updateStatus(@(model.List[i].Id), 'Draft', 'Nháp')">Nháp</button></li>
+                        <li><button class="dropdown-item" onclick="updateStatus(@(model.List[i].Id), 'Active', 'Hoạt động')">Hoạt động</button></li>
+                        <li><button class="dropdown-item" onclick="updateStatus(@(model.List[i].Id), 'InActive', 'Ngừng')">Ngừng</button></li>
+                    </ul>
                 </td>
                 <td class="d-none d-md-table-cell">
-                    @(model.List[i].CreatedDate?.ToString("dd-MM-yyyy"))
+                    <p class="item-td-createdDate">@(model.List[i].CreatedDate?.ToString("dd-MM-yyyy"))</p>
                 </td>
             </tr>
         }
@@ -141,4 +156,6 @@
             endDate: new Date(),
         });
     </script>
+    <script src="~/admin/js/api_service.js"></script>
+    <script src="~/admin/js/Content/index.js"></script>
 }

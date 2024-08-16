@@ -159,19 +159,22 @@
     <thead class="table-dark">
         <tr>
             <th scope="col">#</th>
-            <th class="d-none d-md-table-cell" scope="col">Ảnh</th>
+            <th class="d-none d-lg-table-cell" scope="col">Ảnh</th>
             <th scope="col">Tiêu đề</th>
-            <th class="d-md-table-cell" scope="col">Thứ tự</th>
-            <th class="d-none d-md-table-cell" scope="col">Thông tin thêm</th>
-            <th class="d-md-table-cell" scope="col">Trạng thái</th>
+            <th class="d-none d-sm-table-cell" scope="col">Trạng thái</th>
             <th class="d-none d-md-table-cell" scope="col">Ngày tạo</th>
         </tr>
     </thead>
     <tbody>
         @for (var i = 0; i < model.List.Count; i++)
         {
-            <tr>
-                <td class="">@((model.Current - 1) * model.PerPage + i + 1)</td>
+            <tr id="item-@(model.List[i].Id)">
+                <td class="text-center">
+                    @((model.Current - 1) * model.PerPage + i + 1)
+                    <div class="btn-remove-wrap">
+                        <button class="btn btn-danger my-2" onclick="removeItem(@(model.List[i].Id))">Xóa</button>
+                    </div>
+                </td>
                 <td class="d-none d-md-table-cell td-image">
                     @if (model.List[i].Image == null)
                     {
@@ -185,30 +188,40 @@
                 <td class="">
                     <a class="item-td-link" href="/admin/project/item?id=@(model.List[i].Id)" title="Chuyển sang trang chi tiết">
                         @(model.List[i].Name)
-                        @if (model.List[i].IsHighlight)
-                        {
-                            <span class="item-td-Highlight">Nổi bật</span>
-                        }
                     </a>
-                </td>
-                <td class="">
-                    @(model.List[i].Order)
-                </td>
-                <td class="d-none d-md-table-cell">
-                    <p class="mb-1">
-                        Loại: @(NameSupport.GetProjectTypeName(model.List[i].Type))
+                    @if (model.List[i].Order != null)
+                    {
+                        <span class="item-td-order">
+                            @(model.List[i].Order)
+                        </span>
+                    }
+                    @if (model.List[i].IsHighlight)
+                    {
+                        <span class="item-td-Highlight">Nổi bật</span>
+                    }
+                    <span class="item-td-type item-td-@(model.List[i].Type)">
+                        @(NameSupport.GetProjectTypeName(model.List[i].Type))
+                    </span>
+                    <span class="item-td-project-state item-td-@(model.List[i].State)">
+                        @(NameSupport.GetProjectStateName(model.List[i].State))
+                    </span>
+                    <p class="item-td-address mb-0">
+                        @(model.List[i].Address)
                     </p>
-                    <p class="mb-1">
-                        Địa chỉ: @(model.List[i].Address)
-                    </p>
-                    <p class="item-td-@(model.List[i].State) mb-1">
-                        Tình hình: @(NameSupport.GetProjectStateName(model.List[i].State))
-                    </p>
                 </td>
-                <td class="">
-                    <p class="item-td-@(model.List[i].Status)">
+                <td class="d-none d-sm-table-cell text-center">
+                    <p class="item-td-status mb-0 item-td-@(model.List[i].Status)" data-status="@(model.List[i].Status)">
                         @(NameSupport.GetStatusName(model.List[i].Status))
                     </p>
+                    <br />
+                    <button class="btn btn-primary dropdown-toggle my-2" type="button" id="dropdown-status-@(model.List[i].Id)" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-rotate text-white"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdown-status-@(model.List[i].Id)">
+                        <li><button class="dropdown-item" onclick="updateStatus(@(model.List[i].Id), 'Draft', 'Nháp')">Nháp</button></li>
+                        <li><button class="dropdown-item" onclick="updateStatus(@(model.List[i].Id), 'Active', 'Hoạt động')">Hoạt động</button></li>
+                        <li><button class="dropdown-item" onclick="updateStatus(@(model.List[i].Id), 'InActive', 'Ngừng')">Ngừng</button></li>
+                    </ul>
                 </td>
                 <td class="d-none d-md-table-cell">
                     @(model.List[i].CreatedDate?.ToString("dd/MM/yyyy"))
@@ -246,4 +259,6 @@
             endDate: new Date(),
         });
     </script>
+    <script src="~/admin/js/api_service.js"></script>
+    <script src="~/admin/js/Project/index.js"></script>
 }

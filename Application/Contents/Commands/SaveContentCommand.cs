@@ -85,7 +85,7 @@ public class SaveContentCommand : IRequest<DataResponse<int>>
 
             }
 
-            var isActive =  request.Request.Status == StatusConstant.Active;
+            //var isActive =  request.Request.Status == StatusConstant.Active;
             if (oldStatus != newStatus)
             {
                 if (oldStatus == StatusConstant.Active)
