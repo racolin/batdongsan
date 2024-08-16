@@ -92,7 +92,7 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Email</th>
-            <th class="d-none d-md-table-cell" scope="col">Thông tin cá nhân</th>
+            <th class="d-none d-xl-table-cell" scope="col">Thông tin cá nhân</th>
             <th class="d-none d-md-table-cell" scope="col">Nội dung</th>
             <th class="d-none d-sm-table-cell" scope="col">Tình trạng</th>
             <th class="d-none d-md-table-cell" scope="col">Ngày tạo</th>
@@ -115,7 +115,7 @@
                     <p class="mb-0 item-td-note">@(model.List[i].Note)</p>
                     <p class="mb-0 item-td-address">@(model.List[i].Address)</p>
                 </td>
-                <td class="d-none d-md-table-cell">
+                <td class="d-none d-xl-table-cell">
                     <p class="mb-0">Tên: <span class="item-td-link item-td-name">@(model.List[i].Name)</span></p>
                     <p class="mb-0">Sđt: <span class="item-td-link item-td-phone">@(model.List[i].Phone)</span></p>
                 </td>
@@ -205,7 +205,6 @@
 
 @section AddToFooter {
     <script type="text/javascript">
-        // $("input[name=asc][value='" + urlParams.get("asc") + "']").prop('checked', true);
         var urlParams = new URLSearchParams(window.location.search)
         $("#value").val(urlParams.get("value"));
         $("#startDate").val(urlParams.get("startDate") ?? '01-01-2024');
@@ -230,5 +229,5 @@
     </script>
     <script src="~/admin/js/api_service.js"></script>
     <script src="~/admin/js/verify.js"></script>
-    <script src="~/admin/js/RegisterMail/index.js"></script>
+    <script src="~/admin/js/Contact/index.js"></script>
 }

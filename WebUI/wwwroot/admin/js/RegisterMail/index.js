@@ -24,6 +24,18 @@ function closeModalDetail() {
 }
 
 function updateStateItem(id, state, oldState, stateName) {
+    var checkedStates = [];
+    const regexp = /[?|&]state=([^&|$]*)/g;
+    const str = window.location.search;
+
+    const array = [...str.matchAll(regexp)];
+    for (var i = 0; i < array.length; i++) {
+        checkedStates.push(array[i][1])
+    }
+    if (checkedStates.length != 0 && (!checkedStates.includes(state))) {
+        window.location.reload();
+    }
+
     var item = $("#item-" + id);
     item.find(".item-td-state").text(stateName);
     item.find(".item-td-state").attr("data-state", state);

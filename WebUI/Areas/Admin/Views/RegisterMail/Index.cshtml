@@ -181,6 +181,8 @@
         $("#currentPage").val(@(model.Current));
         $("#order").val(urlParams.get("order") ?? 'desc-date');
 
+        initCheckboxFromUrl('state');
+
         $('#filter-range-date').datepicker({
             format: 'dd-mm-yyyy',
             weekStart: 1,

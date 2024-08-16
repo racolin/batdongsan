@@ -55,7 +55,7 @@ namespace Application.Common.Supports
             switch (type) {
                 case ContactStateConstant.Sent: return "Đợi";
                 case ContactStateConstant.Processed: return "Đã xử lý";
-                case ContactStateConstant.Refused: return "Đã từ chối";
+                case ContactStateConstant.Refused: return "Từ chối";
                 case ContactStateConstant.Removed: return "Đã xóa";
                 default: return null;
             }
