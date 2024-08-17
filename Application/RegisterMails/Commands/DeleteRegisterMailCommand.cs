@@ -25,13 +25,13 @@ public class DeleteRegisterMailCommand : IRequest<DataResponse<bool>>
         public async Task<DataResponse<bool>> Handle(DeleteRegisterMailCommand request, CancellationToken cancellationToken)
         {
             var id = request.Id;
-            var contact = await _context.RegisterMails.FindAsync(id);
-            if (contact == null)
+            var registerMail = await _context.RegisterMails.FindAsync(id);
+            if (registerMail == null)
             {
                 return DataResponse<bool>.Error("Không tìm thấy email muốn xóa!");
             }
 
-            _context.RegisterMails.Remove(contact);
+            _context.RegisterMails.Remove(registerMail);
 
             await _context.SaveChangesAsync(cancellationToken);
 

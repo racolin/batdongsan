@@ -93,3 +93,51 @@ $("#btn-save").on("click", function () {
         // Error Api function() {}
     );
 });
+
+$("#btn-reference").on("click", function () {
+    var id = $("#id").val();
+    // Get references
+    getApiExplicit(
+        '/api/admin/image/get-references?id=' + id,
+        // Success: function (data) {}
+        function (data) {
+            if (data != null) {
+                var refsImage = $("#references-image");
+                refsImage.empty()
+                $("#references-title").removeClass("d-none");
+                if (data.length == 0) {
+                    refsImage.append("<p>Ảnh này hiện không được sử dụng.</p>")
+                }
+                for (var i = 0; i < data.length; i++) {
+                    var refsData = data[i].references; 
+                    for (var j = 0; j < refsData.length; j++) {
+                        refsImage.append($(`<a class='btn reference' title='Chuyển đến trang ${data[i].udName}: ${refsData[j].name}' href='/admin/${data[i].ud}/item?id=${refsData[j].id}' target='_blank'>${data[i].udName}: ${refsData[j].name}</a>`))
+                    }
+                }
+            } else {
+                showMessage('error', 'Có lỗi phát sinh, không thể lấy danh sách tham chiếu!');
+            }
+        },
+        // Warning: function(textMessage, data) {}
+        // Error: function(message) {}
+        // Error Api function() {}
+    );
+});
+
+$("#btn-remove").on("click", function () {
+    // Remove
+    getApiExplicit(
+        '/api/admin/image/delete?id=' + $("#id").val(),
+        // Success: function (data) {}
+        function (data) {
+            if (data != null) {
+                window.location.replace('/admin/image');
+            } else {
+                showMessage('error', 'Có lỗi phát sinh, chưa xóa được ảnh!');
+            }
+        },
+        // Warning: function(textMessage, data) {}
+        // Error: function(message) {}
+        // Error Api function() {}
+    );
+});

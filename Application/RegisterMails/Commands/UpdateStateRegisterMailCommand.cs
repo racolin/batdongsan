@@ -26,8 +26,8 @@ public class UpdateStateRegisterMailCommand : IRequest<DataResponse<bool>>
         public async Task<DataResponse<bool>> Handle(UpdateStateRegisterMailCommand request, CancellationToken cancellationToken)
         {
             var id = request.Request.Id;
-            var contact = await _context.RegisterMails.FindAsync(id);
-            if (contact == null) {
+            var registerMail = await _context.RegisterMails.FindAsync(id);
+            if (registerMail == null) {
                 return DataResponse<bool>.Error("Không tìm thấy email muốn cập nhật!");
             }
 
@@ -36,7 +36,7 @@ public class UpdateStateRegisterMailCommand : IRequest<DataResponse<bool>>
                 return DataResponse<bool>.Error("Tình trạng gửi lên không chính xác!");
             }
 
-            contact.State = request.Request.State;
+            registerMail.State = request.Request.State;
 
             await _context.SaveChangesAsync(cancellationToken);
 

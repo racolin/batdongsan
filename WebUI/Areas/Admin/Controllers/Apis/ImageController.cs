@@ -33,5 +33,19 @@ namespace WebUI.Areas.Admin.Controllers.Apis
                 );
             return result ?? DataResponse<PagingResponse<ShortImageResponse>>.Error("Có lỗi khi tải dữ liệu!");
         }
+        [Authorize(Roles = $"{RoleConstant.Admin},{RoleConstant.ImagePoster}")]
+        [HttpGet("get-references")]
+        public async Task<DataResponse<List<ReferencesResponse>>> GetReferences(int id)
+        {
+            var result = await Mediator.Send(new GetReferencesOfImageQuery(id));
+            return result ?? DataResponse<List<ReferencesResponse>>.Error("Có lỗi khi tải dữ liệu!");
+        }
+        [Authorize(Roles = $"{RoleConstant.Admin},{RoleConstant.ImagePoster}")]
+        [HttpGet("delete")]
+        public async Task<DataResponse<bool>> Delete(int id)
+        {
+            var result = await Mediator.Send(new DeleteImageCommand(id));
+            return result ?? DataResponse<bool>.Error("Có lỗi khi xóa ảnh!");
+        }
     }
 }

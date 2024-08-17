@@ -110,12 +110,28 @@
                         <label for="title" class="form-label">Tiêu đề ảnh (<span class="text-danger">*</span>):</label>
                         <input type="text" class="form-control" name="title" id="title" autocomplete="off" value="@(model != null ? model.Data.Title : "")" placeholder="Nhập tiêu đề">
                     </div>
+                    @if (model != null)
+                    {
+                        <div class="pt-3 d-flex justify-content-end">
+                            <button type="button" id="btn-reference" class="btn btn-edit ms-3" title="Xem danh sách những nơi sử dụng ảnh này">Xem danh sách sử dụng</button>
+                        </div>
+                        <div class="form-title-wrap d-none mb-3" id="references-title">
+                            <p class="form-title">Danh sách sử dụng ảnh</p>
+                        </div>
+                        <div class="references" id="references-image">
+                            
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
     <hr class="d-none d-lg-block" style="margin: .25rem 0 0 0" />
     <div class="py-3 d-flex justify-content-end">
+        @if (model != null)
+        {
+            <button type="button" id="btn-remove" class="btn btn-danger ms-3" title="Xóa">Xóa</button>
+        }
         <button type="button" id="btn-save" onclick="" class="btn btn-save ms-3" title="Lưu">Lưu</button>
     </div>
 }

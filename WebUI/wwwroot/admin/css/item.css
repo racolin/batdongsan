@@ -7,3 +7,25 @@
     width: 100%;
     border-radius: 0.375rem;
 }
+.references .reference {
+    color: white;
+    font-weight: 500;
+    margin-right: .75rem;
+    margin-bottom: .75rem;
+}
+
+.references .reference:nth-child(4n) {
+    background-color: #CB2474;
+}
+
+.references .reference:nth-child(4n+1) {
+    background-color: #FF8F28DD;
+}
+
+.references .reference:nth-child(4n+2) {
+    background-color: #18A2DDDD;
+}
+
+.references .reference:nth-child(4n+3) {
+    background-color: gray;
+}
