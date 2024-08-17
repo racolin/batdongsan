@@ -11,21 +11,17 @@ namespace WebUI.Controllers.Apis
     {
         [HttpPost("send-contact")]
         [AutoValidateAntiforgeryToken]
-        public async Task<DataResponse<int>> Save([FromForm] SaveContactRequest request)
+        public async Task<DataResponse<bool>> Save([FromForm] SendContactRequest request)
         {
-            request.Id = null;
-            request.State = null;
-            var result = await Mediator.Send(new SaveContactCommand(request));
-            return result ?? DataResponse<int>.Error("Có lỗi đã xảy ra khi thực hiện api này!");
+            var result = await Mediator.Send(new SendContactCommand(request, Request.HttpContext.Connection.RemoteIpAddress?.ToString()));
+            return result ?? DataResponse<bool>.Error("Có lỗi đã xảy ra khi thực hiện api này!");
         }
         [HttpPost("register-mail")]
         [AutoValidateAntiforgeryToken]
-        public async Task<DataResponse<int>> RegisterMail([FromForm] SaveRegisterMailRequest request)
+        public async Task<DataResponse<bool>> RegisterMail([FromForm] SendRegisterMailRequest request)
         {
-            request.Id = null;
-            request.State = null;
-            var result = await Mediator.Send(new SaveRegisterMailCommand(request));
-            return result ?? DataResponse<int>.Error("Có lỗi đã xảy ra khi thực hiện api này!");
+            var result = await Mediator.Send(new SendRegisterMailCommand(request, Request.HttpContext.Connection.RemoteIpAddress?.ToString()));
+            return result ?? DataResponse<bool>.Error("Có lỗi đã xảy ra khi thực hiện api này!");
         }
     }
 }

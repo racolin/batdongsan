@@ -17,7 +17,6 @@
         public bool EnableSSL { get; set; }
         public bool DefaultCredential { get; set; }
     }
-
     public class JwtConfigOptions
     {
         public const string Name = "JWT";
@@ -28,4 +27,20 @@
         public int TokenValidityInMinutes { get; set; }
         public int RefreshTokenValidityInDays { get; set; }
     }
+    
+    public class RecaptchaConfigOptions
+    {
+        public const string Name = "Recaptcha";
+
+        public RecaptchaV3ConfigOptions V3 { get; set; }
+    }
+
+    public class RecaptchaV3ConfigOptions
+    {
+
+        public string SecretKey { get; set; }
+        public string SiteKey { get; set; }
+        public string SiteVerify { get; set; }
+    }
+
 }

@@ -35,6 +35,17 @@
         .contact-float-send .contact-float-item::after {
             background-color: #C7749C;
         }
+
+        .grecaptcha-badge {
+            width: 70px !important;
+            overflow: hidden !important;
+            transition: all 0.3s ease !important;
+            left: 4px !important;
+        }
+
+        .grecaptcha-badge:hover {
+            width: 256px !important;
+        }
     </style>
 
     @if (IsSectionDefined("AddToHead"))
@@ -113,23 +124,24 @@
                         @Html.AntiForgeryToken()
                         <div class="row">
                             <div class="col-12 col-md-6">
-                                <input type="text" name="name" title="Họ và tên" placeholder="Họ và tên (*)" id="modal-name" />
+                                <input type="text" name="name" title="Họ và tên" placeholder="Họ và tên (*)" />
                             </div>
                             <div class="col-12 col-md-6">
-                                <input type="text" name="address" title="Địa chỉ" placeholder="Địa chỉ" id="modal-address" />
+                                <input type="text" name="address" title="Địa chỉ" placeholder="Địa chỉ" />
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-12 col-md-6">
-                                <input type="tel" name="phone" title="Số điện thoại" placeholder="Số điện thoại (*)" id="modal-phone" />
+                                <input type="tel" name="phone" title="Số điện thoại" placeholder="Số điện thoại (*)" />
                             </div>
                             <div class="col-12 col-md-6">
-                                <input type="email" name="email" title="Email" placeholder="Email (*)" id="modal-email" />
+                                <input type="email" name="email" title="Email" placeholder="Email (*)" />
                             </div>
                         </div>
 
-                        <textarea name="content" id="modal-content" title="Nhập nội dung cần liên hệ" placeholder="Nhập nội dung cần liên hệ (*)"></textarea>
+                        <textarea name="content" title="Nhập nội dung cần liên hệ" placeholder="Nhập nội dung cần liên hệ (*)"></textarea>
+                        <input type="hidden" name="recaptchaV3Token" />
                         <button type="button" title="Gửi thông tin" onclick="sendContact('send-contact-modal')">GỬI THÔNG TIN</button>
                     </form>
                 </div>
@@ -198,42 +210,55 @@
         window.onscroll = onScroll;
 
         function sendContact(id) {
-            $.ajax({
-                url: '/api/contact/send-contact',
-                type: 'POST',
-                data: $("#" + id).serialize(),//dataJson,
-                datatype: 'json',
-                beforeSend: loading,
-                complete: loaded,
-                success: function (data) {
-                    // do something if warning
-                    if (data.message.type == 1) {
-                        showMessage('warning', data.message.name)
-                        return;
-                    }
-                    // do something if error
-                    if (data.message.type == 2) {
-                        showMessage('error', data.message.name)
-                        return;
-                    }
-                    // success response
-                    // do something if success
-                    showMessage('success', "Chúng tôi sẽ liên hệ với bạn sớm nhất có thể!");
-                    if (id == "send-contact-modal") {
-                        $("#send-info-modal").modal('hide');
-                    }
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    // error api
-                    // do something if error
-                    // alert(xhr.responseJSON.name);
-                    showMessage('error', xhr.responseJSON.name)
-                },
-            });
+            renderRecaptchaV3Token(function (token) { 
+                $("#" + id).find("input[name='recaptchaV3Token']").val(token);
+                $.ajax({
+                    url: '/api/contact/send-contact',
+                    type: 'POST',
+                    data: $("#" + id).serialize(),//dataJson,
+                    datatype: 'json',
+                    beforeSend: loading,
+                    complete: loaded,
+                    success: function (data) {
+                        // do something if warning
+                        if (data.message.type == 1) {
+                            showMessage('warning', data.message.name)
+                            return;
+                        }
+                        // do something if error
+                        if (data.message.type == 2) {
+                            showMessage('error', data.message.name)
+                            return;
+                        }
+                        // success response
+                        // do something if success
+                        showMessage('success', "Chúng tôi sẽ liên hệ với bạn sớm nhất có thể!");
+                        if (id == "send-contact-modal") {
+                            $("#send-info-modal").modal('hide');
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        // error api
+                        // do something if error
+                        // alert(xhr.responseJSON.name);
+                        showMessage('error', xhr.responseJSON.name)
+                    },
+                });
+            })
         }
     </script>
     <script type="text/javascript" src="~/shared/js/notify.js"></script>
     <script type="text/javascript" src="~/shared/js/loader.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Ld7TigqAAAAAIP-GkWuHUOCYI-D-ZZeh3-rGCYC"></script>
+    <script>
+        function renderRecaptchaV3Token(callback) {
+            grecaptcha.ready(function () {
+                grecaptcha.execute('6Ld7TigqAAAAAIP-GkWuHUOCYI-D-ZZeh3-rGCYC', { action: 'submit' }).then(function (token) {
+                    callback(token);
+                });
+            });
+        }
+    </script>
 
     @if (IsSectionDefined("AddToFooter"))
     {

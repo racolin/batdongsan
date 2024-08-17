@@ -46,7 +46,7 @@ public class SaveRegisterMailCommand : IRequest<DataResponse<int>>
             if (id == null) { 
                 var contact = await _context.RegisterMails.FirstOrDefaultAsync(x => 
                     x.Email == request.Request.Email 
-                    && request.Request.State == RegisterMailStateConstant.Sent, cancellationToken);
+                    && x.State == RegisterMailStateConstant.Sent, cancellationToken);
                 if (contact != null)
                 {
                     id = contact.Id;

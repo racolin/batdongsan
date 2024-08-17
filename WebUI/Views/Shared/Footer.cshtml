@@ -22,6 +22,7 @@
                             @Html.AntiForgeryToken()
                             <input title="Input your email" onkeyup="typeRegisterMail()" placeholder="Email (*)" type="email" id="register-mail-input" name="email">
                             <a href="javascript:void(0)" class="d-none" onclick="clearRegisterMail()" id="register-mail-clear"><i class="fa-solid fa-xmark"></i></a>
+                            <input type="hidden" name="recaptchaV3Token" />
                             <button type="button" onclick="checkEmail()" title="Tin tức dự án sẽ được gửi qua mail">Nhận tin</button>
                         </form>
                     </div>
@@ -100,36 +101,38 @@
     }
 
     function registerMail(onSuccess) {
-        console.log($("#register-mail").serialize());
-        $.ajax({
-            url: '/api/contact/register-mail',
-            type: 'POST',
-            data: $("#register-mail").serialize(),//dataJson,
-            datatype: 'json',
-            beforeSend: loading,
-            complete: loaded,
-            success: function (data) {
-                // do something if warning
-                if (data.message.type == 1) {
-                    showMessage('warning', data.message.name)
-                    return;
-                }
-                // do something if error
-                if (data.message.type == 2) {
-                    showMessage('error', data.message.name)
-                    return;
-                }
-                // success response
-                // do something if success
-                onSuccess();
-                // showMessage('success', data.message.name);
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                // error api
-                // do something if error
-                // alert(xhr.responseJSON.name);
-                showMessage('error', xhr.responseJSON.name)
-            },
+        renderRecaptchaV3Token(function (token) {
+            $("#register-mail").find("input[name='recaptchaV3Token']").val(token);
+            $.ajax({
+                url: '/api/contact/register-mail',
+                type: 'POST',
+                data: $("#register-mail").serialize(),//dataJson,
+                datatype: 'json',
+                beforeSend: loading,
+                complete: loaded,
+                success: function (data) {
+                    // do something if warning
+                    if (data.message.type == 1) {
+                        showMessage('warning', data.message.name)
+                        return;
+                    }
+                    // do something if error
+                    if (data.message.type == 2) {
+                        showMessage('error', data.message.name)
+                        return;
+                    }
+                    // success response
+                    // do something if success
+                    onSuccess();
+                    // showMessage('success', data.message.name);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // error api
+                    // do something if error
+                    // alert(xhr.responseJSON.name);
+                    showMessage('error', xhr.responseJSON.name)
+                },
+            });
         });
     }
 </script>

@@ -48,6 +48,7 @@ public static class ConfigureServices
             .AddDefaultTokenProviders();
 
         services.AddIdentityServer().AddApiAuthorization<User, ApplicationDbContext>();
+        services.AddTransient<IRecaptchaService, RecaptchaService>();
         services.AddTransient<IMailService, MailService>();
         services.AddTransient<IDateTimeService, DateTimeService>();
         services.AddTransient<IIdentityService, IdentityService>();
@@ -117,6 +118,7 @@ public static class ConfigureServices
     {
         services.Configure<ConfigOptions>(config.GetSection(ConfigOptions.Name));
         services.Configure<JwtConfigOptions>(config.GetSection(JwtConfigOptions.Name));
+        services.Configure<RecaptchaConfigOptions>(config.GetSection(RecaptchaConfigOptions.Name));
         services.Configure<SecurityStampValidatorOptions>(options =>
         {
             //enables immediate logout, after updating the user's stat.
